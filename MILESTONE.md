@@ -1,3 +1,21 @@
+# Version 0.2 — playtest feedback addressed
+
+Verified on macOS 15.5 / Apple M4 Pro with Godot 4.7.2, Jolt 120 Hz and Mobile rendering.
+
+- Final course balance: **24,255 actual physics rolls** across 33 courses, 21 aims, seven bank settings and five seeds. Every course has a no-nudge solution on every seed. Regular-course clear rates range from **1.77% to 18.91%**, averaging **6.65%** across the broad grid. This is a solver sampling rate, not a measured player win rate. The tutorial remains easier.
+- Default launch: **0 wins in 160 regular-course/seed combinations**, also checked with standalone isolated rolls. The center barricade, shallow contours and side-route boosts remove the old free winning lane.
+- The final report combines the full sweep with a 735-roll retest of Coral 06 after widening its finish to preserve a solution on seed 7777. Results: `docs/verification/solver-report.json`.
+- Full application: **20 identical planned-route retries**, including a moving sweeper and slow motion; position tolerance 0.0001 with identical events. Creating a fresh tire body on AIM clears pending forces retained by the result freeze. Existing course geometry stays loaded.
+- Native and headless experience checks: deliberate route wins, default launch blocks, moving hazards animate and pause, retry restores hazard phase, launch preview never moves the actual tire, and both result camera/body remain stable for ten seconds. PASS.
+- Asset ledger, real mouse/keyboard UI flow, save/style/nudge tests and three fresh processes × 20 physics repeats: PASS.
+- Native full menu playtest: pause/resume, daily challenge and retry PASS; retry **2.42 ms**. Portrait and all four world aim views inspected, plus close chase and settled win/miss views.
+- Final uncapped heaviest-course benchmark: **13.59 ms p95 wall**, **1.80 ms p95 physics**, **54 visible 3D draw calls**, **59,488 visible primitives**. The separate process monitor reports 28.80 ms and the scripted menu playtest reports 27.87 ms p95 frame delta; these are retained rather than presenting the best metric as a universal frame-rate guarantee. Physical phone performance remains unverified.
+- New visual content is original source geometry/materials: terraced cliffs, detailed ground, dense shoulders, world landmarks, hazard stripes/sweep markings, finish pavilions and 4× MSAA. The 28 external/original source asset ledger entries are unchanged.
+
+The earlier alpha verification below is historical and its old difficulty/performance figures do not describe 0.2. Remaining full-spec release gates remain in `FEATURE_STATUS.md`.
+
+---
+
 # Build verification — 2026-09-06
 
 Status: **playable alpha / M0 verified; M1 human feel gate still open**. The content draft is available for evaluation. M1–M5 are not claimed complete.

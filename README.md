@@ -2,7 +2,7 @@
 
 A native pastel downhill tire game. Read the hill, pick a line, lean a little, and let it roll.
 
-**Playable alpha, built with Godot 4.7.2 + Jolt at 120 Hz, Mobile renderer.** Includes the complete title → course select → aim → roll → result → retry loop, 32 courses plus a tutorial, four worlds, four unlockable tires, daily rolls, local progress, settings, adaptive music and sound, and portrait/landscape layouts.
+**Version 0.2 playable alpha, built with Godot 4.7.2 + Jolt at 120 Hz, Mobile renderer.** Includes the complete title → course select → aim → roll → result → retry loop, 32 courses plus a tutorial, four worlds, four unlockable tires, daily rolls, local progress, settings, adaptive music and sound, and portrait/landscape layouts.
 
 This is not a spec-complete store release. See [FEATURE_STATUS.md](FEATURE_STATUS.md) for the remaining implementation and release gates, and [MILESTONE.md](MILESTONE.md) for measured results.
 
@@ -19,7 +19,7 @@ On this machine, open `build/macos/TREADFALL.app`, or install from the **notariz
 On other systems, install the pinned Godot version and set `GODOT_BIN` to its executable. No package manager, runtime download, account, or network connection is needed by the game itself.
 
 - Drag horizontally on the hill to aim and vertically to lean; release to launch.
-- The two sliders and **Let it roll** offer a precise alternative.
+- The two sliders and **Let it roll** offer a precise alternative. The 0.65-second dotted guide shows only the launch; shallow terrain contours and grounded banking replace the old strong lane assistance.
 - During the roll, swipe left/right or use the nudge buttons. Two nudges, 0.5 s cooldown; a third attempt triggers TILT.
 - Keyboard: **←/→** or **A/D** aim/nudge; **↑/↓** or **W/S** lean; **Space/Enter** roll/retry; **R** retry; **Esc** pause.
 - Purist disables nudges and awards three stars on a clear. Earn four stars in a world to open the next. Tires unlock at 0/3/8/16 total stars.
@@ -28,14 +28,14 @@ On other systems, install the pinned Godot version and set `GODOT_BIN` to its ex
 
 ```sh
 ./tools/test.sh               # asset ledger, units, real UI events, 20 runtime retries,
-                             # plus 20 physics repeats in each of 3 fresh processes
+                             # win/miss hold and hazard lifecycle checks, plus 20 physics repeats in each of 3 fresh processes
 ./tools/test.sh --full        # also 33 × 21 × 7 × 5 actual Jolt rolls + PNG heatmaps
 ./tools/godot -- --test --playtest
 ./tools/godot -- --test --perf # uncapped heaviest-course benchmark; exit fails above 16.6 ms p95
 ./tools/godot --headless --script tools/bake_course.gd -- meadow/01
 ```
 
-`--test` keeps the real save untouched. Reports and screenshots go in `build/`; this folder is excluded from git and exports. The solver fails on impossible hills, >60% clear rate, or a roll reaching 20 s. Rolls still moving at 16 s end as misses. The solver uses the actual `RollingTire` scene behavior, not the reduced aim preview model.
+`--test` keeps the real save untouched. Reports and screenshots go in `build/`; this folder is excluded from git and exports. The solver fails on impossible hills, >30% clear rate on regular hills (>60% in the tutorial), any winning default launch, any seed without a solution, or a roll reaching 20 s. Rolls still moving at 16 s end as misses; two seconds stalled against an obstacle ends as BLOCKED. Both wins and misses freeze the tire and hold the camera. The solver uses the actual `RollingTire` scene behavior, not the reduced aim preview model.
 
 Testing entry points:
 
@@ -50,12 +50,12 @@ The optional baker writes an editable grayscale PNG and a terrain mesh/collider 
 ## Build and sign
 
 ```sh
-./tools/export.sh macOS 0.1.0
+./tools/export.sh macOS 0.2.0
 ./tools/sign-macos.sh build/macos/TREADFALL.app --dry-run
 ./tools/sign-macos.sh build/macos/TREADFALL.app --dmg
-./tools/export.sh iOS 0.1.0
+./tools/export.sh iOS 0.2.0
 ./tools/ios-simulator.sh
-./tools/export.sh Windows 0.1.0
+./tools/export.sh Windows 0.2.0
 ```
 
 Godot and templates must both be **4.7.2**. `tools/export.sh` records the git commit, build count, version and SHA-256. It verifies packaged bytes, including an observed Godot export issue that produced a zero-byte macOS executable: the verifier restores the byte-identical official universal release binary and fails if that binary is invalid. A successful engine exit alone is not treated as a working app.

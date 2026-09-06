@@ -1,464 +1,2559 @@
 [
-	{
-		"best": {
-			"aim": -1.0,
-			"lean": 5.0,
-			"score": 220,
-			"seed": 2026,
-			"time": 7.75000000000017
-		},
-		"clears": 405,
-		"course": "tutorial",
-		"rate": 0.551020408163265,
-		"samples": 735,
-		"stuck": 0
-	},
-	{
-		"best": {
-			"aim": -1.0,
-			"lean": 5.0,
-			"score": 220,
-			"seed": 137,
-			"time": 9.4500000000001
-		},
-		"clears": 391,
-		"course": "meadow/01",
-		"rate": 0.531972789115646,
-		"samples": 735,
-		"stuck": 0
-	},
-	{
-		"best": {
-			"aim": -1.0,
-			"lean": 15.0,
-			"score": 285,
-			"seed": 2026,
-			"time": 8.74166666666681
-		},
-		"clears": 303,
-		"course": "meadow/02",
-		"rate": 0.412244897959184,
-		"samples": 735,
-		"stuck": 0
-	},
-	{
-		"best": {
-			"aim": 0.1,
-			"lean": 5.0,
-			"score": 130,
-			"seed": 42,
-			"time": 9.05833333333346
-		},
-		"clears": 95,
-		"course": "meadow/03",
-		"rate": 0.129251700680272,
-		"samples": 735,
-		"stuck": 0
-	},
-	{
-		"best": {
-			"aim": -1.0,
-			"lean": 0.0,
-			"score": 350,
-			"seed": 2026,
-			"time": 9.19166666666679
-		},
-		"clears": 251,
-		"course": "meadow/04",
-		"rate": 0.341496598639456,
-		"samples": 735,
-		"stuck": 0
-	},
-	{
-		"best": {
-			"aim": -0.8,
-			"lean": 5.0,
-			"score": 210,
-			"seed": 137,
-			"time": 12.6083333333333
-		},
-		"clears": 345,
-		"course": "meadow/05",
-		"rate": 0.469387755102041,
-		"samples": 735,
-		"stuck": 0
-	},
-	{
-		"best": {
-			"aim": -0.6,
-			"lean": -5.0,
-			"score": 320,
-			"seed": 31415,
-			"time": 13.9083333333332
-		},
-		"clears": 80,
-		"course": "meadow/06",
-		"rate": 0.108843537414966,
-		"samples": 735,
-		"stuck": 0
-	},
-	{
-		"best": {
-			"aim": -0.8,
-			"lean": 0.0,
-			"score": 200,
-			"seed": 2026,
-			"time": 14.3416666666665
-		},
-		"clears": 174,
-		"course": "meadow/07",
-		"rate": 0.236734693877551,
-		"samples": 735,
-		"stuck": 0
-	},
-	{
-		"best": {
-			"aim": -0.8,
-			"lean": 0.0,
-			"score": 295,
-			"seed": 2026,
-			"time": 10.0416666666667
-		},
-		"clears": 221,
-		"course": "meadow/08",
-		"rate": 0.300680272108844,
-		"samples": 735,
-		"stuck": 0
-	},
-	{
-		"best": {
-			"aim": 1.0,
-			"lean": -10.0,
-			"score": 168,
-			"seed": 7777,
-			"time": 9.11666666666679
-		},
-		"clears": 323,
-		"course": "coral/01",
-		"rate": 0.439455782312925,
-		"samples": 735,
-		"stuck": 0
-	},
-	{
-		"best": {
-			"aim": -1.0,
-			"lean": 0.0,
-			"score": 300,
-			"seed": 137,
-			"time": 8.64166666666682
-		},
-		"clears": 217,
-		"course": "coral/02",
-		"rate": 0.295238095238095,
-		"samples": 735,
-		"stuck": 0
-	},
-	{
-		"best": {
-			"aim": -0.8,
-			"lean": 0.0,
-			"score": 160,
-			"seed": 2026,
-			"time": 9.33333333333344
-		},
-		"clears": 57,
-		"course": "coral/03",
-		"rate": 0.0775510204081633,
-		"samples": 735,
-		"stuck": 0
-	},
-	{
-		"best": {
-			"aim": -0.9,
-			"lean": 5.0,
-			"score": 217,
-			"seed": 42,
-			"time": 10.2416666666667
-		},
-		"clears": 86,
-		"course": "coral/04",
-		"rate": 0.117006802721088,
-		"samples": 735,
-		"stuck": 0
-	},
-	{
-		"best": {
-			"aim": -0.8,
-			"lean": 5.0,
-			"score": 270,
-			"seed": 31415,
-			"time": 12.5249999999999
-		},
-		"clears": 326,
-		"course": "coral/05",
-		"rate": 0.443537414965986,
-		"samples": 735,
-		"stuck": 0
-	},
-	{
-		"best": {
-			"aim": -0.9,
-			"lean": 10.0,
-			"score": 405,
-			"seed": 31415,
-			"time": 8.9666666666668
-		},
-		"clears": 3,
-		"course": "coral/06",
-		"rate": 0.00408163265306122,
-		"samples": 735,
-		"stuck": 0
-	},
-	{
-		"best": {
-			"aim": -1.0,
-			"lean": 0.0,
-			"score": 254,
-			"seed": 7777,
-			"time": 12.8833333333332
-		},
-		"clears": 119,
-		"course": "coral/07",
-		"rate": 0.161904761904762,
-		"samples": 735,
-		"stuck": 0
-	},
-	{
-		"best": {
-			"aim": -0.9,
-			"lean": 0.0,
-			"score": 380,
-			"seed": 137,
-			"time": 9.95833333333341
-		},
-		"clears": 232,
-		"course": "coral/08",
-		"rate": 0.315646258503401,
-		"samples": 735,
-		"stuck": 0
-	},
-	{
-		"best": {
-			"aim": -0.8,
-			"lean": 0.0,
-			"score": 210,
-			"seed": 42,
-			"time": 9.48333333333344
-		},
-		"clears": 282,
-		"course": "ember/01",
-		"rate": 0.383673469387755,
-		"samples": 735,
-		"stuck": 0
-	},
-	{
-		"best": {
-			"aim": 0.8,
-			"lean": -10.0,
-			"score": 320,
-			"seed": 137,
-			"time": 8.34166666666683
-		},
-		"clears": 228,
-		"course": "ember/02",
-		"rate": 0.310204081632653,
-		"samples": 735,
-		"stuck": 0
-	},
-	{
-		"best": {
-			"aim": -1.0,
-			"lean": 5.0,
-			"score": 220,
-			"seed": 42,
-			"time": 8.4333333333335
-		},
-		"clears": 23,
-		"course": "ember/03",
-		"rate": 0.0312925170068027,
-		"samples": 735,
-		"stuck": 0
-	},
-	{
-		"best": {
-			"aim": -0.8,
-			"lean": 0.0,
-			"score": 450,
-			"seed": 137,
-			"time": 15.5249999999998
-		},
-		"clears": 90,
-		"course": "ember/04",
-		"rate": 0.122448979591837,
-		"samples": 735,
-		"stuck": 0
-	},
-	{
-		"best": {
-			"aim": 0.3,
-			"lean": 5.0,
-			"score": 175,
-			"seed": 2026,
-			"time": 12.5999999999999
-		},
-		"clears": 183,
-		"course": "ember/05",
-		"rate": 0.248979591836735,
-		"samples": 735,
-		"stuck": 0
-	},
-	{
-		"best": {
-			"aim": 0.7,
-			"lean": 5.0,
-			"score": 255,
-			"seed": 2026,
-			"time": 13.2999999999999
-		},
-		"clears": 51,
-		"course": "ember/06",
-		"rate": 0.0693877551020408,
-		"samples": 735,
-		"stuck": 0
-	},
-	{
-		"best": {
-			"aim": -0.9,
-			"lean": -5.0,
-			"score": 450,
-			"seed": 137,
-			"time": 12.3749999999999
-		},
-		"clears": 102,
-		"course": "ember/07",
-		"rate": 0.138775510204082,
-		"samples": 735,
-		"stuck": 0
-	},
-	{
-		"best": {
-			"aim": -0.6,
-			"lean": 10.0,
-			"score": 160,
-			"seed": 42,
-			"time": 13.5749999999999
-		},
-		"clears": 78,
-		"course": "ember/08",
-		"rate": 0.106122448979592,
-		"samples": 735,
-		"stuck": 0
-	},
-	{
-		"best": {
-			"aim": -1.0,
-			"lean": 5.0,
-			"score": 220,
-			"seed": 2026,
-			"time": 10.0500000000001
-		},
-		"clears": 267,
-		"course": "neon/01",
-		"rate": 0.363265306122449,
-		"samples": 735,
-		"stuck": 0
-	},
-	{
-		"best": {
-			"aim": -0.8,
-			"lean": 5.0,
-			"score": 300,
-			"seed": 42,
-			"time": 8.55833333333349
-		},
-		"clears": 185,
-		"course": "neon/02",
-		"rate": 0.251700680272109,
-		"samples": 735,
-		"stuck": 0
-	},
-	{
-		"best": {
-			"aim": -0.1,
-			"lean": 5.0,
-			"score": 125,
-			"seed": 137,
-			"time": 12.9333333333332
-		},
-		"clears": 20,
-		"course": "neon/03",
-		"rate": 0.0272108843537415,
-		"samples": 735,
-		"stuck": 0
-	},
-	{
-		"best": {
-			"aim": -1.0,
-			"lean": 5.0,
-			"score": 310,
-			"seed": 7777,
-			"time": 8.95000000000013
-		},
-		"clears": 76,
-		"course": "neon/04",
-		"rate": 0.103401360544218,
-		"samples": 735,
-		"stuck": 0
-	},
-	{
-		"best": {
-			"aim": -0.9,
-			"lean": 0.0,
-			"score": 230,
-			"seed": 137,
-			"time": 12.8583333333332
-		},
-		"clears": 191,
-		"course": "neon/05",
-		"rate": 0.259863945578231,
-		"samples": 735,
-		"stuck": 0
-	},
-	{
-		"best": {
-			"aim": -1.0,
-			"lean": 10.0,
-			"score": 255,
-			"seed": 137,
-			"time": 11.8833333333333
-		},
-		"clears": 36,
-		"course": "neon/06",
-		"rate": 0.0489795918367347,
-		"samples": 735,
-		"stuck": 0
-	},
-	{
-		"best": {
-			"aim": -0.9,
-			"lean": -5.0,
-			"score": 380,
-			"seed": 42,
-			"time": 15.7499999999997
-		},
-		"clears": 78,
-		"course": "neon/07",
-		"rate": 0.106122448979592,
-		"samples": 735,
-		"stuck": 0
-	},
-	{
-		"best": {
-			"aim": -0.9,
-			"lean": -5.0,
-			"score": 420,
-			"seed": 31415,
-			"time": 13.4999999999999
-		},
-		"clears": 85,
-		"course": "neon/08",
-		"rate": 0.115646258503401,
-		"samples": 735,
-		"stuck": 0
-	}
+  {
+    "best": {
+      "aim": -0.6,
+      "lean": 0.0,
+      "score": 230,
+      "seed": 31415,
+      "time": 7.39166666666682
+    },
+    "clears": 193,
+    "course": "tutorial",
+    "neutral_clears": 5,
+    "rate": 0.262585034013605,
+    "samples": 735,
+    "seed_clears": {
+      "137": 41,
+      "2026": 40,
+      "31415": 40,
+      "42": 36,
+      "7777": 36
+    },
+    "solutions": [
+      {
+        "aim": -0.9,
+        "lean": -10.0,
+        "score": 130
+      },
+      {
+        "aim": -0.6,
+        "lean": 0.0,
+        "score": 100
+      },
+      {
+        "aim": -0.6,
+        "lean": 5.0,
+        "score": 180
+      },
+      {
+        "aim": -0.5,
+        "lean": -5.0,
+        "score": 0
+      },
+      {
+        "aim": -0.5,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": -0.5,
+        "lean": 5.0,
+        "score": 0
+      },
+      {
+        "aim": -0.4,
+        "lean": -5.0,
+        "score": 0
+      },
+      {
+        "aim": -0.4,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": -0.4,
+        "lean": 5.0,
+        "score": 100
+      },
+      {
+        "aim": -0.3,
+        "lean": -5.0,
+        "score": 0
+      },
+      {
+        "aim": -0.3,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": -0.3,
+        "lean": 5.0,
+        "score": 100
+      },
+      {
+        "aim": -0.2,
+        "lean": -5.0,
+        "score": 0
+      },
+      {
+        "aim": -0.2,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": -0.2,
+        "lean": 5.0,
+        "score": 30
+      },
+      {
+        "aim": -0.1,
+        "lean": -5.0,
+        "score": 0
+      },
+      {
+        "aim": -0.1,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": -0.1,
+        "lean": 5.0,
+        "score": 130
+      },
+      {
+        "aim": 0.0,
+        "lean": -5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.0,
+        "lean": 0.0,
+        "score": 100
+      },
+      {
+        "aim": 0.0,
+        "lean": 5.0,
+        "score": 30
+      },
+      {
+        "aim": 0.1,
+        "lean": -5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.1,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.2,
+        "lean": -5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.2,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.3,
+        "lean": -5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.3,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.3,
+        "lean": 5.0,
+        "score": 100
+      },
+      {
+        "aim": 0.4,
+        "lean": -5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.4,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.5,
+        "lean": -5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.5,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.5,
+        "lean": 5.0,
+        "score": 100
+      },
+      {
+        "aim": 0.6,
+        "lean": -5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.6,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.8,
+        "lean": 10.0,
+        "score": 25
+      }
+    ],
+    "stuck": 0
+  },
+  {
+    "best": {
+      "aim": -0.6,
+      "lean": 0.0,
+      "score": 160,
+      "seed": 42,
+      "time": 11.0916666666667
+    },
+    "clears": 64,
+    "course": "meadow/01",
+    "neutral_clears": 0,
+    "rate": 0.0870748299319728,
+    "samples": 735,
+    "seed_clears": {
+      "137": 9,
+      "2026": 15,
+      "31415": 14,
+      "42": 12,
+      "7777": 14
+    },
+    "solutions": [
+      {
+        "aim": -0.6,
+        "lean": -5.0,
+        "score": 35
+      },
+      {
+        "aim": -0.6,
+        "lean": 0.0,
+        "score": 160
+      },
+      {
+        "aim": -0.5,
+        "lean": -5.0,
+        "score": 60
+      },
+      {
+        "aim": -0.5,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": -0.4,
+        "lean": -5.0,
+        "score": 0
+      },
+      {
+        "aim": -0.2,
+        "lean": 10.0,
+        "score": 125
+      },
+      {
+        "aim": 0.5,
+        "lean": -5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.6,
+        "lean": -5.0,
+        "score": 100
+      },
+      {
+        "aim": 0.6,
+        "lean": 0.0,
+        "score": 50
+      },
+      {
+        "aim": 0.7,
+        "lean": -5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.7,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.8,
+        "lean": 0.0,
+        "score": 0
+      }
+    ],
+    "stuck": 0
+  },
+  {
+    "best": {
+      "aim": -0.9,
+      "lean": -10.0,
+      "score": 290,
+      "seed": 42,
+      "time": 15.2666666666664
+    },
+    "clears": 101,
+    "course": "meadow/02",
+    "neutral_clears": 0,
+    "rate": 0.137414965986395,
+    "samples": 735,
+    "seed_clears": {
+      "137": 24,
+      "2026": 19,
+      "31415": 18,
+      "42": 21,
+      "7777": 19
+    },
+    "solutions": [
+      {
+        "aim": -0.9,
+        "lean": -10.0,
+        "score": 290
+      },
+      {
+        "aim": -0.9,
+        "lean": -5.0,
+        "score": 160
+      },
+      {
+        "aim": -0.6,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": -0.5,
+        "lean": -5.0,
+        "score": 0
+      },
+      {
+        "aim": -0.5,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": -0.5,
+        "lean": 5.0,
+        "score": 0
+      },
+      {
+        "aim": -0.4,
+        "lean": -5.0,
+        "score": 100
+      },
+      {
+        "aim": 0.4,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.4,
+        "lean": 5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.5,
+        "lean": -5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.5,
+        "lean": 5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.5,
+        "lean": 10.0,
+        "score": 0
+      },
+      {
+        "aim": 0.6,
+        "lean": -5.0,
+        "score": 100
+      },
+      {
+        "aim": 0.6,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.6,
+        "lean": 5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.7,
+        "lean": -5.0,
+        "score": 25
+      },
+      {
+        "aim": 0.7,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.7,
+        "lean": 5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.8,
+        "lean": 0.0,
+        "score": 25
+      },
+      {
+        "aim": 0.8,
+        "lean": 5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.9,
+        "lean": 10.0,
+        "score": 0
+      }
+    ],
+    "stuck": 0
+  },
+  {
+    "best": {
+      "aim": 0.9,
+      "lean": 5.0,
+      "score": 160,
+      "seed": 2026,
+      "time": 10.8166666666667
+    },
+    "clears": 26,
+    "course": "meadow/03",
+    "neutral_clears": 0,
+    "rate": 0.0353741496598639,
+    "samples": 735,
+    "seed_clears": {
+      "137": 7,
+      "2026": 7,
+      "31415": 3,
+      "42": 5,
+      "7777": 4
+    },
+    "solutions": [
+      {
+        "aim": -1.0,
+        "lean": -10.0,
+        "score": 100
+      },
+      {
+        "aim": -0.8,
+        "lean": -10.0,
+        "score": 0
+      },
+      {
+        "aim": 0.1,
+        "lean": 10.0,
+        "score": 0
+      },
+      {
+        "aim": 0.3,
+        "lean": 10.0,
+        "score": 30
+      },
+      {
+        "aim": 0.4,
+        "lean": 10.0,
+        "score": 0
+      }
+    ],
+    "stuck": 0
+  },
+  {
+    "best": {
+      "aim": -0.8,
+      "lean": -5.0,
+      "score": 260,
+      "seed": 137,
+      "time": 12.9916666666666
+    },
+    "clears": 32,
+    "course": "meadow/04",
+    "neutral_clears": 0,
+    "rate": 0.0435374149659864,
+    "samples": 735,
+    "seed_clears": {
+      "137": 7,
+      "2026": 7,
+      "31415": 6,
+      "42": 6,
+      "7777": 6
+    },
+    "solutions": [
+      {
+        "aim": -1.0,
+        "lean": -15.0,
+        "score": 0
+      },
+      {
+        "aim": -0.9,
+        "lean": 0.0,
+        "score": 140
+      },
+      {
+        "aim": -0.5,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.4,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.8,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.8,
+        "lean": 5.0,
+        "score": 0
+      }
+    ],
+    "stuck": 0
+  },
+  {
+    "best": {
+      "aim": 0.3,
+      "lean": 0.0,
+      "score": 193,
+      "seed": 7777,
+      "time": 14.0916666666665
+    },
+    "clears": 58,
+    "course": "meadow/05",
+    "neutral_clears": 0,
+    "rate": 0.0789115646258503,
+    "samples": 735,
+    "seed_clears": {
+      "137": 16,
+      "2026": 10,
+      "31415": 10,
+      "42": 11,
+      "7777": 11
+    },
+    "solutions": [
+      {
+        "aim": -0.6,
+        "lean": 0.0,
+        "score": 100
+      },
+      {
+        "aim": -0.5,
+        "lean": 0.0,
+        "score": 60
+      },
+      {
+        "aim": -0.4,
+        "lean": -5.0,
+        "score": 60
+      },
+      {
+        "aim": 0.3,
+        "lean": 5.0,
+        "score": 80
+      },
+      {
+        "aim": 0.4,
+        "lean": 10.0,
+        "score": 25
+      },
+      {
+        "aim": 0.5,
+        "lean": -5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.6,
+        "lean": 0.0,
+        "score": 140
+      },
+      {
+        "aim": 0.7,
+        "lean": 0.0,
+        "score": 130
+      },
+      {
+        "aim": 0.8,
+        "lean": 0.0,
+        "score": 85
+      },
+      {
+        "aim": 0.8,
+        "lean": 10.0,
+        "score": 0
+      },
+      {
+        "aim": 0.9,
+        "lean": 5.0,
+        "score": 0
+      }
+    ],
+    "stuck": 0
+  },
+  {
+    "best": {
+      "aim": -0.9,
+      "lean": -10.0,
+      "score": 280,
+      "seed": 31415,
+      "time": 15.4083333333331
+    },
+    "clears": 38,
+    "course": "meadow/06",
+    "neutral_clears": 0,
+    "rate": 0.0517006802721088,
+    "samples": 735,
+    "seed_clears": {
+      "137": 6,
+      "2026": 11,
+      "31415": 11,
+      "42": 5,
+      "7777": 5
+    },
+    "solutions": [
+      {
+        "aim": -0.8,
+        "lean": -5.0,
+        "score": 190
+      },
+      {
+        "aim": 0.5,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.6,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.6,
+        "lean": 5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.7,
+        "lean": 0.0,
+        "score": 0
+      }
+    ],
+    "stuck": 0
+  },
+  {
+    "best": {
+      "aim": -0.4,
+      "lean": -5.0,
+      "score": 100,
+      "seed": 42,
+      "time": 8.85000000000014
+    },
+    "clears": 30,
+    "course": "meadow/07",
+    "neutral_clears": 0,
+    "rate": 0.0408163265306122,
+    "samples": 735,
+    "seed_clears": {
+      "137": 4,
+      "2026": 4,
+      "31415": 8,
+      "42": 7,
+      "7777": 7
+    },
+    "solutions": [
+      {
+        "aim": -0.6,
+        "lean": 0.0,
+        "score": 30
+      },
+      {
+        "aim": -0.5,
+        "lean": -5.0,
+        "score": 50
+      },
+      {
+        "aim": -0.5,
+        "lean": 0.0,
+        "score": 85
+      },
+      {
+        "aim": -0.4,
+        "lean": -5.0,
+        "score": 100
+      },
+      {
+        "aim": 0.3,
+        "lean": 0.0,
+        "score": 50
+      },
+      {
+        "aim": 0.6,
+        "lean": 0.0,
+        "score": 50
+      },
+      {
+        "aim": 0.8,
+        "lean": -5.0,
+        "score": 0
+      }
+    ],
+    "stuck": 0
+  },
+  {
+    "best": {
+      "aim": 0.4,
+      "lean": 5.0,
+      "score": 100,
+      "seed": 42,
+      "time": 10.1416666666667
+    },
+    "clears": 89,
+    "course": "meadow/08",
+    "neutral_clears": 0,
+    "rate": 0.12108843537415,
+    "samples": 735,
+    "seed_clears": {
+      "137": 18,
+      "2026": 14,
+      "31415": 21,
+      "42": 20,
+      "7777": 16
+    },
+    "solutions": [
+      {
+        "aim": -0.5,
+        "lean": -5.0,
+        "score": 25
+      },
+      {
+        "aim": -0.5,
+        "lean": 5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.0,
+        "lean": 5.0,
+        "score": 30
+      },
+      {
+        "aim": 0.1,
+        "lean": 5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.2,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.3,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.3,
+        "lean": 5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.4,
+        "lean": 5.0,
+        "score": 100
+      },
+      {
+        "aim": 0.4,
+        "lean": 10.0,
+        "score": 0
+      },
+      {
+        "aim": 0.5,
+        "lean": -5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.5,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.5,
+        "lean": 5.0,
+        "score": 100
+      },
+      {
+        "aim": 0.5,
+        "lean": 10.0,
+        "score": 0
+      },
+      {
+        "aim": 0.6,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.6,
+        "lean": 5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.7,
+        "lean": -5.0,
+        "score": 40
+      },
+      {
+        "aim": 0.7,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.7,
+        "lean": 5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.8,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.9,
+        "lean": 5.0,
+        "score": 0
+      }
+    ],
+    "stuck": 0
+  },
+  {
+    "best": {
+      "aim": 1.0,
+      "lean": 10.0,
+      "score": 270,
+      "seed": 7777,
+      "time": 14.4916666666665
+    },
+    "clears": 85,
+    "course": "coral/01",
+    "neutral_clears": 0,
+    "rate": 0.115646258503401,
+    "samples": 735,
+    "seed_clears": {
+      "137": 17,
+      "2026": 16,
+      "31415": 19,
+      "42": 15,
+      "7777": 18
+    },
+    "solutions": [
+      {
+        "aim": -0.6,
+        "lean": -10.0,
+        "score": 0
+      },
+      {
+        "aim": -0.6,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": -0.5,
+        "lean": -5.0,
+        "score": 0
+      },
+      {
+        "aim": -0.5,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": -0.5,
+        "lean": 5.0,
+        "score": 100
+      },
+      {
+        "aim": -0.4,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": -0.1,
+        "lean": 5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.0,
+        "lean": 5.0,
+        "score": 130
+      },
+      {
+        "aim": 0.1,
+        "lean": 10.0,
+        "score": 30
+      },
+      {
+        "aim": 0.5,
+        "lean": -5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.5,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.6,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.7,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.8,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.8,
+        "lean": 5.0,
+        "score": 30
+      }
+    ],
+    "stuck": 0
+  },
+  {
+    "best": {
+      "aim": -0.9,
+      "lean": -10.0,
+      "score": 330,
+      "seed": 31415,
+      "time": 15.3833333333331
+    },
+    "clears": 96,
+    "course": "coral/02",
+    "neutral_clears": 0,
+    "rate": 0.130612244897959,
+    "samples": 735,
+    "seed_clears": {
+      "137": 21,
+      "2026": 21,
+      "31415": 20,
+      "42": 18,
+      "7777": 16
+    },
+    "solutions": [
+      {
+        "aim": -1.0,
+        "lean": -5.0,
+        "score": 170
+      },
+      {
+        "aim": -1.0,
+        "lean": 0.0,
+        "score": 200
+      },
+      {
+        "aim": -0.5,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": -0.5,
+        "lean": 5.0,
+        "score": 0
+      },
+      {
+        "aim": -0.4,
+        "lean": -5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.1,
+        "lean": 5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.3,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.3,
+        "lean": 5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.4,
+        "lean": 5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.5,
+        "lean": 5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.5,
+        "lean": 10.0,
+        "score": 0
+      },
+      {
+        "aim": 0.6,
+        "lean": -5.0,
+        "score": 60
+      },
+      {
+        "aim": 0.6,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.6,
+        "lean": 5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.7,
+        "lean": 5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.8,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.8,
+        "lean": 5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.9,
+        "lean": 5.0,
+        "score": 0
+      }
+    ],
+    "stuck": 0
+  },
+  {
+    "best": {
+      "aim": 0.2,
+      "lean": 10.0,
+      "score": 100,
+      "seed": 137,
+      "time": 15.2166666666664
+    },
+    "clears": 26,
+    "course": "coral/03",
+    "neutral_clears": 0,
+    "rate": 0.0353741496598639,
+    "samples": 735,
+    "seed_clears": {
+      "137": 8,
+      "2026": 5,
+      "31415": 5,
+      "42": 4,
+      "7777": 4
+    },
+    "solutions": [
+      {
+        "aim": -1.0,
+        "lean": -10.0,
+        "score": 30
+      },
+      {
+        "aim": -0.8,
+        "lean": -10.0,
+        "score": 0
+      },
+      {
+        "aim": -0.6,
+        "lean": -15.0,
+        "score": 0
+      },
+      {
+        "aim": -0.5,
+        "lean": -10.0,
+        "score": 60
+      }
+    ],
+    "stuck": 0
+  },
+  {
+    "best": {
+      "aim": -1.0,
+      "lean": -5.0,
+      "score": 224,
+      "seed": 42,
+      "time": 9.43333333333344
+    },
+    "clears": 56,
+    "course": "coral/04",
+    "neutral_clears": 0,
+    "rate": 0.0761904761904762,
+    "samples": 735,
+    "seed_clears": {
+      "137": 10,
+      "2026": 12,
+      "31415": 15,
+      "42": 8,
+      "7777": 11
+    },
+    "solutions": [
+      {
+        "aim": -1.0,
+        "lean": -5.0,
+        "score": 224
+      },
+      {
+        "aim": -0.9,
+        "lean": -15.0,
+        "score": 0
+      },
+      {
+        "aim": -0.6,
+        "lean": -10.0,
+        "score": 100
+      },
+      {
+        "aim": -0.5,
+        "lean": 0.0,
+        "score": 30
+      },
+      {
+        "aim": 0.2,
+        "lean": 5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.4,
+        "lean": 5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.5,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.7,
+        "lean": 5.0,
+        "score": 0
+      }
+    ],
+    "stuck": 0
+  },
+  {
+    "best": {
+      "aim": -0.5,
+      "lean": 0.0,
+      "score": 160,
+      "seed": 7777,
+      "time": 12.2999999999999
+    },
+    "clears": 58,
+    "course": "coral/05",
+    "neutral_clears": 0,
+    "rate": 0.0789115646258503,
+    "samples": 735,
+    "seed_clears": {
+      "137": 12,
+      "2026": 12,
+      "31415": 14,
+      "42": 12,
+      "7777": 8
+    },
+    "solutions": [
+      {
+        "aim": -0.7,
+        "lean": 0.0,
+        "score": 10
+      },
+      {
+        "aim": -0.5,
+        "lean": -10.0,
+        "score": 100
+      },
+      {
+        "aim": -0.5,
+        "lean": -5.0,
+        "score": 0
+      },
+      {
+        "aim": -0.5,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": -0.4,
+        "lean": -5.0,
+        "score": 50
+      },
+      {
+        "aim": 0.4,
+        "lean": -5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.4,
+        "lean": 5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.5,
+        "lean": -5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.6,
+        "lean": -5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.6,
+        "lean": 10.0,
+        "score": 0
+      },
+      {
+        "aim": 0.7,
+        "lean": -5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.7,
+        "lean": 0.0,
+        "score": 60
+      }
+    ],
+    "stuck": 0
+  },
+  {
+    "best": {
+      "aim": -1.0,
+      "lean": -5.0,
+      "score": 290,
+      "seed": 2026,
+      "time": 10.2250000000001
+    },
+    "clears": 13,
+    "course": "coral/06",
+    "neutral_clears": 0,
+    "rate": 0.017687074829932,
+    "samples": 735,
+    "seed_clears": {
+      "137": 2,
+      "2026": 3,
+      "31415": 3,
+      "42": 4,
+      "7777": 1
+    },
+    "solutions": [
+      {
+        "aim": -1.0,
+        "lean": -5.0,
+        "score": 200
+      },
+      {
+        "aim": -0.9,
+        "lean": -5.0,
+        "score": 250
+      },
+      {
+        "aim": -0.7,
+        "lean": -10.0,
+        "score": 0
+      },
+      {
+        "aim": 0.9,
+        "lean": -5.0,
+        "score": 0
+      }
+    ],
+    "stuck": 0
+  },
+  {
+    "best": {
+      "aim": 0.3,
+      "lean": 5.0,
+      "score": 180,
+      "seed": 137,
+      "time": 14.5166666666665
+    },
+    "clears": 42,
+    "course": "coral/07",
+    "neutral_clears": 0,
+    "rate": 0.0571428571428571,
+    "samples": 735,
+    "seed_clears": {
+      "137": 7,
+      "2026": 9,
+      "31415": 7,
+      "42": 9,
+      "7777": 10
+    },
+    "solutions": [
+      {
+        "aim": -0.4,
+        "lean": 0.0,
+        "score": 60
+      },
+      {
+        "aim": 0.2,
+        "lean": 5.0,
+        "score": 80
+      },
+      {
+        "aim": 0.3,
+        "lean": 0.0,
+        "score": 60
+      },
+      {
+        "aim": 0.4,
+        "lean": -5.0,
+        "score": 60
+      },
+      {
+        "aim": 0.5,
+        "lean": -5.0,
+        "score": 60
+      },
+      {
+        "aim": 0.5,
+        "lean": 0.0,
+        "score": 60
+      },
+      {
+        "aim": 0.6,
+        "lean": 0.0,
+        "score": 60
+      },
+      {
+        "aim": 0.7,
+        "lean": -5.0,
+        "score": 100
+      },
+      {
+        "aim": 0.8,
+        "lean": 0.0,
+        "score": 50
+      }
+    ],
+    "stuck": 0
+  },
+  {
+    "best": {
+      "aim": -0.9,
+      "lean": 0.0,
+      "score": 274,
+      "seed": 7777,
+      "time": 11.7083333333333
+    },
+    "clears": 84,
+    "course": "coral/08",
+    "neutral_clears": 0,
+    "rate": 0.114285714285714,
+    "samples": 735,
+    "seed_clears": {
+      "137": 15,
+      "2026": 16,
+      "31415": 16,
+      "42": 20,
+      "7777": 17
+    },
+    "solutions": [
+      {
+        "aim": -0.4,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.0,
+        "lean": 5.0,
+        "score": 53
+      },
+      {
+        "aim": 0.2,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.3,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.4,
+        "lean": -5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.4,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.4,
+        "lean": 5.0,
+        "score": 90
+      },
+      {
+        "aim": 0.5,
+        "lean": -5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.5,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.5,
+        "lean": 5.0,
+        "score": 90
+      },
+      {
+        "aim": 0.6,
+        "lean": -5.0,
+        "score": 25
+      },
+      {
+        "aim": 0.6,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.7,
+        "lean": -5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.7,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.7,
+        "lean": 5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.8,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.8,
+        "lean": 5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.8,
+        "lean": 10.0,
+        "score": 0
+      },
+      {
+        "aim": 0.9,
+        "lean": 0.0,
+        "score": 25
+      },
+      {
+        "aim": 0.9,
+        "lean": 5.0,
+        "score": 25
+      }
+    ],
+    "stuck": 0
+  },
+  {
+    "best": {
+      "aim": -0.4,
+      "lean": 5.0,
+      "score": 170,
+      "seed": 2026,
+      "time": 15.9166666666664
+    },
+    "clears": 38,
+    "course": "ember/01",
+    "neutral_clears": 0,
+    "rate": 0.0517006802721088,
+    "samples": 735,
+    "seed_clears": {
+      "137": 6,
+      "2026": 5,
+      "31415": 8,
+      "42": 10,
+      "7777": 9
+    },
+    "solutions": [
+      {
+        "aim": -0.5,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": -0.4,
+        "lean": -5.0,
+        "score": 0
+      },
+      {
+        "aim": -0.4,
+        "lean": 5.0,
+        "score": 60
+      },
+      {
+        "aim": 0.1,
+        "lean": 5.0,
+        "score": 58
+      },
+      {
+        "aim": 0.2,
+        "lean": -10.0,
+        "score": 0
+      },
+      {
+        "aim": 0.2,
+        "lean": 5.0,
+        "score": 85
+      },
+      {
+        "aim": 0.3,
+        "lean": 5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.4,
+        "lean": 0.0,
+        "score": 70
+      },
+      {
+        "aim": 0.4,
+        "lean": 5.0,
+        "score": 50
+      },
+      {
+        "aim": 0.8,
+        "lean": 5.0,
+        "score": 100
+      }
+    ],
+    "stuck": 0
+  },
+  {
+    "best": {
+      "aim": -1.0,
+      "lean": 0.0,
+      "score": 220,
+      "seed": 137,
+      "time": 10.825
+    },
+    "clears": 84,
+    "course": "ember/02",
+    "neutral_clears": 0,
+    "rate": 0.114285714285714,
+    "samples": 735,
+    "seed_clears": {
+      "137": 19,
+      "2026": 17,
+      "31415": 20,
+      "42": 16,
+      "7777": 12
+    },
+    "solutions": [
+      {
+        "aim": -0.9,
+        "lean": -10.0,
+        "score": 200
+      },
+      {
+        "aim": -0.6,
+        "lean": -10.0,
+        "score": 25
+      },
+      {
+        "aim": -0.5,
+        "lean": -5.0,
+        "score": 150
+      },
+      {
+        "aim": -0.4,
+        "lean": -5.0,
+        "score": 0
+      },
+      {
+        "aim": -0.3,
+        "lean": 0.0,
+        "score": 60
+      },
+      {
+        "aim": 0.1,
+        "lean": 5.0,
+        "score": 25
+      },
+      {
+        "aim": 0.2,
+        "lean": 5.0,
+        "score": 90
+      },
+      {
+        "aim": 0.3,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.4,
+        "lean": -5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.5,
+        "lean": 0.0,
+        "score": 60
+      },
+      {
+        "aim": 0.6,
+        "lean": -5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.6,
+        "lean": 0.0,
+        "score": 60
+      },
+      {
+        "aim": 0.7,
+        "lean": -5.0,
+        "score": 25
+      },
+      {
+        "aim": 0.7,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.8,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.9,
+        "lean": 5.0,
+        "score": 0
+      }
+    ],
+    "stuck": 0
+  },
+  {
+    "best": {
+      "aim": -0.8,
+      "lean": -15.0,
+      "score": 130,
+      "seed": 42,
+      "time": 15.2083333333331
+    },
+    "clears": 20,
+    "course": "ember/03",
+    "neutral_clears": 0,
+    "rate": 0.0272108843537415,
+    "samples": 735,
+    "seed_clears": {
+      "137": 3,
+      "2026": 3,
+      "31415": 2,
+      "42": 7,
+      "7777": 5
+    },
+    "solutions": [
+      {
+        "aim": -0.8,
+        "lean": -15.0,
+        "score": 130
+      },
+      {
+        "aim": -0.8,
+        "lean": -10.0,
+        "score": 30
+      },
+      {
+        "aim": -0.4,
+        "lean": 0.0,
+        "score": 43
+      },
+      {
+        "aim": 0.1,
+        "lean": 5.0,
+        "score": 35
+      },
+      {
+        "aim": 0.3,
+        "lean": 5.0,
+        "score": 35
+      },
+      {
+        "aim": 0.5,
+        "lean": -5.0,
+        "score": 10
+      },
+      {
+        "aim": 0.7,
+        "lean": -5.0,
+        "score": 127
+      }
+    ],
+    "stuck": 0
+  },
+  {
+    "best": {
+      "aim": -0.9,
+      "lean": -5.0,
+      "score": 224,
+      "seed": 7777,
+      "time": 10.9083333333334
+    },
+    "clears": 43,
+    "course": "ember/04",
+    "neutral_clears": 0,
+    "rate": 0.0585034013605442,
+    "samples": 735,
+    "seed_clears": {
+      "137": 5,
+      "2026": 8,
+      "31415": 10,
+      "42": 10,
+      "7777": 10
+    },
+    "solutions": [
+      {
+        "aim": -0.7,
+        "lean": -5.0,
+        "score": 90
+      },
+      {
+        "aim": -0.5,
+        "lean": 5.0,
+        "score": 0
+      },
+      {
+        "aim": -0.4,
+        "lean": -5.0,
+        "score": 125
+      },
+      {
+        "aim": 0.1,
+        "lean": 5.0,
+        "score": 3
+      },
+      {
+        "aim": 0.2,
+        "lean": 5.0,
+        "score": 53
+      },
+      {
+        "aim": 0.4,
+        "lean": 5.0,
+        "score": 100
+      },
+      {
+        "aim": 0.5,
+        "lean": 10.0,
+        "score": 0
+      },
+      {
+        "aim": 0.7,
+        "lean": 5.0,
+        "score": 53
+      },
+      {
+        "aim": 0.8,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.8,
+        "lean": 10.0,
+        "score": 0
+      }
+    ],
+    "stuck": 0
+  },
+  {
+    "best": {
+      "aim": 1.0,
+      "lean": 5.0,
+      "score": 230,
+      "seed": 137,
+      "time": 9.15833333333345
+    },
+    "clears": 23,
+    "course": "ember/05",
+    "neutral_clears": 0,
+    "rate": 0.0312925170068027,
+    "samples": 735,
+    "seed_clears": {
+      "137": 5,
+      "2026": 5,
+      "31415": 3,
+      "42": 6,
+      "7777": 4
+    },
+    "solutions": [
+      {
+        "aim": -0.5,
+        "lean": 0.0,
+        "score": 125
+      },
+      {
+        "aim": -0.5,
+        "lean": 5.0,
+        "score": 100
+      },
+      {
+        "aim": -0.4,
+        "lean": 0.0,
+        "score": 60
+      },
+      {
+        "aim": -0.2,
+        "lean": 10.0,
+        "score": 25
+      },
+      {
+        "aim": 0.4,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.6,
+        "lean": 0.0,
+        "score": 100
+      }
+    ],
+    "stuck": 0
+  },
+  {
+    "best": {
+      "aim": -0.9,
+      "lean": -10.0,
+      "score": 330,
+      "seed": 31415,
+      "time": 15.3333333333331
+    },
+    "clears": 14,
+    "course": "ember/06",
+    "neutral_clears": 0,
+    "rate": 0.019047619047619,
+    "samples": 735,
+    "seed_clears": {
+      "137": 3,
+      "2026": 1,
+      "31415": 5,
+      "42": 3,
+      "7777": 2
+    },
+    "solutions": [
+      {
+        "aim": -0.7,
+        "lean": -5.0,
+        "score": 20
+      },
+      {
+        "aim": 0.7,
+        "lean": 10.0,
+        "score": 90
+      },
+      {
+        "aim": 1.0,
+        "lean": 10.0,
+        "score": 0
+      }
+    ],
+    "stuck": 0
+  },
+  {
+    "best": {
+      "aim": 0.2,
+      "lean": 5.0,
+      "score": 160,
+      "seed": 2026,
+      "time": 13.7749999999999
+    },
+    "clears": 29,
+    "course": "ember/07",
+    "neutral_clears": 0,
+    "rate": 0.0394557823129252,
+    "samples": 735,
+    "seed_clears": {
+      "137": 3,
+      "2026": 11,
+      "31415": 5,
+      "42": 6,
+      "7777": 4
+    },
+    "solutions": [
+      {
+        "aim": -0.4,
+        "lean": 0.0,
+        "score": 25
+      },
+      {
+        "aim": 0.2,
+        "lean": 0.0,
+        "score": 25
+      },
+      {
+        "aim": 0.3,
+        "lean": 5.0,
+        "score": 60
+      },
+      {
+        "aim": 0.4,
+        "lean": 5.0,
+        "score": 20
+      },
+      {
+        "aim": 0.6,
+        "lean": 10.0,
+        "score": 0
+      },
+      {
+        "aim": 0.7,
+        "lean": -5.0,
+        "score": 0
+      }
+    ],
+    "stuck": 0
+  },
+  {
+    "best": {
+      "aim": -0.8,
+      "lean": -5.0,
+      "score": 424,
+      "seed": 137,
+      "time": 13.7083333333332
+    },
+    "clears": 48,
+    "course": "ember/08",
+    "neutral_clears": 0,
+    "rate": 0.0653061224489796,
+    "samples": 735,
+    "seed_clears": {
+      "137": 9,
+      "2026": 9,
+      "31415": 9,
+      "42": 9,
+      "7777": 12
+    },
+    "solutions": [
+      {
+        "aim": -1.0,
+        "lean": -10.0,
+        "score": 280
+      },
+      {
+        "aim": -0.4,
+        "lean": -10.0,
+        "score": 0
+      },
+      {
+        "aim": 0.1,
+        "lean": 5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.2,
+        "lean": 5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.3,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.5,
+        "lean": 5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.6,
+        "lean": 10.0,
+        "score": 100
+      },
+      {
+        "aim": 0.7,
+        "lean": 5.0,
+        "score": 100
+      },
+      {
+        "aim": 0.8,
+        "lean": 0.0,
+        "score": 0
+      }
+    ],
+    "stuck": 0
+  },
+  {
+    "best": {
+      "aim": 1.0,
+      "lean": 10.0,
+      "score": 520,
+      "seed": 7777,
+      "time": 12.6749999999999
+    },
+    "clears": 25,
+    "course": "neon/01",
+    "neutral_clears": 0,
+    "rate": 0.0340136054421769,
+    "samples": 735,
+    "seed_clears": {
+      "137": 6,
+      "2026": 4,
+      "31415": 5,
+      "42": 5,
+      "7777": 5
+    },
+    "solutions": [
+      {
+        "aim": 0.3,
+        "lean": 0.0,
+        "score": 110
+      },
+      {
+        "aim": 0.4,
+        "lean": -5.0,
+        "score": 30
+      },
+      {
+        "aim": 0.5,
+        "lean": 0.0,
+        "score": 35
+      },
+      {
+        "aim": 0.6,
+        "lean": 0.0,
+        "score": 40
+      },
+      {
+        "aim": 0.8,
+        "lean": 5.0,
+        "score": 88
+      }
+    ],
+    "stuck": 0
+  },
+  {
+    "best": {
+      "aim": -0.8,
+      "lean": -5.0,
+      "score": 320,
+      "seed": 137,
+      "time": 12.2166666666666
+    },
+    "clears": 139,
+    "course": "neon/02",
+    "neutral_clears": 0,
+    "rate": 0.189115646258503,
+    "samples": 735,
+    "seed_clears": {
+      "137": 28,
+      "2026": 25,
+      "31415": 27,
+      "42": 30,
+      "7777": 29
+    },
+    "solutions": [
+      {
+        "aim": -1.0,
+        "lean": -5.0,
+        "score": 240
+      },
+      {
+        "aim": -0.5,
+        "lean": 5.0,
+        "score": 30
+      },
+      {
+        "aim": -0.4,
+        "lean": -5.0,
+        "score": 58
+      },
+      {
+        "aim": -0.4,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": -0.4,
+        "lean": 5.0,
+        "score": 0
+      },
+      {
+        "aim": -0.3,
+        "lean": 0.0,
+        "score": 100
+      },
+      {
+        "aim": -0.3,
+        "lean": 5.0,
+        "score": 0
+      },
+      {
+        "aim": -0.2,
+        "lean": 10.0,
+        "score": 30
+      },
+      {
+        "aim": 0.1,
+        "lean": 5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.2,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.3,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.3,
+        "lean": 5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.4,
+        "lean": -5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.4,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.4,
+        "lean": 5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.4,
+        "lean": 10.0,
+        "score": 0
+      },
+      {
+        "aim": 0.5,
+        "lean": -5.0,
+        "score": 100
+      },
+      {
+        "aim": 0.5,
+        "lean": 0.0,
+        "score": 100
+      },
+      {
+        "aim": 0.5,
+        "lean": 10.0,
+        "score": 0
+      },
+      {
+        "aim": 0.6,
+        "lean": -5.0,
+        "score": 100
+      },
+      {
+        "aim": 0.6,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.6,
+        "lean": 5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.6,
+        "lean": 10.0,
+        "score": 0
+      },
+      {
+        "aim": 0.7,
+        "lean": -5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.7,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.7,
+        "lean": 5.0,
+        "score": 100
+      },
+      {
+        "aim": 0.8,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.8,
+        "lean": 5.0,
+        "score": 100
+      },
+      {
+        "aim": 0.9,
+        "lean": 5.0,
+        "score": 0
+      },
+      {
+        "aim": 1.0,
+        "lean": 10.0,
+        "score": 0
+      }
+    ],
+    "stuck": 0
+  },
+  {
+    "best": {
+      "aim": 1.0,
+      "lean": 10.0,
+      "score": 230,
+      "seed": 42,
+      "time": 14.9999999999998
+    },
+    "clears": 29,
+    "course": "neon/03",
+    "neutral_clears": 0,
+    "rate": 0.0394557823129252,
+    "samples": 735,
+    "seed_clears": {
+      "137": 9,
+      "2026": 7,
+      "31415": 5,
+      "42": 3,
+      "7777": 5
+    },
+    "solutions": [
+      {
+        "aim": 0.2,
+        "lean": -10.0,
+        "score": 25
+      },
+      {
+        "aim": 0.7,
+        "lean": 10.0,
+        "score": 85
+      },
+      {
+        "aim": 1.0,
+        "lean": 10.0,
+        "score": 230
+      }
+    ],
+    "stuck": 0
+  },
+  {
+    "best": {
+      "aim": -1.0,
+      "lean": -5.0,
+      "score": 350,
+      "seed": 7777,
+      "time": 12.9583333333332
+    },
+    "clears": 34,
+    "course": "neon/04",
+    "neutral_clears": 0,
+    "rate": 0.0462585034013605,
+    "samples": 735,
+    "seed_clears": {
+      "137": 6,
+      "2026": 8,
+      "31415": 7,
+      "42": 6,
+      "7777": 7
+    },
+    "solutions": [
+      {
+        "aim": 0.2,
+        "lean": 5.0,
+        "score": 53
+      },
+      {
+        "aim": 0.5,
+        "lean": -5.0,
+        "score": 43
+      },
+      {
+        "aim": 0.5,
+        "lean": 10.0,
+        "score": 0
+      },
+      {
+        "aim": 0.7,
+        "lean": 5.0,
+        "score": 70
+      },
+      {
+        "aim": 0.7,
+        "lean": 10.0,
+        "score": 100
+      },
+      {
+        "aim": 0.9,
+        "lean": 10.0,
+        "score": 100
+      }
+    ],
+    "stuck": 0
+  },
+  {
+    "best": {
+      "aim": 0.7,
+      "lean": 10.0,
+      "score": 130,
+      "seed": 2026,
+      "time": 12.2916666666666
+    },
+    "clears": 34,
+    "course": "neon/05",
+    "neutral_clears": 0,
+    "rate": 0.0462585034013605,
+    "samples": 735,
+    "seed_clears": {
+      "137": 5,
+      "2026": 9,
+      "31415": 3,
+      "42": 9,
+      "7777": 8
+    },
+    "solutions": [
+      {
+        "aim": -0.5,
+        "lean": 5.0,
+        "score": 30
+      },
+      {
+        "aim": -0.4,
+        "lean": -5.0,
+        "score": 25
+      },
+      {
+        "aim": -0.4,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": -0.4,
+        "lean": 5.0,
+        "score": 0
+      },
+      {
+        "aim": -0.3,
+        "lean": -5.0,
+        "score": 25
+      },
+      {
+        "aim": -0.3,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.2,
+        "lean": 0.0,
+        "score": 80
+      },
+      {
+        "aim": 0.4,
+        "lean": 0.0,
+        "score": 100
+      },
+      {
+        "aim": 0.5,
+        "lean": 10.0,
+        "score": 0
+      }
+    ],
+    "stuck": 0
+  },
+  {
+    "best": {
+      "aim": -0.9,
+      "lean": -10.0,
+      "score": 430,
+      "seed": 2026,
+      "time": 15.7916666666664
+    },
+    "clears": 22,
+    "course": "neon/06",
+    "neutral_clears": 0,
+    "rate": 0.0299319727891156,
+    "samples": 735,
+    "seed_clears": {
+      "137": 5,
+      "2026": 5,
+      "31415": 3,
+      "42": 2,
+      "7777": 7
+    },
+    "solutions": [
+      {
+        "aim": -1.0,
+        "lean": -5.0,
+        "score": 250
+      },
+      {
+        "aim": -0.8,
+        "lean": -5.0,
+        "score": 190
+      }
+    ],
+    "stuck": 0
+  },
+  {
+    "best": {
+      "aim": 0.1,
+      "lean": 5.0,
+      "score": 285,
+      "seed": 7777,
+      "time": 12.5416666666666
+    },
+    "clears": 50,
+    "course": "neon/07",
+    "neutral_clears": 0,
+    "rate": 0.0680272108843537,
+    "samples": 735,
+    "seed_clears": {
+      "137": 11,
+      "2026": 7,
+      "31415": 11,
+      "42": 11,
+      "7777": 10
+    },
+    "solutions": [
+      {
+        "aim": -0.4,
+        "lean": 0.0,
+        "score": 25
+      },
+      {
+        "aim": -0.4,
+        "lean": 5.0,
+        "score": 0
+      },
+      {
+        "aim": -0.3,
+        "lean": 0.0,
+        "score": 100
+      },
+      {
+        "aim": 0.3,
+        "lean": 0.0,
+        "score": 100
+      },
+      {
+        "aim": 0.4,
+        "lean": -5.0,
+        "score": 58
+      },
+      {
+        "aim": 0.4,
+        "lean": 0.0,
+        "score": 30
+      },
+      {
+        "aim": 0.5,
+        "lean": -5.0,
+        "score": 0
+      },
+      {
+        "aim": 0.5,
+        "lean": 0.0,
+        "score": 60
+      },
+      {
+        "aim": 0.8,
+        "lean": 0.0,
+        "score": 0
+      },
+      {
+        "aim": 0.8,
+        "lean": 5.0,
+        "score": 50
+      },
+      {
+        "aim": 0.9,
+        "lean": 5.0,
+        "score": 0
+      }
+    ],
+    "stuck": 0
+  },
+  {
+    "best": {
+      "aim": -0.9,
+      "lean": -5.0,
+      "score": 390,
+      "seed": 42,
+      "time": 13.3833333333332
+    },
+    "clears": 35,
+    "course": "neon/08",
+    "neutral_clears": 0,
+    "rate": 0.0476190476190476,
+    "samples": 735,
+    "seed_clears": {
+      "137": 6,
+      "2026": 10,
+      "31415": 5,
+      "42": 7,
+      "7777": 7
+    },
+    "solutions": [
+      {
+        "aim": -0.9,
+        "lean": -5.0,
+        "score": 390
+      },
+      {
+        "aim": -0.8,
+        "lean": 0.0,
+        "score": 280
+      },
+      {
+        "aim": 0.4,
+        "lean": 10.0,
+        "score": 0
+      },
+      {
+        "aim": 0.5,
+        "lean": 5.0,
+        "score": 105
+      },
+      {
+        "aim": 0.6,
+        "lean": -5.0,
+        "score": 10
+      },
+      {
+        "aim": 0.6,
+        "lean": 10.0,
+        "score": 0
+      },
+      {
+        "aim": 0.7,
+        "lean": 5.0,
+        "score": 100
+      }
+    ],
+    "stuck": 0
+  }
 ]

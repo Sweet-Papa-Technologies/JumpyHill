@@ -34,3 +34,5 @@ CC0 terms: https://creativecommons.org/publicdomain/zero/1.0/ . Font license tex
 | `assets/audio/footstep_grass_000.ogg` | https://kenney.nl/assets/impact-sounds | Kenney | CC0 | 2026-09-06 | Unmodified source, looped in engine. |
 | `assets/audio/footstep_snow_000.ogg` | https://kenney.nl/assets/impact-sounds | Kenney | CC0 | 2026-09-06 | Unmodified source, looped in engine. |
 | `assets/audio/footstep_concrete_000.ogg` | https://kenney.nl/assets/impact-sounds | Kenney | CC0 | 2026-09-06 | Unmodified source, looped in engine. |
+
+The 0.2 scenery in `src/course/scenery.gd` and ground shader in `src/feel/shaders/terrain.gdshader` are original source-generated geometry/materials under Apache-2.0. They add no external asset files; the existing Kenney and font provenance is unchanged.

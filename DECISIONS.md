@@ -10,3 +10,17 @@
 - Headless tests use a dependency-free SceneTree assertion harness so all tests execute the production scripts without an addon. Test wrappers reject script errors as well as nonzero exits.
 - macOS export verification found a zero-byte executable despite Godot's success exit. The build verifier restores the unchanged binary from the pinned official export template, validates its format and size, and then the app is launched and signed.
 - The supplied iOS simulator archive contains x86_64 code despite its dual-architecture XCFramework metadata. The local simulator script builds x86_64 and was verified under Rosetta. No claim is made about an arm64 simulator build.
+
+## 0.2 playtest response
+
+Player feedback showed the broad 60% solver ceiling hid an obvious default winning lane. Regular courses now require zero default-launch clears across five seeds, at least one solution per seed, and a maximum 30% broad-grid clear rate. The tutorial keeps a gentler ceiling. Shallow terrain contours retain physical banking without the old strong gutter funnel; the center boost moved to a side route. A center barricade and staggered obstacles require launch/lean choices and optional nudge corrections.
+
+Moving sweepers and shuttles use AnimatableBody3D, driven from physics time instead of the render loop. Their marked sweep areas show their reach, and their phases reset each retry. Moving visuals are excluded recursively from static mesh batching. Lean force applies while grounded, the axle banks to the selected angle, and there is no automatic forward force to push a blocked tire out of trouble.
+
+The preview is explicitly a 0.65-second launch aid; it never supplies steering to the real tire and stops at a blocking face. Its reduced contact model is still not a full rigid-body pre-roll.
+
+At termination the body freezes and the camera captures a bounded, immutable focus. The short orbit settles instead of chasing a body falling past the end of the hill. BLOCKED results offer route advice rather than reporting misleading distance from a finish never reached.
+
+The visual additions are original repository geometry and shaders, extending the existing Kenney CC0 props: layered cliffs, ground grain, planted shoulders, warning stripes, biome landmarks and finish pavilions. No additional downloads or asset licenses are needed.
+
+The result-freeze regression exposed alternating retry positions from pending forces retained by the old tire body. AIM now recreates just the small tire body before the fresh-world reset; course meshes and colliders are retained. Tests cover a route that reaches moving hazards and clears, rather than stopping at the first barrier. Slow motion remains enabled.
