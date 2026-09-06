@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="CourseData" load_steps=2 format=3]
+[ext_resource type="Script" path="res://src/course/course_data.gd" id="1"]
+[resource]
+script = ExtResource("1")
+title = "First Light"
+world = 0
+number = 1
+length = 58.0
+slope = 0.27
+goal_x = 0
+goal_width = 3.7399999999999998
+lane_curve = 0.75
+layout = 1
+par_style = 90
+moving_gate = false

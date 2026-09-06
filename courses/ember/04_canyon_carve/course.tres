@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="CourseData" load_steps=2 format=3]
+[ext_resource type="Script" path="res://src/course/course_data.gd" id="1"]
+[resource]
+script = ExtResource("1")
+title = "Canyon Carve"
+world = 2
+number = 4
+length = 68.0
+slope = 0.32
+goal_x = 0.8
+goal_width = 2.96
+lane_curve = 1.6
+layout = 20
+par_style = 150
+moving_gate = false

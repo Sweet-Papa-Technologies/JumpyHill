@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="CourseData" load_steps=2 format=3]
+[ext_resource type="Script" path="res://src/course/course_data.gd" id="1"]
+[resource]
+script = ExtResource("1")
+title = "Moonshot"
+world = 3
+number = 7
+length = 76.0
+slope = 0.34500000000000003
+goal_x = -1.8
+goal_width = 2.48
+lane_curve = 2.25
+layout = 31
+par_style = 195
+moving_gate = false

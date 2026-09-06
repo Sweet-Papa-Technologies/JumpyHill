@@ -1,0 +1,7 @@
+.godot/
+.tools/
+build/
+.DS_Store
+*.tmp
+export/*.zip
+export/*.app/

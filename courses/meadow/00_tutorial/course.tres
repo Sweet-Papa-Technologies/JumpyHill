@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="CourseData" load_steps=2 format=3]
+[ext_resource type="Script" path="res://src/course/course_data.gd" id="1"]
+[resource]
+script = ExtResource("1")
+title = "Hello, Hill"
+number = 0
+length = 54.0
+goal_width = 4.0
+lane_curve = 0.4
+par_style = 60

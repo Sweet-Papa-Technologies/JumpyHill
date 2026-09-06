@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="CourseData" load_steps=2 format=3]
+[ext_resource type="Script" path="res://src/course/course_data.gd" id="1"]
+[resource]
+script = ExtResource("1")
+title = "Peach Please"
+world = 1
+number = 2
+length = 62.0
+slope = 0.29500000000000004
+goal_x = -1.4
+goal_width = 3.38
+lane_curve = 1.0999999999999999
+layout = 10
+par_style = 115
+moving_gate = false

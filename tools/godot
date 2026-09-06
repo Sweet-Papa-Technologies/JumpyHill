@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -euo pipefail
+cd "$(dirname "$0")/.."
+GODOT_BIN="${GODOT_BIN:-$PWD/.tools/Godot.app/Contents/MacOS/Godot}"
+if [[ ! -x "$GODOT_BIN" ]]; then
+  GODOT_BIN="$(command -v godot || command -v godot4 || true)"
+fi
+[[ -n "$GODOT_BIN" && -x "$GODOT_BIN" ]] || { echo 'Run tools/bootstrap.sh first, or set GODOT_BIN.' >&2; exit 1; }
+exec "$GODOT_BIN" --path "$PWD" "$@"

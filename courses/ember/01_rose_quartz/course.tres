@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="CourseData" load_steps=2 format=3]
+[ext_resource type="Script" path="res://src/course/course_data.gd" id="1"]
+[resource]
+script = ExtResource("1")
+title = "Rose Quartz"
+world = 2
+number = 1
+length = 62.0
+slope = 0.32
+goal_x = 0
+goal_width = 3.1399999999999997
+lane_curve = 1.15
+layout = 17
+par_style = 120
+moving_gate = false

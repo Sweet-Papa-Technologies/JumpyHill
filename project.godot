@@ -1,0 +1,45 @@
+config_version=5
+
+[application]
+config/name="TREADFALL"
+config/icon="res://assets/ui/icon.svg"
+run/main_scene="res://src/main.tscn"
+config/features=PackedStringArray("4.7", "Mobile")
+config/description="Read the hill. Find your line. Let it roll."
+config/version="0.1.0"
+
+[autoload]
+Save="*res://src/core/save.gd"
+Platform="*res://src/platform/platform.gd"
+Sound="*res://src/audio/sound.gd"
+
+[display]
+window/size/viewport_width=1440
+window/size/viewport_height=900
+window/size/window_width_override=1440
+window/size/window_height_override=900
+window/size/min_width=420
+window/size/min_height=720
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+window/handheld/orientation=1
+
+[rendering]
+renderer/rendering_method="mobile"
+renderer/rendering_method.mobile="mobile"
+textures/default_filters/use_nearest_mipmap_filter=false
+textures/vram_compression/import_etc2_astc=true
+anti_aliasing/quality/msaa_3d=1
+environment/defaults/default_clear_color=Color(0.74, 0.88, 0.88, 1)
+
+[physics]
+3d/physics_engine="Jolt Physics"
+common/physics_ticks_per_second=120
+common/physics_interpolation=true
+3d/default_gravity=9.8
+
+[audio]
+driver/enable_input=false
+
+[debug]
+gdscript/warnings/untyped_declaration=1

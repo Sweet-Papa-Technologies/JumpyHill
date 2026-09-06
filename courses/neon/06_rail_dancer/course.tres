@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="CourseData" load_steps=2 format=3]
+[ext_resource type="Script" path="res://src/course/course_data.gd" id="1"]
+[resource]
+script = ExtResource("1")
+title = "Rail Dancer"
+world = 3
+number = 6
+length = 74.0
+slope = 0.34500000000000003
+goal_x = 0.5
+goal_width = 2.54
+lane_curve = 2.1
+layout = 30
+par_style = 185
+moving_gate = false

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="CourseData" load_steps=2 format=3]
+[ext_resource type="Script" path="res://src/course/course_data.gd" id="1"]
+[resource]
+script = ExtResource("1")
+title = "Cloud Hopper"
+world = 0
+number = 5
+length = 66.0
+slope = 0.27
+goal_x = -0.8
+goal_width = 3.5
+lane_curve = 1.35
+layout = 5
+par_style = 130
+moving_gate = false

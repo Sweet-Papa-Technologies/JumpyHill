@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="TireData" load_steps=2 format=3]
+[ext_resource type="Script" path="res://src/tire/tire_data.gd" id="1"]
+[resource]
+script = ExtResource("1")
+title = "Slick"
+mass = 9.0
+grip = 0.6
+bounce = 0.25
+speed_scale = 1.12
+width = 0.35
+unlock_stars = 8
+accent = Color(0.9294117647058824, 0.6901960784313725, 0.6392156862745098, 1)

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="CourseData" load_steps=2 format=3]
+[ext_resource type="Script" path="res://src/course/course_data.gd" id="1"]
+[resource]
+script = ExtResource("1")
+title = "Powder Keg"
+world = 3
+number = 3
+length = 68.0
+slope = 0.34500000000000003
+goal_x = 0.6
+goal_width = 2.7199999999999998
+lane_curve = 1.65
+layout = 27
+par_style = 155
+moving_gate = false

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="CourseData" load_steps=2 format=3]
+[ext_resource type="Script" path="res://src/course/course_data.gd" id="1"]
+[resource]
+script = ExtResource("1")
+title = "Driftwood"
+world = 1
+number = 3
+length = 64.0
+slope = 0.29500000000000004
+goal_x = 1.4
+goal_width = 3.32
+lane_curve = 1.2499999999999998
+layout = 11
+par_style = 125
+moving_gate = false

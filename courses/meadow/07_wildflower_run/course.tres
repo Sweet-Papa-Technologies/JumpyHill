@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="CourseData" load_steps=2 format=3]
+[ext_resource type="Script" path="res://src/course/course_data.gd" id="1"]
+[resource]
+script = ExtResource("1")
+title = "Wildflower Run"
+world = 0
+number = 7
+length = 70.0
+slope = 0.27
+goal_x = -1.8
+goal_width = 3.38
+lane_curve = 1.65
+layout = 7
+par_style = 150
+moving_gate = false

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="CourseData" load_steps=2 format=3]
+[ext_resource type="Script" path="res://src/course/course_data.gd" id="1"]
+[resource]
+script = ExtResource("1")
+title = "The Long Way"
+world = 0
+number = 6
+length = 68.0
+slope = 0.27
+goal_x = 0.9
+goal_width = 3.44
+lane_curve = 1.5
+layout = 6
+par_style = 140
+moving_gate = false
