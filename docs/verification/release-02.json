@@ -1,0 +1,12 @@
+{
+  "preset": "macOS",
+  "version": "0.2.0",
+  "build": 7,
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "commit": "bdaf08944f64db985b0f18b4ce84a35b1f674df1",
+  "signed": true,
+  "dirty": false,
+  "sha256": "4671d9d8920a038a2fce2298cce5ebee5a464227e3d153a514fc4ff34b9126ec",
+  "notarized": true,
+  "dmg_sha256": "a2fa704e2fc5fe2a8a8a51c95453165f77e373c17cd8965067ffc2cce1937585"
+}

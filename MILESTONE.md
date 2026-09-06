@@ -13,6 +13,8 @@ Verified on macOS 15.5 / Apple M4 Pro with Godot 4.7.2, Jolt 120 Hz and Mobile r
 - Final uncapped heaviest-course benchmark: **13.59 ms p95 wall**, **1.80 ms p95 physics**, **54 visible 3D draw calls**, **59,488 visible primitives**. The separate process monitor reports 28.80 ms and the scripted menu playtest reports 27.87 ms p95 frame delta; these are retained rather than presenting the best metric as a universal frame-rate guarantee. Physical phone performance remains unverified.
 - New visual content is original source geometry/materials: terraced cliffs, detailed ground, dense shoulders, world landmarks, hazard stripes/sweep markings, finish pavilions and 4× MSAA. The 28 external/original source asset ledger entries are unchanged.
 
+Final native artifacts: version **0.2.0**, source commit `bdaf089`, build 7. The universal Mac app and DMG are Developer ID signed, accepted by Apple notarization, stapled and validated; Gatekeeper accepts the app. The final signed binary was launched and its corrected off-edge result inspected. Artifact checksums are in `docs/verification/release-02.json`. Windows was re-exported and its PE package validated (unsigned, not executed on Windows). The final iOS simulator app compiled, installed and launched; its screenshot was inspected and the simulator restored to shutdown.
+
 The earlier alpha verification below is historical and its old difficulty/performance figures do not describe 0.2. Remaining full-spec release gates remain in `FEATURE_STATUS.md`.
 
 ---
