@@ -8,6 +8,7 @@ EXPECTED="$(cat .godot-version)"
 ACTUAL="$(tools/godot --version)"
 [[ "$ACTUAL" == "$EXPECTED.stable."* ]] || { echo "Editor mismatch: $ACTUAL, need $EXPECTED" >&2; exit 1; }
 BUILD_NUMBER="$(git rev-list --count HEAD)"
+export TREADFALL_SOURCE_DIRTY="$(git status --porcelain)"
 export TREADFALL_BUILD_NUMBER="$BUILD_NUMBER" TREADFALL_VERSION="$VERSION"
 python3 tools/asset_ledger.py
 case "$PRESET" in
@@ -34,9 +35,9 @@ tools/godot --headless --editor --import --quit
 tools/godot --headless --export-release "$PRESET" "$DEST"
 python3 tools/verify_export.py "$DEST" "$PRESET"
 python3 - "$DEST" "$PRESET" "$VERSION" "$BUILD_NUMBER" "$ACTUAL" <<'PY'
-import sys,json,hashlib,subprocess
+import sys,json,hashlib,subprocess,os
 from pathlib import Path
-p=Path(sys.argv[1]);manifest=dict(preset=sys.argv[2],version=sys.argv[3],build=int(sys.argv[4]),engine=sys.argv[5],commit=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),signed=False,dirty=bool(subprocess.check_output(['git','status','--porcelain'],text=True).strip()))
+p=Path(sys.argv[1]);manifest=dict(preset=sys.argv[2],version=sys.argv[3],build=int(sys.argv[4]),engine=sys.argv[5],commit=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),signed=False,dirty=bool(os.environ.get('TREADFALL_SOURCE_DIRTY', '').strip()))
 if p.exists():manifest['sha256']=hashlib.sha256(p.read_bytes()).hexdigest()
 p.with_suffix('.manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
 PY

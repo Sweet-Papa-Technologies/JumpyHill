@@ -13,7 +13,7 @@ This repository is a playable alpha. The original requirements remain unchanged.
 | Progress/menus | World selector, course grid, stars, locks, garage, retry/new seed/next, daily date/seed/best persistence, audio/accessibility settings, credits | Postcard course-pin carousel and richer tutorial gestures; native gamepad bonus support |
 | Save/privacy | Versioned atomic JSON, malformed-data recovery, no accounts/ads/analytics; no runtime network dependency | Real-device interruption/storage tests and store privacy review |
 | Share/platform | Screenshot postcard saved locally; desktop reveals file; haptics and safe-area adapters | Native iOS/Android share sheets and actual store review IDs; verify physical haptics |
-| macOS | Universal app export, package-byte validation, native playtest, Developer ID signing | Clean-checkout and second-Mac installation; reference M1 performance sign-off |
+| macOS | Universal app export, package-byte validation, native playtest, Developer ID signing, accepted notarization and stapled DMG; clean-checkout test/export/sign/launch | Second-Mac installation; reference M1 performance sign-off |
 | iOS | Xcode export, simulator build/install/launch, portrait inspection | Signed physical-device install, iPhone 12 performance, ten-roll human feel sign-off, TestFlight/App Store metadata/review |
 | Android/Windows | Export presets and reused Windows signing script | Android AAB/keystore/SDK validation; signed Windows build on Windows; actual devices and store distribution |
 

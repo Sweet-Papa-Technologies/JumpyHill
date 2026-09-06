@@ -26,3 +26,13 @@ if sys.argv[2] == 'macOS':
         z.extractall(path.parent)
     os.chmod(path.parent / executable, 0o755)
     print('macOS package byte verification PASS')
+
+elif sys.argv[2] == 'Windows':
+    with path.open('rb') as f:
+        assert f.read(2) == b'MZ', 'Missing Windows executable header'
+        f.seek(60)
+        offset = int.from_bytes(f.read(4), 'little')
+        f.seek(offset)
+        assert f.read(4) == b'PE\0\0', 'Invalid PE header'
+    assert path.stat().st_size > 1_000_000
+    print('Windows package byte verification PASS (execution/signing needs Windows)')

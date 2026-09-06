@@ -8,7 +8,7 @@ This is not a spec-complete store release. See [FEATURE_STATUS.md](FEATURE_STATU
 
 ## Play
 
-On this machine, open `build/macos/TREADFALL.app`. The source project also runs directly:
+On this machine, open `build/macos/TREADFALL.app`, or install from the **notarized, stapled** `build/macos/TREADFALL.dmg`. The source project also runs directly:
 
 ```sh
 ./tools/bootstrap.sh          # macOS: pinned editor + official export templates
@@ -73,3 +73,9 @@ Typed GDScript; no gameplay addons. `src/core` holds save/state support, `src/co
 Kenney CC0 nature props and impact sounds, Google Fonts OFL Bungee/Nunito, and original procedural meshes, vector art, and synthesized music. All assets are shipped locally. [ASSETS.md](ASSETS.md) records each file's provenance and license; [CREDITS.md](CREDITS.md) includes the shipped notices.
 
 Dependencies: Godot 4.7.2 provides rendering, Jolt physics, audio and exports; Python 3 and shell scripts provide local asset/build verification only. No third-party game plugins or analytics SDKs are included.
+
+## Screenshots
+
+![Native macOS title screen](docs/screenshots/title.png)
+
+![Neon Nightcap, full-course aim view](docs/screenshots/neon.png)
