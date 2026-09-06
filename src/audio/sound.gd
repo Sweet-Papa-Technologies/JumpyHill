@@ -57,7 +57,7 @@ func play(event: String) -> void:
 	var path: String = "res://assets/audio/click.wav"
 	match event:
 		"BOING", "TOCK": path = "res://assets/audio/impactWood_medium_000.ogg"
-		"POST", "WIDE": path = "res://assets/audio/impactMetal_light_000.ogg"
+		"POST", "WIDE", "BLOCKED": path = "res://assets/audio/impactMetal_light_000.ogg"
 		"GOAL":
 			path = "res://assets/audio/goal.wav"
 			duck = 1.4

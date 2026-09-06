@@ -32,26 +32,38 @@ func id() -> String:
 func height_at(x: float, z: float) -> float:
 	var base: float = (length - z) * slope
 	var bend: float = sin(z / length * TAU) * lane_curve
-	var gutters: float = -0.25 * cos((x - bend) * PI / 3.6) * sin(clampf(z / 9.0, 0.0, 1.0) * PI / 2.0)
-	var edges: float = maxf(0.0, absf(x) - width * 0.40) * 0.50
+	var gutters: float = -0.09 * cos((x - bend) * PI / 3.6) * sin(clampf(z / 9.0, 0.0, 1.0) * PI / 2.0)
+	var edges: float = maxf(0.0, absf(x) - width * 0.40) * 0.20
 	return base + gutters + edges
 
 func features(roll_seed: int) -> Array[Dictionary]:
 	var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 	rng.seed = roll_seed
 	var out: Array[Dictionary] = []
-	for row: int in range(3 if number < 3 else 4):
-		for side: int in [-1, 1]:
-			var z: float = 17.0 + row * 8.0
-			var x: float = side * (2.6 + float((row + layout) % 3) * 0.9)
-			out.append({"kind": "bumper" if row % 2 == 0 else "peg", "x": x + rng.randf_range(-0.05, 0.05), "z": z + rng.randf_range(-0.05, 0.05), "strength": rng.randf_range(0.9, 1.1)})
-	out.append({"kind": "ramp", "x": -3.8 if layout % 2 == 0 else 3.8, "z": length * 0.57, "strength": 1.0})
-	out.append({"kind": "boost", "x": 0.0, "z": length * 0.37, "strength": 1.0})
-	out.append({"kind": "mud", "x": 4.4 if layout % 2 == 0 else -4.4, "z": length * 0.76, "strength": 1.0})
+	if number == 0:
+		out.append({"kind": "bumper", "x": 2.8 + rng.randf_range(-0.05, 0.05), "z": 23.0, "strength": 1.0})
+		out.append({"kind": "ramp", "x": -3.8, "z": 34.0, "strength": 1.0})
+		return out
+	# Each chapter introduces a readable obstacle arrangement. The center is
+	# deliberately contested; difficulty comes from route choice, not auto-aim.
+	var mirror: float = -1.0 if layout % 2 == 0 else 1.0
+	out.append({"kind": "barrier", "x": 0.0, "z": 13.0, "strength": 1.0, "span": 2.4, "yaw": 0.0})
+	var rows: int = 3 + world / 2 + (1 if number >= 5 else 0)
+	for row: int in range(rows):
+		var z: float = 23.0 + row * (length - 33.0) / maxi(1, rows - 1)
+		var side: float = mirror * (-1.0 if row % 2 == 0 else 1.0)
+		var x: float = side * (3.0 + float((row + number) % 3) * 0.65)
+		out.append({"kind": "bumper" if (row + number) % 3 != 0 else "barrier", "x": x + rng.randf_range(-0.08, 0.08), "z": z, "strength": rng.randf_range(0.9, 1.1), "span": 2.0, "yaw": side * -0.25})
+		out.append({"kind": "peg", "x": -side * (4.0 + (row % 2) * 1.2), "z": z + 2.0, "strength": 1.0})
+	var mover_z: float = length * (0.54 if number % 2 else 0.65)
+	out.append({"kind": "sweeper" if number % 2 else "shuttle", "x": mirror * 0.8, "z": mover_z, "strength": 1.0, "span": 3.0 + world * 0.25, "rate": 0.75 + world * 0.12, "phase": float(number) * 0.7})
+	if number >= 5 or world >= 2:
+		out.append({"kind": "shuttle" if number % 2 else "sweeper", "x": -mirror * 1.8, "z": length * 0.82, "strength": 1.0, "span": 2.8, "rate": 1.0 + world * 0.1, "phase": float(number)})
+	out.append({"kind": "ramp", "x": mirror * 4.7, "z": length * 0.44, "strength": 1.0})
+	out.append({"kind": "boost", "x": -mirror * 4.2, "z": length * 0.35, "strength": 1.0})
+	out.append({"kind": "mud", "x": mirror * 2.0, "z": length * 0.73, "strength": 1.0})
 	if number >= 3:
-		out.append({"kind": "rail", "x": -5.5, "z": length * 0.63, "strength": 1.0})
-	if number >= 5:
-		out.append({"kind": "log", "x": 2.0, "z": length * 0.69, "strength": rng.randf_range(-0.4, 0.4)})
+		out.append({"kind": "rail", "x": -mirror * 5.8, "z": length * 0.56, "strength": 1.0})
 	return out
 
 static func all_courses() -> Array[CourseData]:

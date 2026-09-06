@@ -28,6 +28,7 @@ var show_visual: bool = true
 var gust_start: float = 3.0
 var gust_force: float = 0.0
 var last_result: Dictionary = {}
+var stalled_time: float = 0.0
 
 func _ready() -> void:
 	mass = variant.mass
@@ -115,6 +116,8 @@ func reset_to_aim() -> void:
 	style = StyleTracker.new()
 	touched.clear()
 	post_hit = false
+	stalled_time = 0.0
+	last_result = {}
 	air_time = 0.0
 	air_awarded = 0.0
 	speed_time = 0.0
@@ -169,17 +172,22 @@ func _physics_process(dt: float) -> void:
 		return
 	elapsed += dt
 	# Lean supplies continuous force and rolling torque, never teleports the tire.
-	apply_central_force(Vector3(lean * FEEL.lean_force, 0, 0))
+	var on_ground: bool = position.y - course.height_at(position.x, position.z) < FEEL.tire_radius + 0.18
+	if on_ground:
+		apply_central_force(Vector3(lean * FEEL.lean_force, 0, 0))
 	var axle: Vector3 = transform.basis.x.normalized()
 	var flat_axle: Vector3 = Vector3(axle.x, 0, axle.z).normalized()
+	flat_axle = (flat_axle * cos(deg_to_rad(lean)) + Vector3.UP * sin(deg_to_rad(lean))).normalized()
 	apply_torque(axle.cross(flat_axle) * 180.0)
 	apply_torque(Vector3.UP * (lean * 0.22 - angular_velocity.y * 8.0))
 	if elapsed >= gust_start and elapsed < gust_start + 0.65:
 		apply_central_force(Vector3(gust_force, 0, 0))
 	var speed: float = linear_velocity.length()
 	var cap: float = course.max_speed * variant.speed_scale
-	if elapsed > 3.0 and speed < 1.0:
-		apply_central_force(Vector3(0, 0, mass * 4.0))
+	stalled_time = stalled_time + dt if elapsed > 2.0 and speed < 0.7 else 0.0
+	if stalled_time > 2.0:
+		_finish("BLOCKED", 0.0, absf(position.x - course.goal_x))
+		return
 	if elapsed > 16.0:
 		_finish("POST" if post_hit else "WIDE", 0.0, absf(position.x - course.goal_x))
 		return
@@ -263,6 +271,8 @@ func _physics_process(dt: float) -> void:
 func _finish(outcome: String, accuracy: float, offset: float) -> void:
 	active = false
 	last_result = {"outcome": outcome, "accuracy": accuracy, "offset": offset, "stars": style.stars(outcome == "GOAL", accuracy, course.par_style, purist), "score": style.score, "seed": roll_seed, "time": elapsed, "position": position, "events": style.events.duplicate()}
-	linear_damp = 2.5
-	angular_damp = 2.0
+	# A finished attempt is a stable tableau, including out-of-bounds misses.
+	linear_velocity = Vector3.ZERO
+	angular_velocity = Vector3.ZERO
+	freeze = true
 	finished.emit(last_result)

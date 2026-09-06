@@ -12,10 +12,12 @@ static func trace(tire: RollingTire, seconds: float = 1.0) -> PackedVector3Array
 	var result: PhysicsTestMotionResult3D = PhysicsTestMotionResult3D.new()
 	for i: int in range(int(seconds / dt)):
 		velocity += Vector3(tire.lean * RollingTire.FEEL.lean_force / tire.mass, -9.8, 0) * dt
-		params.from = Transform3D(Basis.IDENTITY, pos)
+		params.from = Transform3D(tire.basis, pos)
 		params.motion = velocity * dt
 		if PhysicsServer3D.body_test_motion(tire.get_rid(), params, result):
 			pos += result.get_travel()
+			if result.get_collision_normal().y < 0.6:
+				break
 			var normal: Vector3 = result.get_collision_normal()
 			velocity = velocity.slide(normal)
 			pos += velocity * dt * (1.0 - result.get_collision_safe_fraction())

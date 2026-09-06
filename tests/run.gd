@@ -150,6 +150,9 @@ func solver(args: PackedStringArray) -> void:
 		if only != "" and data.id() != only:
 			continue
 		var clear_count: int = 0
+		var neutral_clears: int = 0
+		var seed_clears: Dictionary = {}
+		var solutions: Array[Dictionary] = []
 		var count: int = 0
 		var stuck: int = 0
 		var best: Dictionary = {}
@@ -157,6 +160,7 @@ func solver(args: PackedStringArray) -> void:
 		heat.fill(Color("663e57"))
 		var rates: Dictionary = {}
 		for seed_v: int in seeds:
+			seed_clears[str(seed_v)] = 0
 			var hill: HillCourse = create_hill(data, seed_v)
 			var tires: Array[RollingTire] = []
 			for a: int in range(21):
@@ -185,6 +189,10 @@ func solver(args: PackedStringArray) -> void:
 					stuck += 1
 				if tire.last_result.get("outcome", "") == "GOAL":
 					clear_count += 1
+					seed_clears[str(seed_v)] += 1
+					if i == 73: neutral_clears += 1
+					if seed_v == 42:
+						solutions.append({"aim": tire.aim, "lean": tire.lean, "score": tire.last_result.score})
 					var key: String = str(i)
 					rates[key] = int(rates.get(key, 0)) + 1
 					heat.set_pixel(i / 7, i % 7, Color("b7d8ac"))
@@ -195,9 +203,13 @@ func solver(args: PackedStringArray) -> void:
 			await physics_frame
 		var rate: float = float(clear_count) / count
 		check(clear_count > 0, data.id() + " is solvable")
-		check(rate <= 0.6, data.id() + " clear rate <= 60%")
+		check(rate <= (0.6 if data.number == 0 else 0.30), data.id() + " difficulty ceiling")
+		if data.number > 0:
+			check(neutral_clears == 0, data.id() + " default roll cannot win")
+		for seed_key: String in seed_clears:
+			check(seed_clears[seed_key] > 0, data.id() + " solvable seed " + seed_key)
 		check(stuck == 0, data.id() + " no stuck rolls")
-		var report: Dictionary = {"course": data.id(), "samples": count, "clears": clear_count, "rate": rate, "stuck": stuck, "best": best}
+		var report: Dictionary = {"course": data.id(), "samples": count, "clears": clear_count, "rate": rate, "stuck": stuck, "best": best, "neutral_clears": neutral_clears, "seed_clears": seed_clears, "solutions": solutions}
 		results.append(report)
 		heat.resize(420, 140, Image.INTERPOLATE_NEAREST)
 		heat.save_png("res://build/solver/" + data.id().replace("/", "_") + ".png")

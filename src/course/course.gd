@@ -7,6 +7,7 @@ var feature_list: Array[Dictionary] = []
 var palette: Array = []
 var posts: Array[Node3D] = []
 var gate: Node3D
+var movers: Array[Dictionary] = []
 var visual: bool = true
 var mats: Dictionary = {}
 var terrain_mesh: ArrayMesh
@@ -58,7 +59,7 @@ func cylinder(radius: float, height: float, pos: Vector3, color: Color, solid: b
 	mesh.top_radius = radius
 	mesh.bottom_radius = radius
 	mesh.height = height
-	mesh.radial_segments = 12
+	mesh.radial_segments = 24
 	var node: Node3D = mesh_node(mesh, pos, color) if visual else Node3D.new()
 	if not visual:
 		add_child(node)
@@ -83,6 +84,17 @@ func build() -> void:
 	for f: Dictionary in feature_list:
 		var pos: Vector3 = Vector3(f.x, data.height_at(f.x, f.z), f.z)
 		match f.kind:
+			"sweeper", "shuttle":
+				_build_mover(f)
+			"barrier":
+				var barrier: Node3D = box(Vector3(f.span, 1.0, 0.65), pos + Vector3.UP * 0.5, palette[5], true)
+				barrier.rotation.y = f.yaw
+				if visual:
+					for stripe: int in range(5):
+						var band: Node3D = box(Vector3(0.18, 0.7, 0.025), Vector3(-f.span * 0.4 + stripe * f.span * 0.2, 0, -0.34), Color("ffe2a0"), false, barrier)
+						band.rotation.z = -0.35
+						var back_band: Node3D = box(Vector3(0.18, 0.7, 0.025), Vector3(-f.span * 0.4 + stripe * f.span * 0.2, 0, 0.34), Color("ffe2a0"), false, barrier)
+						back_band.rotation.z = -0.35
 			"bumper", "peg":
 				var radius: float = 0.68 if f.kind == "bumper" else 0.32
 				cylinder(radius, 1.1, pos + Vector3.UP * 0.55, palette[3] if f.kind == "bumper" else palette[2], true)
@@ -111,6 +123,7 @@ func build() -> void:
 	_build_goal()
 	if visual:
 		_build_decor()
+		HillScenery.build(self)
 		_batch_visuals()
 
 func _build_terrain() -> void:
@@ -130,10 +143,12 @@ func _build_terrain() -> void:
 	terrain_mesh = st.commit()
 	if visual:
 		var mi: MeshInstance3D = mesh_node(terrain_mesh, Vector3.ZERO, palette[0])
-		var mat: StandardMaterial3D = StandardMaterial3D.new()
-		mat.vertex_color_use_as_albedo = true
-		mat.vertex_color_is_srgb = true
-		mat.roughness = 1.0
+		var mat: ShaderMaterial = ShaderMaterial.new()
+		mat.shader = preload("res://src/feel/shaders/terrain.gdshader")
+		mat.set_shader_parameter("ground_color", palette[0])
+		mat.set_shader_parameter("verge_color", palette[2])
+		mat.set_shader_parameter("track_width", data.width)
+		mat.set_shader_parameter("biome", data.world)
 		mi.material_override = mat
 	var body: StaticBody3D = StaticBody3D.new()
 	body.collision_layer = 1
@@ -156,12 +171,6 @@ func _build_terrain() -> void:
 		pad.rotation.x = atan(data.slope)
 		for i: int in range(7):
 			box(Vector3(0.65, 0.025, 0.25), Vector3(-3 + i, 0.065, 1), palette[2], false, pad)
-		# Three readable routes converge toward the finish; actual gutters are in the mesh.
-		for lane: int in [-1, 0, 1]:
-			for z: int in range(7, int(data.length) - 3, 2):
-				var x: float = lane * 4.7 + sin(z / data.length * TAU) * data.lane_curve
-				var tile: Node3D = box(Vector3(0.10, 0.025, 0.5), Vector3(x, data.height_at(x, z) + 0.045, z), palette[1])
-				tile.rotation.x = atan(data.slope)
 
 func _build_goal() -> void:
 	for side: int in [-1, 1]:
@@ -181,11 +190,45 @@ func _build_goal() -> void:
 				var pz: float = data.length + z * 0.25
 				box(Vector3(data.goal_width / 8, 0.035, 0.25), Vector3(px, data.height_at(px, pz) + 0.04, pz), palette[2] if (x + z) % 2 == 0 else Color("fff2d5"))
 	if data.moving_gate:
-		gate = box(Vector3(0.6, 1.2, 0.4), Vector3(data.goal_x, 0.8, data.length - 2), palette[3], true)
+		_build_mover({"kind": "shuttle", "x": data.goal_x, "z": data.length - 3.0, "span": data.goal_width, "rate": 1.3, "phase": 0.0})
+	tick_gate(0)
+
+func _build_mover(f: Dictionary) -> void:
+	var body: AnimatableBody3D = AnimatableBody3D.new()
+	body.collision_layer = 1
+	body.collision_mask = 2
+	# Driven once per physics tick, including the solver. Jolt derives velocity
+	# from the transform so a sweeping arm really transfers momentum.
+	body.sync_to_physics = false
+	body.set_meta("moving_visual", true)
+	add_child(body)
+	var size_v: Vector3 = Vector3(f.span, 0.65, 0.42) if f.kind == "sweeper" else Vector3(1.15, 1.25, 1.0)
+	var col: CollisionShape3D = CollisionShape3D.new()
+	var shape: BoxShape3D = BoxShape3D.new()
+	shape.size = size_v
+	col.shape = shape
+	body.add_child(col)
+	if visual:
+		box(size_v, Vector3.ZERO, palette[3], false, body)
+		for side: int in [-1, 1]:
+			box(Vector3(0.20, size_v.y + 0.04, size_v.z + 0.04), Vector3(side * (size_v.x / 2 - 0.15), 0, 0), Color("fff2cf"), false, body)
+		box(Vector3(0.16, size_v.y + 0.05, size_v.z + 0.05), Vector3.ZERO, palette[5], false, body)
+		# Ground markings show the entire danger zone before launch.
+		for i: int in range(20):
+			var angle: float = i * TAU / 20
+			var px: float = f.x + (cos(angle) * f.span * 0.55 if f.kind == "sweeper" else (float(i) / 19 - 0.5) * f.span * 2)
+			var pz: float = f.z + (sin(angle) * f.span * 0.55 if f.kind == "sweeper" else 0)
+			box(Vector3(0.16, 0.035, 0.25), Vector3(px, data.height_at(px, pz) + 0.05, pz), palette[3])
+	movers.append({"body": body, "feature": f})
 
 func tick_gate(time: float) -> void:
-	if gate != null:
-		gate.position.x = data.goal_x + sin(time * 1.8) * data.goal_width * 0.7
+	for mover: Dictionary in movers:
+		var f: Dictionary = mover.feature
+		var body: AnimatableBody3D = mover.body
+		var phase: float = time * f.rate + f.phase
+		var x: float = f.x + (sin(phase) * f.span if f.kind == "shuttle" else 0.0)
+		body.position = Vector3(x, data.height_at(x, f.z) + (0.62 if f.kind == "sweeper" else 0.66), f.z)
+		body.basis = Basis(Vector3.RIGHT, atan(data.slope)) * Basis(Vector3.UP, phase if f.kind == "sweeper" else 0.0)
 
 func _build_decor() -> void:
 	var rng: RandomNumberGenerator = RandomNumberGenerator.new()
@@ -245,7 +288,7 @@ func _batch_visuals() -> void:
 	var nodes: Array[Node] = find_children("*", "MeshInstance3D", true, false)
 	for node: Node in nodes:
 		var mi: MeshInstance3D = node as MeshInstance3D
-		if mi == gate or mi in posts or mi.mesh == terrain_mesh:
+		if _is_moving(mi) or mi in posts or mi.mesh == terrain_mesh:
 			continue
 		var mat: Material = mi.material_override
 		if mat == null:
@@ -263,3 +306,10 @@ func _batch_visuals() -> void:
 		merged.mesh = groups[key].st.commit()
 		merged.material_override = groups[key].mat
 		add_child(merged)
+
+func _is_moving(node: Node) -> bool:
+	while node != self:
+		if node.has_meta("moving_visual"):
+			return true
+		node = node.get_parent()
+	return false

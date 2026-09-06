@@ -7,10 +7,16 @@ var trauma: float = 0.0
 var age: float = 0.0
 var reduce_motion: bool = false
 var portrait: bool = false
+var result_focus: Vector3 = Vector3.ZERO
 
 func blend_to(new_mode: String, _duration: float = 0.2) -> void:
 	mode = new_mode
 	age = 0.0
+	if new_mode == "result" and is_instance_valid(target):
+		result_focus = target.global_position
+		result_focus.x = clampf(result_focus.x, -course.width * 0.5, course.width * 0.5)
+		result_focus.z = clampf(result_focus.z, 0, course.length)
+		result_focus.y = maxf(result_focus.y, course.height_at(result_focus.x, result_focus.z) + 0.65)
 
 func _process(dt: float) -> void:
 	if course == null:
@@ -29,7 +35,7 @@ func _process(dt: float) -> void:
 			target_fov = lerpf(60, 78, clampf(target.linear_velocity.length() / course.max_speed, 0, 1))
 		"result":
 			var angle: float = minf(age, 1.2) * 0.45
-			var center: Vector3 = target.global_position if is_instance_valid(target) else Vector3(0, 0, course.length)
+			var center: Vector3 = result_focus
 			desired = center + Vector3(sin(angle) * 10, 7, -cos(angle) * 10)
 			look = center
 			target_fov = 55

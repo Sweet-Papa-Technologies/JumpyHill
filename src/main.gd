@@ -66,7 +66,7 @@ func _ready() -> void:
 	viewport.world_3d = World3D.new()
 	viewport.handle_input_locally = false
 	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
-	viewport.msaa_3d = Viewport.MSAA_2X
+	viewport.msaa_3d = Viewport.MSAA_4X
 	viewport_container.add_child(viewport)
 	world_root = Node3D.new()
 	world_root.process_mode = Node.PROCESS_MODE_PAUSABLE
@@ -201,6 +201,11 @@ func _enter_state(next: State) -> void:
 			tire.reset_to_aim()
 			camera.blend_to("aim")
 		State.AIM:
+			# A frozen finished rigid body can retain pending forces. Recreate the
+			# small tire body while retaining the expensive course geometry.
+			tire.free()
+			_create_tire()
+			camera.target = tire
 			_reset_physics_space()
 			trails.clear()
 			ui.page = "aim"
@@ -347,7 +352,6 @@ func _process(dt: float) -> void:
 	pop_time = maxf(0, pop_time - dt)
 	if state == State.ROLL:
 		Sound.tier = minf(2.0, tire.style.score / 120.0)
-		course.tick_gate(tire.elapsed)
 	if guide_dirty and state == State.AIM:
 		guide_dirty = false
 		_update_guide()
@@ -371,7 +375,7 @@ func _process(dt: float) -> void:
 func _update_guide() -> void:
 	for child: Node in guide.get_children():
 		child.queue_free()
-	var points: PackedVector3Array = RollPredictor.trace(tire)
+	var points: PackedVector3Array = RollPredictor.trace(tire, RollingTire.FEEL.guide_seconds)
 	for i: int in range(points.size()):
 		var mesh: SphereMesh = SphereMesh.new()
 		mesh.radius = 0.11 - i * 0.003
@@ -636,6 +640,7 @@ func _reset_physics_space() -> void:
 func _physics_process(_dt: float) -> void:
 	if state != State.ROLL or get_tree().paused:
 		return
+	course.tick_gate(tire.elapsed + _dt)
 	# Trigger and end slow motion on simulation time, independent of render FPS.
 	if not slow_used and tire.position.z > course.data.length - 4 and absf(tire.position.x - course.data.goal_x) < course.data.goal_width and not Save.data.settings.reduce_motion:
 		slow_used = true

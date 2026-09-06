@@ -6,7 +6,7 @@ config/icon="res://assets/ui/icon.svg"
 run/main_scene="res://src/main.tscn"
 config/features=PackedStringArray("4.7", "Mobile")
 config/description="Read the hill. Find your line. Let it roll."
-config/version="0.1.0"
+config/version="0.2.0"
 
 [autoload]
 Save="*res://src/core/save.gd"

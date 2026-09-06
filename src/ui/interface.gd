@@ -224,17 +224,17 @@ func _draw() -> void:
 			label(game.course.data.title.to_upper(), Vector2(x, 159 if portrait else 188), 27, INK, true)
 			if page == "aim":
 				if not portrait:
-					label("A LITTLE LEAN.", Vector2(x, 285), 24, INK, true)
-					label("A LOT OF POSSIBILITY.", Vector2(x, 318), 20, INK, true)
+					label("PICK YOUR LINE.", Vector2(x, 285), 24, INK, true)
+					label("DODGE. BANK. COMMIT.", Vector2(x, 318), 20, INK, true)
 					label("Drag to aim. Lift to roll.", Vector2(x, 365), 22, MUTED)
 				var yy: float = 1020 if portrait else 426
-				label("AIM", Vector2(x, yy), 15, MUTED)
+				label("LAUNCH ANGLE", Vector2(x, yy), 15, MUTED)
 				label("%+.0f°" % (game.aim_value * 25), Vector2(x + w - 57, yy), 17)
-				label("LEAN", Vector2(x, yy + 95), 15, MUTED)
+				label("BANK / DRIFT", Vector2(x, yy + 95), 15, MUTED)
 				label("%+.1f°" % game.lean_value, Vector2(x + w - 64, yy + 95), 17)
 				if not portrait:
 					label("← → AIM    ↑ ↓ LEAN    SPACE ROLL", Vector2(x, 793), 12, MUTED)
-					label("Two nudges. Make them count.", Vector2(x, 824), 17, MUTED)
+					label("Short guide. Two nudges. No autopilot.", Vector2(x, 824), 17, MUTED)
 			else:
 				if not portrait:
 					label("LET THE", Vector2(x, 282), 36, INK, true)
@@ -251,8 +251,8 @@ func _draw() -> void:
 					label("%d STYLE    ×%d" % [game.tire.style.score, game.tire.style.combo], Vector2(365, 63), 18)
 		"result":
 			var good: bool = game.result.get("outcome", "") == "GOAL"
-			label("SIGNED, SEALED,", Vector2(x, 148), 23, MUTED, true)
-			label("DELIVERED." if good else "SO CLOSE.", Vector2(x, 206), 35, INK, true)
+			label("SIGNED, SEALED," if good else "READ THE HILL.", Vector2(x, 148), 23, MUTED, true)
+			label("DELIVERED." if good else ("ROADBLOCK." if game.result.get("outcome") == "BLOCKED" else "ANOTHER LINE."), Vector2(x, 206), 35, INK, true)
 			label("★".repeat(int(game.result.get("stars", 0))) + "☆".repeat(3 - int(game.result.get("stars", 0))), Vector2(x, 280), 52, Color("c1943f"))
 			label("%03d" % game.result.get("score", 0), Vector2(x, 365), 62, INK, true)
 			label("STYLE POINTS", Vector2(x + 180, 350), 14, MUTED)
@@ -261,7 +261,10 @@ func _draw() -> void:
 				label("%s  ·  SEED %d" % [game.course.data.title, game.roll_seed], Vector2(x, 960), 18, MUTED)
 			label("%s  /  %.1f SECONDS" % [game.result.get("outcome", "WIDE"), game.result.get("time", 0)], Vector2(x, 408), 16)
 			if not portrait:
-				label("CENTER %d%%" % roundi(float(game.result.get("accuracy", 0)) * 100) if good else "%.1f tire widths from the center" % (float(game.result.get("offset", 0)) / 1.3), Vector2(x, 450), 18, MUTED)
+				var feedback: String = "CENTER %d%%" % roundi(float(game.result.get("accuracy", 0)) * 100)
+				if not good:
+					feedback = "Aim around it. Bank back toward goal." if game.result.get("outcome") == "BLOCKED" else ("Try less bank to stay on the hill." if game.tire.position.z < game.course.data.length - 2 else "%.1f tire widths from the center" % (float(game.result.get("offset", 0)) / 1.3))
+				label(feedback, Vector2(x, 450), 16, MUTED)
 				label("SEED  %d" % game.roll_seed, Vector2(x, 785), 14, MUTED)
 				label("Same hill. A whole new possibility.", Vector2(x, 818), 17, MUTED)
 		"pause":
@@ -282,7 +285,7 @@ func _draw() -> void:
 		"credits":
 			label("MADE FOR", Vector2(x, 144), 33, INK, true)
 			label("ONE MORE.", Vector2(x, 190), 35, INK, true)
-			var lines: Array[String] = ["TREADFALL / 0.1", "Sweet Papa Technologies", "Forrester ‘FoFo’ Terry", "", "BUILT WITH GODOT 4.7.2 · MIT", "Nature & impact sounds: Kenney · CC0", "Bungee: David Jonathan Ross · OFL", "Nunito: Vernon Adams et al. · OFL", "Original procedural hills & synth music", "", "No ads. No accounts. Just good hills.", "Asset licenses included with the game."]
+			var lines: Array[String] = ["TREADFALL / 0.2", "Sweet Papa Technologies", "Forrester ‘FoFo’ Terry", "", "BUILT WITH GODOT 4.7.2 · MIT", "Nature & impact sounds: Kenney · CC0", "Bungee: David Jonathan Ross · OFL", "Nunito: Vernon Adams et al. · OFL", "Original procedural hills & synth music", "", "No ads. No accounts. Just good hills.", "Asset licenses included with the game."]
 			for i: int in range(lines.size()):
 				label(lines[i], Vector2(x, 276 + i * 36), 16 if i > 3 else 21, MUTED if i > 3 else INK)
 	if not portrait:
