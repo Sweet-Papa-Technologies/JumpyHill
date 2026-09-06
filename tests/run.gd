@@ -57,6 +57,9 @@ func unit_tests() -> void:
 	check(int(loaded.version) == 1 and int(loaded.courses["meadow/01"].stars) == 3 and int(loaded.courses["meadow/01"].score) == 200 and int(loaded.courses["meadow/01"].seed) == 42 and is_equal_approx(float(loaded.settings.music), 0.55) and loaded.settings.haptics == true, "save JSON round trip")
 	check(save_node.daily_for("2026-09-06") == save_node.daily_for("2026-09-06"), "daily deterministic")
 	check(save_node.daily_for("2026-09-06") != save_node.daily_for("2026-09-07"), "daily advances")
+	check(not save_node.load_data({"version": "oops"}), "reject malformed version")
+	check(save_node.load_data({"version": 1, "courses": {"bad": "oops"}, "settings": {"music": "loud", "master": 4.0}}), "recover malformed entries")
+	check(not save_node.data.courses.has("bad") and save_node.data.settings.master == 1.0, "skip corrupt progress and clamp settings")
 	save_node.data = original
 	var hill: HillCourse = create_hill(courses[1], 42)
 	var tire: RollingTire = create_tire(courses[1], 42, 0, 0)

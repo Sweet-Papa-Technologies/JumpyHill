@@ -36,7 +36,7 @@ python3 tools/verify_export.py "$DEST" "$PRESET"
 python3 - "$DEST" "$PRESET" "$VERSION" "$BUILD_NUMBER" "$ACTUAL" <<'PY'
 import sys,json,hashlib,subprocess
 from pathlib import Path
-p=Path(sys.argv[1]);manifest=dict(preset=sys.argv[2],version=sys.argv[3],build=int(sys.argv[4]),engine=sys.argv[5],commit=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),signed=False)
+p=Path(sys.argv[1]);manifest=dict(preset=sys.argv[2],version=sys.argv[3],build=int(sys.argv[4]),engine=sys.argv[5],commit=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),signed=False,dirty=bool(subprocess.check_output(['git','status','--porcelain'],text=True).strip()))
 if p.exists():manifest['sha256']=hashlib.sha256(p.read_bytes()).hexdigest()
 p.with_suffix('.manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
 PY

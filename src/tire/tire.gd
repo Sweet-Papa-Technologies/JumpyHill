@@ -91,16 +91,19 @@ func _create_model() -> void:
 	model.add_child(hub)
 	var tread_mat: StandardMaterial3D = StandardMaterial3D.new()
 	tread_mat.albedo_color = Color("52605f")
+	var tread_mesh: BoxMesh = BoxMesh.new()
+	tread_mesh.size = Vector3(variant.width + 0.06, 0.065, 0.10)
+	tread_mesh.material = tread_mat
+	var multi: MultiMesh = MultiMesh.new()
+	multi.transform_format = MultiMesh.TRANSFORM_3D
+	multi.mesh = tread_mesh
+	multi.instance_count = 20
 	for i: int in range(20):
-		var tread: MeshInstance3D = MeshInstance3D.new()
-		var tread_mesh: BoxMesh = BoxMesh.new()
-		tread_mesh.size = Vector3(variant.width + 0.06, 0.065, 0.10)
-		tread.mesh = tread_mesh
-		tread.material_override = tread_mat
 		var angle: float = float(i) / 20 * TAU
-		tread.position = Vector3(0, cos(angle) * 0.625, sin(angle) * 0.625)
-		tread.rotation.x = angle
-		model.add_child(tread)
+		multi.set_instance_transform(i, Transform3D(Basis(Vector3.RIGHT, angle), Vector3(0, cos(angle) * 0.625, sin(angle) * 0.625)))
+	var treads: MultiMeshInstance3D = MultiMeshInstance3D.new()
+	treads.multimesh = multi
+	model.add_child(treads)
 
 func reset_to_aim() -> void:
 	freeze = true

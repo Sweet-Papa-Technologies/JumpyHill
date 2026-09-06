@@ -8,7 +8,7 @@ for line in ledger.splitlines():
     if not line.startswith('| `assets/'): continue
     cells = [c.strip() for c in line.split('|')[1:-1]]
     rows[cells[0].strip('`')] = cells
-files = {str(p) for p in Path('assets').rglob('*') if p.is_file() and p.suffix != '.import'}
+files = {str(p) for p in Path('assets').rglob('*') if p.is_file() and p.suffix != '.import' and p.name != '.DS_Store'}
 assert files == set(rows), f'Ledger mismatch: missing={files-set(rows)}, stale={set(rows)-files}'
 for path, cells in rows.items():
     original = cells[1] == 'Original work in this repository'

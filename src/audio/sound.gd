@@ -6,9 +6,12 @@ var world: int = -1
 var duck: float = 0.0
 var enabled: bool = true
 var streams: Dictionary = {}
+var rolling: AudioStreamPlayer
+var roll_surface: int = -1
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	enabled = DisplayServer.get_name() != "headless"
 	for name: String in ["Music", "SFX"]:
 		var index: int = AudioServer.bus_count
 		AudioServer.add_bus()
@@ -24,6 +27,9 @@ func _ready() -> void:
 		player.bus = "Music"
 		add_child(player)
 		music_players.append(player)
+	rolling = AudioStreamPlayer.new()
+	rolling.bus = "SFX"
+	add_child(rolling)
 	apply_settings()
 
 func apply_settings() -> void:
@@ -31,7 +37,7 @@ func apply_settings() -> void:
 		AudioServer.set_bus_volume_db(AudioServer.get_bus_index(pair[0]), linear_to_db(maxf(0.0001, float(Save.data.settings[pair[1]]))))
 
 func set_world(value: int) -> void:
-	if world == value:
+	if not enabled or world == value:
 		return
 	world = value
 	for i: int in range(3):
@@ -69,3 +75,33 @@ func _notification(what: int) -> void:
 		AudioServer.set_bus_mute(0, true)
 	elif what == NOTIFICATION_APPLICATION_FOCUS_IN:
 		AudioServer.set_bus_mute(0, false)
+
+func set_roll(speed: float, surface: int) -> void:
+	if not enabled or rolling == null:
+		return
+	if speed < 0.5:
+		rolling.volume_db = -80
+		return
+	var index: int = 1 if surface == 3 else (2 if surface == 2 else 0)
+	if index != roll_surface:
+		roll_surface = index
+		var file: String = ["footstep_grass_000.ogg", "footstep_snow_000.ogg", "footstep_concrete_000.ogg"][index]
+		var stream: AudioStreamOggVorbis = load("res://assets/audio/" + file) as AudioStreamOggVorbis
+		stream.loop = true
+		rolling.stream = stream
+		rolling.play()
+	rolling.pitch_scale = clampf(0.7 + speed * 0.075, 0.7, 2.0)
+	rolling.volume_db = lerpf(-25, -13, clampf(speed / 16, 0, 1))
+
+func stop_all() -> void:
+	enabled = false
+	for player: AudioStreamPlayer in music_players + players:
+		player.stop()
+		player.stream = null
+	if is_instance_valid(rolling):
+		rolling.stop()
+		rolling.stream = null
+	streams.clear()
+
+func _exit_tree() -> void:
+	stop_all()

@@ -1,0 +1,464 @@
+[
+	{
+		"best": {
+			"aim": -1.0,
+			"lean": 5.0,
+			"score": 220,
+			"seed": 2026,
+			"time": 7.75000000000017
+		},
+		"clears": 405,
+		"course": "tutorial",
+		"rate": 0.551020408163265,
+		"samples": 735,
+		"stuck": 0
+	},
+	{
+		"best": {
+			"aim": -1.0,
+			"lean": 5.0,
+			"score": 220,
+			"seed": 137,
+			"time": 9.4500000000001
+		},
+		"clears": 391,
+		"course": "meadow/01",
+		"rate": 0.531972789115646,
+		"samples": 735,
+		"stuck": 0
+	},
+	{
+		"best": {
+			"aim": -1.0,
+			"lean": 15.0,
+			"score": 285,
+			"seed": 2026,
+			"time": 8.74166666666681
+		},
+		"clears": 303,
+		"course": "meadow/02",
+		"rate": 0.412244897959184,
+		"samples": 735,
+		"stuck": 0
+	},
+	{
+		"best": {
+			"aim": 0.1,
+			"lean": 5.0,
+			"score": 130,
+			"seed": 42,
+			"time": 9.05833333333346
+		},
+		"clears": 95,
+		"course": "meadow/03",
+		"rate": 0.129251700680272,
+		"samples": 735,
+		"stuck": 0
+	},
+	{
+		"best": {
+			"aim": -1.0,
+			"lean": 0.0,
+			"score": 350,
+			"seed": 2026,
+			"time": 9.19166666666679
+		},
+		"clears": 251,
+		"course": "meadow/04",
+		"rate": 0.341496598639456,
+		"samples": 735,
+		"stuck": 0
+	},
+	{
+		"best": {
+			"aim": -0.8,
+			"lean": 5.0,
+			"score": 210,
+			"seed": 137,
+			"time": 12.6083333333333
+		},
+		"clears": 345,
+		"course": "meadow/05",
+		"rate": 0.469387755102041,
+		"samples": 735,
+		"stuck": 0
+	},
+	{
+		"best": {
+			"aim": -0.6,
+			"lean": -5.0,
+			"score": 320,
+			"seed": 31415,
+			"time": 13.9083333333332
+		},
+		"clears": 80,
+		"course": "meadow/06",
+		"rate": 0.108843537414966,
+		"samples": 735,
+		"stuck": 0
+	},
+	{
+		"best": {
+			"aim": -0.8,
+			"lean": 0.0,
+			"score": 200,
+			"seed": 2026,
+			"time": 14.3416666666665
+		},
+		"clears": 174,
+		"course": "meadow/07",
+		"rate": 0.236734693877551,
+		"samples": 735,
+		"stuck": 0
+	},
+	{
+		"best": {
+			"aim": -0.8,
+			"lean": 0.0,
+			"score": 295,
+			"seed": 2026,
+			"time": 10.0416666666667
+		},
+		"clears": 221,
+		"course": "meadow/08",
+		"rate": 0.300680272108844,
+		"samples": 735,
+		"stuck": 0
+	},
+	{
+		"best": {
+			"aim": 1.0,
+			"lean": -10.0,
+			"score": 168,
+			"seed": 7777,
+			"time": 9.11666666666679
+		},
+		"clears": 323,
+		"course": "coral/01",
+		"rate": 0.439455782312925,
+		"samples": 735,
+		"stuck": 0
+	},
+	{
+		"best": {
+			"aim": -1.0,
+			"lean": 0.0,
+			"score": 300,
+			"seed": 137,
+			"time": 8.64166666666682
+		},
+		"clears": 217,
+		"course": "coral/02",
+		"rate": 0.295238095238095,
+		"samples": 735,
+		"stuck": 0
+	},
+	{
+		"best": {
+			"aim": -0.8,
+			"lean": 0.0,
+			"score": 160,
+			"seed": 2026,
+			"time": 9.33333333333344
+		},
+		"clears": 57,
+		"course": "coral/03",
+		"rate": 0.0775510204081633,
+		"samples": 735,
+		"stuck": 0
+	},
+	{
+		"best": {
+			"aim": -0.9,
+			"lean": 5.0,
+			"score": 217,
+			"seed": 42,
+			"time": 10.2416666666667
+		},
+		"clears": 86,
+		"course": "coral/04",
+		"rate": 0.117006802721088,
+		"samples": 735,
+		"stuck": 0
+	},
+	{
+		"best": {
+			"aim": -0.8,
+			"lean": 5.0,
+			"score": 270,
+			"seed": 31415,
+			"time": 12.5249999999999
+		},
+		"clears": 326,
+		"course": "coral/05",
+		"rate": 0.443537414965986,
+		"samples": 735,
+		"stuck": 0
+	},
+	{
+		"best": {
+			"aim": -0.9,
+			"lean": 10.0,
+			"score": 405,
+			"seed": 31415,
+			"time": 8.9666666666668
+		},
+		"clears": 3,
+		"course": "coral/06",
+		"rate": 0.00408163265306122,
+		"samples": 735,
+		"stuck": 0
+	},
+	{
+		"best": {
+			"aim": -1.0,
+			"lean": 0.0,
+			"score": 254,
+			"seed": 7777,
+			"time": 12.8833333333332
+		},
+		"clears": 119,
+		"course": "coral/07",
+		"rate": 0.161904761904762,
+		"samples": 735,
+		"stuck": 0
+	},
+	{
+		"best": {
+			"aim": -0.9,
+			"lean": 0.0,
+			"score": 380,
+			"seed": 137,
+			"time": 9.95833333333341
+		},
+		"clears": 232,
+		"course": "coral/08",
+		"rate": 0.315646258503401,
+		"samples": 735,
+		"stuck": 0
+	},
+	{
+		"best": {
+			"aim": -0.8,
+			"lean": 0.0,
+			"score": 210,
+			"seed": 42,
+			"time": 9.48333333333344
+		},
+		"clears": 282,
+		"course": "ember/01",
+		"rate": 0.383673469387755,
+		"samples": 735,
+		"stuck": 0
+	},
+	{
+		"best": {
+			"aim": 0.8,
+			"lean": -10.0,
+			"score": 320,
+			"seed": 137,
+			"time": 8.34166666666683
+		},
+		"clears": 228,
+		"course": "ember/02",
+		"rate": 0.310204081632653,
+		"samples": 735,
+		"stuck": 0
+	},
+	{
+		"best": {
+			"aim": -1.0,
+			"lean": 5.0,
+			"score": 220,
+			"seed": 42,
+			"time": 8.4333333333335
+		},
+		"clears": 23,
+		"course": "ember/03",
+		"rate": 0.0312925170068027,
+		"samples": 735,
+		"stuck": 0
+	},
+	{
+		"best": {
+			"aim": -0.8,
+			"lean": 0.0,
+			"score": 450,
+			"seed": 137,
+			"time": 15.5249999999998
+		},
+		"clears": 90,
+		"course": "ember/04",
+		"rate": 0.122448979591837,
+		"samples": 735,
+		"stuck": 0
+	},
+	{
+		"best": {
+			"aim": 0.3,
+			"lean": 5.0,
+			"score": 175,
+			"seed": 2026,
+			"time": 12.5999999999999
+		},
+		"clears": 183,
+		"course": "ember/05",
+		"rate": 0.248979591836735,
+		"samples": 735,
+		"stuck": 0
+	},
+	{
+		"best": {
+			"aim": 0.7,
+			"lean": 5.0,
+			"score": 255,
+			"seed": 2026,
+			"time": 13.2999999999999
+		},
+		"clears": 51,
+		"course": "ember/06",
+		"rate": 0.0693877551020408,
+		"samples": 735,
+		"stuck": 0
+	},
+	{
+		"best": {
+			"aim": -0.9,
+			"lean": -5.0,
+			"score": 450,
+			"seed": 137,
+			"time": 12.3749999999999
+		},
+		"clears": 102,
+		"course": "ember/07",
+		"rate": 0.138775510204082,
+		"samples": 735,
+		"stuck": 0
+	},
+	{
+		"best": {
+			"aim": -0.6,
+			"lean": 10.0,
+			"score": 160,
+			"seed": 42,
+			"time": 13.5749999999999
+		},
+		"clears": 78,
+		"course": "ember/08",
+		"rate": 0.106122448979592,
+		"samples": 735,
+		"stuck": 0
+	},
+	{
+		"best": {
+			"aim": -1.0,
+			"lean": 5.0,
+			"score": 220,
+			"seed": 2026,
+			"time": 10.0500000000001
+		},
+		"clears": 267,
+		"course": "neon/01",
+		"rate": 0.363265306122449,
+		"samples": 735,
+		"stuck": 0
+	},
+	{
+		"best": {
+			"aim": -0.8,
+			"lean": 5.0,
+			"score": 300,
+			"seed": 42,
+			"time": 8.55833333333349
+		},
+		"clears": 185,
+		"course": "neon/02",
+		"rate": 0.251700680272109,
+		"samples": 735,
+		"stuck": 0
+	},
+	{
+		"best": {
+			"aim": -0.1,
+			"lean": 5.0,
+			"score": 125,
+			"seed": 137,
+			"time": 12.9333333333332
+		},
+		"clears": 20,
+		"course": "neon/03",
+		"rate": 0.0272108843537415,
+		"samples": 735,
+		"stuck": 0
+	},
+	{
+		"best": {
+			"aim": -1.0,
+			"lean": 5.0,
+			"score": 310,
+			"seed": 7777,
+			"time": 8.95000000000013
+		},
+		"clears": 76,
+		"course": "neon/04",
+		"rate": 0.103401360544218,
+		"samples": 735,
+		"stuck": 0
+	},
+	{
+		"best": {
+			"aim": -0.9,
+			"lean": 0.0,
+			"score": 230,
+			"seed": 137,
+			"time": 12.8583333333332
+		},
+		"clears": 191,
+		"course": "neon/05",
+		"rate": 0.259863945578231,
+		"samples": 735,
+		"stuck": 0
+	},
+	{
+		"best": {
+			"aim": -1.0,
+			"lean": 10.0,
+			"score": 255,
+			"seed": 137,
+			"time": 11.8833333333333
+		},
+		"clears": 36,
+		"course": "neon/06",
+		"rate": 0.0489795918367347,
+		"samples": 735,
+		"stuck": 0
+	},
+	{
+		"best": {
+			"aim": -0.9,
+			"lean": -5.0,
+			"score": 380,
+			"seed": 42,
+			"time": 15.7499999999997
+		},
+		"clears": 78,
+		"course": "neon/07",
+		"rate": 0.106122448979592,
+		"samples": 735,
+		"stuck": 0
+	},
+	{
+		"best": {
+			"aim": -0.9,
+			"lean": -5.0,
+			"score": 420,
+			"seed": 31415,
+			"time": 13.4999999999999
+		},
+		"clears": 85,
+		"course": "neon/08",
+		"rate": 0.115646258503401,
+		"samples": 735,
+		"stuck": 0
+	}
+]

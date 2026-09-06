@@ -18,6 +18,7 @@ var hover: String = ""
 var ticker: float = 0.0
 var toast: String = ""
 var toast_time: float = 0.0
+var safe_origin: Vector2 = Vector2.ZERO
 var lean_slider: HSlider
 var aim_slider: HSlider
 
@@ -39,10 +40,13 @@ func rebuild() -> void:
 		return
 	portrait = size.x / size.y < 1.0
 	base = Vector2(720, 1280) if portrait else Vector2(1440, 900)
-	factor = minf(size.x / base.x, size.y / base.y)
+	var safe: Rect2 = Platform.safe_area()
+	factor = minf(safe.size.x / base.x, safe.size.y / base.y)
+	safe_origin = safe.position + (safe.size - base * factor) / 2
 	buttons.scale = Vector2.ONE * factor
-	buttons.position = (size - base * factor) / 2
+	buttons.position = safe_origin
 	for child: Node in buttons.get_children():
+		buttons.remove_child(child)
 		child.queue_free()
 	lean_slider = null
 	aim_slider = null
@@ -73,6 +77,8 @@ func rebuild() -> void:
 			aim_slider = slider("aim", Rect2(x, yy, w, 36), -1, 1, game.aim_value, 0.01)
 			lean_slider = slider("lean", Rect2(x, yy + 95, w, 36), -15, 15, game.lean_value, 0.5)
 			button("roll", "LET IT ROLL  ↓", Rect2(x, yy + 146, w, 66), YELLOW, 23)
+			if portrait:
+				button("purist", "PURIST ✓" if game.purist else "PURIST ○", Rect2(420, 29, 185, 46), PAPER, 18)
 			if not portrait:
 				button("purist", "●  PURIST" if game.purist else "○  PURIST", Rect2(x, 703, w, 45), Color("e7ecdc"), 17)
 		"roll":
@@ -170,7 +176,7 @@ func panel(rect: Rect2, color: Color, radius: int = 24) -> void:
 func _draw() -> void:
 	if game == null:
 		return
-	draw_set_transform((size - base * factor) / 2, 0, Vector2.ONE * factor)
+	draw_set_transform(safe_origin, 0, Vector2.ONE * factor)
 	var x: float = 40 if portrait else 56
 	var w: float = 640 if portrait else 332
 	var hud: bool = page in ["aim", "roll"]
@@ -250,6 +256,9 @@ func _draw() -> void:
 			label("★".repeat(int(game.result.get("stars", 0))) + "☆".repeat(3 - int(game.result.get("stars", 0))), Vector2(x, 280), 52, Color("c1943f"))
 			label("%03d" % game.result.get("score", 0), Vector2(x, 365), 62, INK, true)
 			label("STYLE POINTS", Vector2(x + 180, 350), 14, MUTED)
+			if portrait:
+				panel(Rect2(20, 928, 680, 48), PAPER, 16)
+				label("%s  ·  SEED %d" % [game.course.data.title, game.roll_seed], Vector2(x, 960), 18, MUTED)
 			label("%s  /  %.1f SECONDS" % [game.result.get("outcome", "WIDE"), game.result.get("time", 0)], Vector2(x, 408), 16)
 			if not portrait:
 				label("CENTER %d%%" % roundi(float(game.result.get("accuracy", 0)) * 100) if good else "%.1f tire widths from the center" % (float(game.result.get("offset", 0)) / 1.3), Vector2(x, 450), 18, MUTED)

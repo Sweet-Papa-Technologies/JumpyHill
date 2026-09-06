@@ -10,11 +10,33 @@ func _ready() -> void:
 		return
 	if FileAccess.file_exists(PATH):
 		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(PATH))
-		if parsed is Dictionary and int(parsed.get("version", 0)) == 1:
-			for key: String in ["courses", "daily", "settings"]:
-				if parsed.get(key) is Dictionary:
-					data[key].merge(parsed[key], true)
-			data.tire = clampi(int(parsed.get("tire", 0)), 0, 3)
+		load_data(parsed)
+
+func load_data(parsed: Variant) -> bool:
+	if not parsed is Dictionary or not parsed.get("version") is float and not parsed.get("version") is int or int(parsed.get("version", 0)) != 1:
+		return false
+	for group: String in ["courses", "daily"]:
+		if parsed.get(group) is Dictionary:
+			for key: String in parsed[group]:
+				var entry: Variant = parsed[group][key]
+				if not entry is Dictionary:
+					continue
+				if not _number(entry.get("stars")) or not _number(entry.get("score")) or not _number(entry.get("seed")):
+					continue
+				data[group][key] = {"stars": clampi(int(entry.stars), 0, 3), "score": maxi(0, int(entry.score)), "seed": int(entry.seed)}
+	if parsed.get("settings") is Dictionary:
+		for key: String in data.settings:
+			var value: Variant = parsed.settings.get(key)
+			if key in ["master", "music", "sfx"] and _number(value):
+				data.settings[key] = clampf(float(value), 0, 1)
+			elif key not in ["master", "music", "sfx"] and value is bool:
+				data.settings[key] = value
+	if _number(parsed.get("tire")):
+		data.tire = clampi(int(parsed.tire), 0, 3)
+	return true
+
+func _number(value: Variant) -> bool:
+	return (value is float or value is int) and is_finite(float(value))
 
 func persist(path: String = PATH) -> bool:
 	if test_mode and path == PATH:

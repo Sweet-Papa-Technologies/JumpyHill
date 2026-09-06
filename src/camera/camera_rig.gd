@@ -34,7 +34,7 @@ func _process(dt: float) -> void:
 			look = center
 			target_fov = 55
 		_:
-			desired = middle + (Vector3(30, 49, 53) if not portrait else Vector3(7, 48, 47))
+			desired = middle + (Vector3(30, 49, 53) if not portrait else Vector3(7, 48, 47)) * (course.length / 58.0) * 1.05
 			look = middle
 			target_fov = 48 if not portrait else 54
 	var weight: float = 1.0 if reduce_motion else 1.0 - exp(-dt * 5.0)

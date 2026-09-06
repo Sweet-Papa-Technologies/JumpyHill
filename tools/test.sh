@@ -4,6 +4,7 @@ cd "$(dirname "$0")/.."
 mkdir -p build
 python3 tools/asset_ledger.py
 tools/godot --headless --editor --import --quit > build/test-import.log 2>&1
+if rg -q "SCRIPT ERROR|ERROR:" build/test-import.log; then cat build/test-import.log; exit 1; fi
 run_checked() {
   local log="$1"; shift
   tools/godot --headless --fixed-fps 120 --script tests/run.gd -- --test "$@" > "$log" 2>&1
@@ -11,6 +12,12 @@ run_checked() {
   if rg -q 'SCRIPT ERROR|ERROR:|TESTS .* FAIL' "$log"; then exit 1; fi
 }
 run_checked build/unit.log
+tools/godot --headless --script tests/ui_flow.gd -- --test > build/ui-flow.log 2>&1
+cat build/ui-flow.log
+if rg -q 'SCRIPT ERROR|ERROR:|UI FLOW FAIL' build/ui-flow.log; then exit 1; fi
+tools/godot --headless --fixed-fps 120 --script tests/retry.gd -- --test > build/runtime-retry.log 2>&1
+cat build/runtime-retry.log
+if rg -q 'SCRIPT ERROR|ERROR:|RUNTIME RETRY FAIL' build/runtime-retry.log; then exit 1; fi
 for i in 1 2 3; do run_checked "build/determinism-$i.log" --determinism; done
 python3 - <<'PY'
 from pathlib import Path

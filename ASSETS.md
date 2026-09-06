@@ -31,3 +31,6 @@ CC0 terms: https://creativecommons.org/publicdomain/zero/1.0/ . Font license tex
 | `assets/models/tree_palmTall.obj` | https://kenney.nl/assets/nature-kit | Kenney | CC0 | 2026-09-06 | Material references removed; palette applied in engine. |
 | `assets/models/tree_pineRoundA.obj` | https://kenney.nl/assets/nature-kit | Kenney | CC0 | 2026-09-06 | Material references removed; palette applied in engine. |
 | `assets/ui/icon.svg` | Original work in this repository | Sweet Papa Technologies | Apache-2.0 | 2026-09-06 | Procedural composition / original vector; no external samples. |
+| `assets/audio/footstep_grass_000.ogg` | https://kenney.nl/assets/impact-sounds | Kenney | CC0 | 2026-09-06 | Unmodified source, looped in engine. |
+| `assets/audio/footstep_snow_000.ogg` | https://kenney.nl/assets/impact-sounds | Kenney | CC0 | 2026-09-06 | Unmodified source, looped in engine. |
+| `assets/audio/footstep_concrete_000.ogg` | https://kenney.nl/assets/impact-sounds | Kenney | CC0 | 2026-09-06 | Unmodified source, looped in engine. |

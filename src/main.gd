@@ -35,10 +35,21 @@ var frames: int = 0
 var particles: Array[Dictionary] = []
 var screen_size: Vector2
 var automation: bool = false
+var automation_output: String = "res://build/playtest"
+var quitting: bool = false
 var automating_step: int = 0
 var frame_times: Array[float] = []
 var screenshot_index: int = 0
 var retired_worlds: Array[World3D] = []
+var trails: TireTrails
+var hit_until: int = 0
+var perf_mode: bool = false
+var perf_wall: Array[float] = []
+var perf_cpu: Array[float] = []
+var perf_physics: Array[float] = []
+var perf_draws: int = 0
+var perf_primitives: int = 0
+var speed_fx: ShaderMaterial
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -47,6 +58,9 @@ func _ready() -> void:
 	viewport_container = SubViewportContainer.new()
 	viewport_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	viewport_container.stretch = true
+	speed_fx = ShaderMaterial.new()
+	speed_fx.shader = preload("res://src/feel/shaders/speed.gdshader")
+	viewport_container.material = speed_fx
 	add_child(viewport_container)
 	viewport = SubViewport.new()
 	viewport.world_3d = World3D.new()
@@ -58,6 +72,8 @@ func _ready() -> void:
 	world_root.process_mode = Node.PROCESS_MODE_PAUSABLE
 	viewport.add_child(world_root)
 	_setup_light()
+	trails = TireTrails.new()
+	world_root.add_child(trails)
 	camera = HillCamera.new()
 	world_root.add_child(camera)
 	camera.current = true
@@ -149,6 +165,7 @@ func load_course(data: CourseData) -> void:
 	sky_mat.ground_horizon_color = sky_mat.sky_horizon_color
 	sky_mat.ground_bottom_color = sky_mat.sky_top_color
 	Sound.set_world(data.world)
+	_apply_post_markers()
 
 func _create_tire() -> void:
 	tire = RollingTire.new()
@@ -185,6 +202,7 @@ func _enter_state(next: State) -> void:
 			camera.blend_to("aim")
 		State.AIM:
 			_reset_physics_space()
+			trails.clear()
 			ui.page = "aim"
 			tire.aim = aim_value
 			tire.lean = lean_value
@@ -301,6 +319,7 @@ func _action(name: String, value: Variant = null) -> void:
 			Save.data.settings[value] = not Save.data.settings[value]
 			Save.persist()
 			camera.reduce_motion = Save.data.settings.reduce_motion
+			_apply_post_markers()
 			ui.rebuild()
 		"daily":
 			daily = Save.daily_for(Time.get_date_string_from_system())
@@ -319,23 +338,31 @@ func _preview_selected() -> void:
 
 func _process(dt: float) -> void:
 	retired_worlds.clear()
+	var rolling: bool = state == State.ROLL and not get_tree().paused
+	Sound.set_roll(tire.linear_velocity.length() if rolling else 0, course.data.world)
+	var speed_v: float = clampf((tire.linear_velocity.length() / course.data.max_speed - 0.8) / 0.2, 0, 1) if rolling and not Save.data.settings.reduce_motion else 0.0
+	speed_fx.set_shader_parameter("speed", speed_v)
+	speed_fx.set_shader_parameter("combo", clampf(tire.style.combo / 12.0, 0, 1) if rolling and not Save.data.settings.reduce_motion else 0.0)
 	frames += 1
 	pop_time = maxf(0, pop_time - dt)
 	if state == State.ROLL:
 		Sound.tier = minf(2.0, tire.style.score / 120.0)
 		course.tick_gate(tire.elapsed)
-		if tire.position.z > course.data.length - 4 and absf(tire.position.x - course.data.goal_x) < course.data.goal_width and not slow_used and not Save.data.settings.reduce_motion:
-			slow_used = true
-			slow_until = Time.get_ticks_msec() + 400
-			Engine.time_scale = 0.35
-		if slow_until > 0 and Time.get_ticks_msec() > slow_until:
-			Engine.time_scale = 1
-			slow_until = 0
 	if guide_dirty and state == State.AIM:
 		guide_dirty = false
 		_update_guide()
 	if not get_tree().paused:
 		_tick_particles(dt)
+		trails.tick(dt, tire)
+	if hit_until > 0 and Time.get_ticks_msec() >= hit_until:
+		hit_until = 0
+		viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	if perf_mode and state == State.ROLL and tire.elapsed > 1:
+		perf_wall.append(dt * 1000)
+		perf_cpu.append(Performance.get_monitor(Performance.TIME_PROCESS) * 1000)
+		perf_physics.append(Performance.get_monitor(Performance.TIME_PHYSICS_PROCESS) * 1000)
+		perf_draws = maxi(perf_draws, viewport.get_render_info(Viewport.RENDER_INFO_TYPE_VISIBLE, Viewport.RENDER_INFO_DRAW_CALLS_IN_FRAME))
+		perf_primitives = maxi(perf_primitives, viewport.get_render_info(Viewport.RENDER_INFO_TYPE_VISIBLE, Viewport.RENDER_INFO_PRIMITIVES_IN_FRAME))
 	if capture_path != "" and frames == capture_at:
 		_capture(capture_path)
 	if automation:
@@ -362,6 +389,15 @@ func _update_guide() -> void:
 
 func _finish(outcome: Dictionary) -> void:
 	result = outcome
+	if perf_mode:
+		perf_wall.sort()
+		perf_cpu.sort()
+		perf_physics.sort()
+		var report: Dictionary = {"device": RenderingServer.get_video_adapter_name(), "frames": perf_wall.size(), "p95_wall_ms": perf_wall[int(perf_wall.size() * 0.95)], "p95_cpu_ms": perf_cpu[int(perf_cpu.size() * 0.95)], "p95_physics_ms": perf_physics[int(perf_physics.size() * 0.95)], "max_draw_calls": perf_draws, "max_primitives": perf_primitives}
+		var report_file: FileAccess = FileAccess.open("res://build/performance.json", FileAccess.WRITE)
+		report_file.store_string(JSON.stringify(report, "\t"))
+		print("PERFORMANCE ", JSON.stringify(report))
+		_quit.call_deferred(0 if report.p95_wall_ms < 16.6 else 1)
 	Save.record(course.data.id(), int(result.stars), int(result.score), roll_seed)
 	if not daily.is_empty():
 		var old: Dictionary = Save.data.daily.get(daily.date, {})
@@ -372,6 +408,12 @@ func _finish(outcome: Dictionary) -> void:
 	Platform.vibrate("heavy")
 	if result.outcome == "GOAL":
 		_burst(tire.position, 70)
+		if not Save.data.settings.reduce_motion:
+			for post: Node3D in course.posts:
+				var wobble: Tween = create_tween()
+				wobble.tween_property(post, "rotation:z", 0.12, 0.08)
+				wobble.tween_property(post, "rotation:z", -0.08, 0.09)
+				wobble.tween_property(post, "rotation:z", 0.0, 0.12)
 	change_state(State.RESULT)
 
 func _style(event: String) -> void:
@@ -379,6 +421,9 @@ func _style(event: String) -> void:
 	pop_time = 0.8
 	Sound.play(event)
 	if event in ["BOING", "NICE", "GRIND"]:
+		if not Save.data.settings.reduce_motion:
+			hit_until = Time.get_ticks_msec() + 45
+			viewport.render_target_update_mode = SubViewport.UPDATE_DISABLED
 		camera.trauma = minf(0.4, camera.trauma + 0.25)
 		Platform.vibrate("medium")
 		_burst(tire.position, 9)
@@ -485,7 +530,7 @@ func _capture(path: String) -> void:
 	get_viewport().get_texture().get_image().save_png(path)
 	print("CAPTURE ", path)
 	if not automation:
-		get_tree().quit()
+		_quit()
 
 func _command_line() -> void:
 	var args: PackedStringArray = OS.get_cmdline_user_args()
@@ -506,10 +551,20 @@ func _command_line() -> void:
 	if opts.has("--capture"):
 		capture_path = opts["--capture"]
 		capture_at = int(opts.get("--capture-at", "90"))
+	if opts.has("--perf"):
+		perf_mode = true
+		Engine.max_fps = 0
+		Save.data.settings.reduce_motion = true
+		load_course(courses.back())
+		aim_value = -0.9
+		lean_value = -5
+		change_state(State.AIM)
+		change_state.call_deferred(State.ROLL)
 	if opts.has("--playtest"):
 		automation = true
 		Sound.enabled = false
-		DirAccess.make_dir_recursive_absolute("res://build/playtest")
+		automation_output = opts.get("--test-output", "res://build/playtest")
+		DirAccess.make_dir_recursive_absolute(automation_output)
 
 func _automate(dt: float) -> void:
 	if state == State.ROLL:
@@ -517,22 +572,22 @@ func _automate(dt: float) -> void:
 	match automating_step:
 		0:
 			if frames > 45:
-				_capture("res://build/playtest/title.png")
+				_capture(automation_output + "/title.png")
 				_action("play")
 				automating_step = 1
 		1:
 			if frames > 90:
-				_capture("res://build/playtest/select.png")
+				_capture(automation_output + "/select.png")
 				_action("start")
 				automating_step = 2
 		2:
 			if frames > 140:
-				_capture("res://build/playtest/aim.png")
+				_capture(automation_output + "/aim.png")
 				_action("roll")
 				automating_step = 3
 		3:
 			if tire.elapsed > 2.0:
-				_capture("res://build/playtest/roll.png")
+				_capture(automation_output + "/roll.png")
 				_action("pause")
 				automating_step = 4
 		4:
@@ -544,7 +599,7 @@ func _automate(dt: float) -> void:
 				automating_step = 5
 		5:
 			if state == State.RESULT:
-				_capture("res://build/playtest/result.png")
+				_capture(automation_output + "/result.png")
 				var started: int = Time.get_ticks_usec()
 				_action("retry")
 				var retry_ms: float = (Time.get_ticks_usec() - started) / 1000.0
@@ -554,7 +609,7 @@ func _automate(dt: float) -> void:
 				automating_step = 6
 		6:
 			if frames % 30 == 0:
-				_capture("res://build/playtest/settings.png")
+				_capture(automation_output + "/settings.png")
 				_action("setting_toggle", "reduce_motion")
 				_action("setting_toggle", "reduce_motion")
 				_action("settings_back")
@@ -562,12 +617,12 @@ func _automate(dt: float) -> void:
 				assert(state == State.AIM and roll_seed == int(daily.seed))
 				frame_times.sort()
 				var report: Dictionary = {"retry": "pass", "pause_resume": "pass", "daily": "pass", "frames": frame_times.size(), "p95_frame_ms": frame_times[int(frame_times.size() * 0.95)] if not frame_times.is_empty() else 0, "result": result}
-				var file: FileAccess = FileAccess.open("res://build/playtest/report.json", FileAccess.WRITE)
+				var file: FileAccess = FileAccess.open(automation_output + "/report.json", FileAccess.WRITE)
 				file.store_string(JSON.stringify(report, "\t"))
 				print("PLAYTEST PASS ", JSON.stringify(report))
 				automating_step = 7
 		7:
-			if frames % 60 == 0: get_tree().quit()
+			if frames % 60 == 0: _quit()
 
 func _reset_physics_space() -> void:
 	# Jolt retains contact caches/body ordering in a reused space. A fresh space
@@ -577,3 +632,28 @@ func _reset_physics_space() -> void:
 	viewport.world_3d = World3D.new()
 	viewport.add_child(world_root)
 	course.tick_gate(0)
+
+func _physics_process(_dt: float) -> void:
+	if state != State.ROLL or get_tree().paused:
+		return
+	# Trigger and end slow motion on simulation time, independent of render FPS.
+	if not slow_used and tire.position.z > course.data.length - 4 and absf(tire.position.x - course.data.goal_x) < course.data.goal_width and not Save.data.settings.reduce_motion:
+		slow_used = true
+		slow_until = tire.elapsed + 0.14
+		Engine.time_scale = 0.35
+	if slow_used and slow_until > 0 and tire.elapsed >= slow_until:
+		Engine.time_scale = 1
+		slow_until = 0
+
+func _apply_post_markers() -> void:
+	for i: int in range(course.posts.size()):
+		var post: MeshInstance3D = course.posts[i] as MeshInstance3D
+		post.material_override = course.material((Color("294d4c") if i == 0 else Color("f5ce78")) if Save.data.settings.colorblind else Color("fff3d7"))
+
+func _quit(code: int = 0) -> void:
+	if quitting:
+		return
+	quitting = true
+	Sound.stop_all()
+	await get_tree().create_timer(0.15, true, false, true).timeout
+	get_tree().quit(code)
