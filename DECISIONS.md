@@ -24,3 +24,5 @@ At termination the body freezes and the camera captures a bounded, immutable foc
 The visual additions are original repository geometry and shaders, extending the existing Kenney CC0 props: layered cliffs, ground grain, planted shoulders, warning stripes, biome landmarks and finish pavilions. No additional downloads or asset licenses are needed.
 
 The result-freeze regression exposed alternating retry positions from pending forces retained by the old tire body. AIM now recreates just the small tire body before the fresh-world reset; course meshes and colliders are retained. Tests cover a route that reaches moving hazards and clears, rather than stopping at the first barrier. Slow motion remains enabled.
+
+The packaged off-edge playtest also caught a frozen tire hidden inside decorative cliff geometry. Off-edge misses now retain their original scored endpoint in the result record and stage the frozen tire on the nearby shoulder for a readable result shot. A regression checks both the original out-of-bounds endpoint and the unobstructed presentation pose.

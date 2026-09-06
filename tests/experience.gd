@@ -36,7 +36,7 @@ func attempt(aim: float, lean: float) -> Dictionary:
 	var focus: Vector3 = game.camera.result_focus
 	for tick: int in range(600): await physics_frame
 	var camera_position: Vector3 = game.camera.position
-	capture("win" if game.result.outcome == "GOAL" else "miss")
+	capture("win" if game.result.outcome == "GOAL" else ("miss" if game.result.outcome == "BLOCKED" else "edge-miss"))
 	for tick: int in range(600): await physics_frame
 	check(game.tire.position.distance_to(position) < 0.0001, "Finished tire stays put for ten seconds")
 	check(game.camera.result_focus == focus, "Result focus is immutable")
@@ -61,6 +61,10 @@ func run() -> void:
 	check(miss.outcome != "GOAL", "Default launch is not a free win")
 	var win: Dictionary = await attempt(-0.6, 0)
 	check(win.outcome == "GOAL", "A deliberate bank route clears the first hill")
+	var edge: Dictionary = await attempt(1, 15)
+	check(edge.outcome != "GOAL" and absf(edge.position.x) > game.course.data.width / 2, "Extreme bank produces an off-edge miss")
+	check(absf(game.tire.position.x) < game.course.data.width * 0.4, "Off-edge result is staged clear of decorative cliffs")
+	check(game.tire.position.y > game.course.data.height_at(game.tire.position.x, game.tire.position.z) + 0.6, "Recovered result tire is visible above the ground")
 	game.change_state(game.State.AIM)
 	await physics_frame
 	await physics_frame

@@ -6,6 +6,7 @@ Verified on macOS 15.5 / Apple M4 Pro with Godot 4.7.2, Jolt 120 Hz and Mobile r
 - Default launch: **0 wins in 160 regular-course/seed combinations**, also checked with standalone isolated rolls. The center barricade, shallow contours and side-route boosts remove the old free winning lane.
 - The final report combines the full sweep with a 735-roll retest of Coral 06 after widening its finish to preserve a solution on seed 7777. Results: `docs/verification/solver-report.json`.
 - Full application: **20 identical planned-route retries**, including a moving sweeper and slow motion; position tolerance 0.0001 with identical events. Creating a fresh tire body on AIM clears pending forces retained by the result freeze. Existing course geometry stays loaded.
+- Off-edge result check: the original out-of-bounds endpoint stays in the score record; the frozen tire is presented on the visible shoulder, clear of decorative cliffs. Native screenshot and ten-second stability regression: PASS.
 - Native and headless experience checks: deliberate route wins, default launch blocks, moving hazards animate and pause, retry restores hazard phase, launch preview never moves the actual tire, and both result camera/body remain stable for ten seconds. PASS.
 - Asset ledger, real mouse/keyboard UI flow, save/style/nudge tests and three fresh processes × 20 physics repeats: PASS.
 - Native full menu playtest: pause/resume, daily challenge and retry PASS; retry **2.42 ms**. Portrait and all four world aim views inspected, plus close chase and settled win/miss views.

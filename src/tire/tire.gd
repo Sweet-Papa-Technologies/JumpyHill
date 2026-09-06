@@ -275,4 +275,12 @@ func _finish(outcome: String, accuracy: float, offset: float) -> void:
 	linear_velocity = Vector3.ZERO
 	angular_velocity = Vector3.ZERO
 	freeze = true
+	# Preserve the scored endpoint above, then stage an off-edge miss on the
+	# shoulder so decorative cliffs cannot swallow the result's subject.
+	if outcome != "GOAL" and (absf(position.x) > course.width * 0.5 or position.y < course.height_at(position.x, position.z) - 0.4):
+		position.x = clampf(position.x, -course.width * 0.38, course.width * 0.38)
+		position.z = clampf(position.z, 0.0, course.length)
+		position.y = course.height_at(position.x, position.z) + FEEL.tire_radius + 0.04
+		rotation = Vector3(0, rotation.y, 0)
+		reset_physics_interpolation()
 	finished.emit(last_result)
