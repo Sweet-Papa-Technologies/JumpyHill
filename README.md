@@ -8,7 +8,7 @@ This is not a spec-complete store release. See [FEATURE_STATUS.md](FEATURE_STATU
 
 ## Play
 
-On this machine, open `build/macos/TREADFALL.app`, or install from the **notarized, stapled** `build/macos/TREADFALL.dmg`. The source project also runs directly:
+On this machine, open `build/macos/TREADFALL.app`, or use the local `build/macos/TREADFALL-0.4.0-local.dmg`. The 0.4 app has an ad hoc local-testing signature; Developer ID signing/notarization awaits explicit permission. The previous notarized installer is retained as `build/macos/TREADFALL-0.3.0-notarized.dmg`. The source project also runs directly:
 
 ```sh
 ./tools/bootstrap.sh          # macOS: pinned editor + official export templates
@@ -68,7 +68,7 @@ Godot and templates must both be **4.7.2**. `tools/export.sh` records the git co
 
 The signing scripts were reused from `~/code/FloppyJam/scripts`, as required. `FoFoPedal` and `FoFoSoundBooster` were absent; the available `FoFoPedalVST` setup was inspected. Credentials stay in the existing keychain/environment. `--dry-run` signs and verifies locally; it does **not** notarize. The second macOS command submits to Apple's notarization service and produces a stapled DMG. Windows Trusted Signing requires a Windows host, as in FloppyJam.
 
-The iOS export is an Xcode project for `com.sweetpapa.treadfall`, team `6Y5SZ2K5XY`. On this machine (Xcode 16.4), the supplied simulator library is x86_64 despite its dual-architecture manifest; the simulator script detects and builds that architecture. The app was installed and launched under the iPhone 16 Pro simulator. This does not establish performance, haptics, signing, or installation on a physical iPhone.
+The iOS export is an Xcode project for `com.sweetpapa.treadfall`, team `6Y5SZ2K5XY`. On this machine (Xcode 16.4), the supplied simulator library is x86_64 despite its dual-architecture manifest; the simulator script detects and builds that architecture. The app was installed and launched under the iPhone 16 Pro simulator. This does not establish performance, haptics, signing, or installation on a physical iPhone. A physical-device compile was also attempted: the engine arm64 object metadata identifies iOS SDK **26.1**, and the installed Xcode 16.4/iOS 18.5 SDK cannot link its CADynamicRange/MTLTensorDomain references. `tools/ios-device.sh` checks for SDK 26.1+ and builds an unsigned arm64 release on a compatible host. [Apple lists the required Xcode/macOS combinations](https://developer.apple.com/xcode/system-requirements).
 
 Android builds require SDK platform 36, build tools and JDK 17 configured in Godot Editor Settings. `tools/android.sh` exports arm64 APKs, checks package contents, signs with a local test key stored in ignored `.tools/`, and verifies signatures and 16 KB library alignment. `TREADFALL.apk` is normal play; `TREADFALL-playtest.apk` has identical game bytes with automated launch arguments. Install through `adb install -r` and launch `com.sweetpapa.treadfall/com.godot.game.GodotAppLauncher`. Android uses the OpenGL compatibility renderer; the emulator's Vulkan presentation path failed during testing. The local signing key is **not a Play Store release key**. Gradle/AAB distribution, physical-phone feel and store release testing remain. No store listings or submissions are created by these commands.
 

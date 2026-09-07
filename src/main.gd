@@ -116,14 +116,14 @@ func _setup_light() -> void:
 	env.sky = sky
 	env.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
 	env.ambient_light_color = Color("e4ecd9")
-	env.ambient_light_energy = 0.48
+	env.ambient_light_energy = 0.30 if OS.get_name() == "Android" else 0.48
 	env.tonemap_mode = Environment.TONE_MAPPER_LINEAR
 	env.tonemap_exposure = 1.0
 	environment.environment = env
 	var sun: DirectionalLight3D = DirectionalLight3D.new()
 	sun.rotation_degrees = Vector3(-52, -35, 0)
 	sun.light_color = Color("fff0d5")
-	sun.light_energy = 0.85
+	sun.light_energy = 0.50 if OS.get_name() == "Android" else 0.85
 	sun.shadow_enabled = not software_simulator
 	sun.directional_shadow_mode = DirectionalLight3D.SHADOW_ORTHOGONAL
 	sun.directional_shadow_max_distance = 110
