@@ -30,4 +30,4 @@ for i in range(1,4):
 assert len(set(results))==1, 'Cross-process determinism failed'
 print('Cross-process determinism PASS: 3 processes × 20 rolls')
 PY
-if [[ "${1:-}" == --full ]]; then run_checked build/solver-full.log --solver; fi
+if [[ "${1:-}" == --full ]]; then run_checked build/solver-full.log --solver --angle-only; fi

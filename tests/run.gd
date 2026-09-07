@@ -142,6 +142,9 @@ func solver(args: PackedStringArray) -> void:
 	var only: String = ""
 	if "--course" in args:
 		only = args[args.find("--course") + 1]
+	var angle_only: bool = "--angle-only" in args
+	var aim_steps: int = 101 if angle_only else 21
+	var lean_steps: int = 1 if angle_only else 7
 	var quick: bool = "--quick" in args
 	var seeds: Array[int] = seed_values.duplicate()
 	if quick:
@@ -156,16 +159,16 @@ func solver(args: PackedStringArray) -> void:
 		var count: int = 0
 		var stuck: int = 0
 		var best: Dictionary = {}
-		var heat: Image = Image.create(21, 7, false, Image.FORMAT_RGB8)
+		var heat: Image = Image.create(aim_steps, lean_steps, false, Image.FORMAT_RGB8)
 		heat.fill(Color("663e57"))
 		var rates: Dictionary = {}
 		for seed_v: int in seeds:
 			seed_clears[str(seed_v)] = 0
 			var hill: HillCourse = create_hill(data, seed_v)
 			var tires: Array[RollingTire] = []
-			for a: int in range(21):
-				for l: int in range(7):
-					tires.append(create_tire(data, seed_v, -1.0 + a * 0.1, -15.0 + l * 5))
+			for a: int in range(aim_steps):
+				for l: int in range(lean_steps):
+					tires.append(create_tire(data, seed_v, -1.0 + float(a) * 2.0 / (aim_steps - 1), 0.0 if angle_only else -15.0 + l * 5))
 			await physics_frame
 			await physics_frame
 			for tire: RollingTire in tires:
@@ -190,12 +193,12 @@ func solver(args: PackedStringArray) -> void:
 				if tire.last_result.get("outcome", "") == "GOAL":
 					clear_count += 1
 					seed_clears[str(seed_v)] += 1
-					if i == 73: neutral_clears += 1
+					if is_zero_approx(tire.aim) and is_zero_approx(tire.lean): neutral_clears += 1
 					if seed_v == 42:
 						solutions.append({"aim": tire.aim, "lean": tire.lean, "score": tire.last_result.score})
 					var key: String = str(i)
 					rates[key] = int(rates.get(key, 0)) + 1
-					heat.set_pixel(i / 7, i % 7, Color("b7d8ac"))
+					heat.set_pixel(i / lean_steps, i % lean_steps, Color("b7d8ac"))
 					if best.is_empty() or int(tire.last_result.score) > int(best.score):
 						best = {"aim": tire.aim, "lean": tire.lean, "seed": seed_v, "score": tire.last_result.score, "time": tire.elapsed}
 				tire.free()
@@ -203,7 +206,8 @@ func solver(args: PackedStringArray) -> void:
 			await physics_frame
 		var rate: float = float(clear_count) / count
 		check(clear_count > 0, data.id() + " is solvable")
-		check(rate <= (0.6 if data.number == 0 else 0.30), data.id() + " difficulty ceiling")
+		var ceiling: float = (0.8 if data.number == 0 else 0.50) if angle_only else (0.6 if data.number == 0 else 0.30)
+		check(rate <= ceiling, data.id() + " difficulty ceiling")
 		if data.number > 0:
 			check(neutral_clears == 0, data.id() + " default roll cannot win")
 		for seed_key: String in seed_clears:

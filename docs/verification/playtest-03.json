@@ -1,0 +1,18 @@
+{
+	"daily": "pass",
+	"frames": 213,
+	"p95_frame_ms": 27.576,
+	"pause_resume": "pass",
+	"result": {
+		"accuracy": 0.0,
+		"events": [],
+		"offset": 0.103217169642448,
+		"outcome": "BLOCKED",
+		"position": "(0.103217, 13.0152, 12.01896)",
+		"score": 0,
+		"seed": 42,
+		"stars": 0,
+		"time": 5.69166666666674
+	},
+	"retry": "pass"
+}

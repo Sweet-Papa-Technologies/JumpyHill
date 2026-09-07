@@ -1,3 +1,17 @@
+# Version 0.3 — single-control HUD and first-person play
+
+- Gameplay occupies the full window. A dedicated bottom panel contains one launch-angle slider and Roll; bank input and drag-to-release launching are removed. Purist is available before a roll in the pause menu.
+- Every attempt starts in a stabilized first-person tire view. Course view / Tire view (keyboard V) switches in AIM or ROLL. The fitted overview uses a wider desktop diagonal and keeps launch and finish clear of the HUD in landscape and portrait.
+- Actual GUI-event tests cover the sole angle control, neutral bank, drag without accidental launch, switching views before/during play, pause/resume, retry-to-first-person and visible course endpoints. PASS.
+- Native full-flow playtest includes both views, launching, rolling, pause/resume, result/retry and daily challenge. PASS. Landscape and portrait screenshots inspected.
+- Angle-only balance: **33 hills × 101 angles × five seeds = 16,665 rolls**, bank fixed to zero. Every hill has a no-nudge solution on every tested seed. Default launch wins **0/160** regular-course/seed samples. Regular-course angle-grid clear rates are **1.39–46.73%**, averaging **17.88%**. This metric samples one adjustable value and is not comparable with the old aim/bank grid. Three finish positions were adjusted to keep their routes solvable without bank input.
+- The angle-only ceiling is 50% on regular hills, 80% on the tutorial. The full report is `docs/verification/angle-only-03.json`.
+- Existing result-freeze, off-edge presentation and 20-retry determinism checks remain passing. Native first-person benchmark: **13.42 ms p95 wall**, **2.19 ms p95 physics**, **36 visible draw calls**, **58,432 primitives**, Apple M4 Pro. The process monitor reports 17.18 ms; the automated GUI walk reports 27.58 ms p95 frame delta. These are development-machine measurements, not physical-phone guarantees.
+
+Earlier release notes below are historical.
+
+---
+
 # Version 0.2 — playtest feedback addressed
 
 Verified on macOS 15.5 / Apple M4 Pro with Godot 4.7.2, Jolt 120 Hz and Mobile rendering.

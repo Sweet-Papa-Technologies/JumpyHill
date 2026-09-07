@@ -44,14 +44,35 @@ func run() -> void:
 	verify(game.state == game.State.COURSE_SELECT, "mouse opens course select")
 	await click("start")
 	verify(game.state == game.State.AIM, "mouse starts hill")
-	var lean_key: InputEventKey = InputEventKey.new()
-	lean_key.keycode = KEY_UP
-	lean_key.pressed = true
-	root.push_input(lean_key, true)
+	verify(game.camera.first_person, "hill starts in first person")
+	verify(game.viewport_container.position.x == 0, "gameplay uses the whole window")
+	verify(game.ui.buttons.find_child("lean", true, false) == null, "no bank slider")
+	var angle_key: InputEventKey = InputEventKey.new()
+	angle_key.keycode = KEY_RIGHT
+	angle_key.pressed = true
+	root.push_input(angle_key, true)
 	await process_frame
-	verify(game.lean_value == 0.5, "keyboard changes lean")
-	await click("roll")
-	verify(game.state == game.State.ROLL, "mouse releases tire")
+	verify(is_equal_approx(game.aim_value, 0.05) and game.lean_value == 0, "keyboard only changes launch angle")
+	await click("view")
+	verify(not game.camera.first_person and game.state == game.State.AIM, "view button opens course overview without launching")
+	for z: float in [0.0, game.course.data.length]:
+		var point: Vector2 = game.camera.unproject_position(Vector3(0, game.course.data.height_at(0, z) + 1.0, z))
+		var bottom: float = game.ui.safe_origin.y + game.ui.control_dock().position.y * game.ui.factor
+		verify(point.y > 80 * game.ui.factor and point.y < bottom, "overview keeps launch and goal above controls: %s < %.1f" % [point, bottom])
+	await click("view")
+	verify(game.camera.first_person, "view button returns to tire perspective")
+	game._pointer(Vector2(600, 300), true)
+	game._drag(Vector2(60, 100))
+	game._pointer(Vector2(660, 400), false)
+	verify(game.state == game.State.AIM and game.lean_value == 0, "drag release never launches or changes bank")
+	var roll_key: InputEventKey = InputEventKey.new()
+	roll_key.keycode = KEY_SPACE
+	roll_key.pressed = true
+	root.push_input(roll_key, true)
+	await process_frame
+	verify(game.state == game.State.ROLL, "space launches even after focusing the view button")
+	await click("view")
+	verify(not game.camera.first_person and game.state == game.State.ROLL, "view also switches during a roll")
 	await click("pause")
 	verify(paused, "pause freezes simulation")
 	var old_elapsed: float = game.tire.elapsed
@@ -68,6 +89,7 @@ func run() -> void:
 	game._action("retry")
 	await process_frame
 	verify(game.state == game.State.AIM and game.tire.nudges == 0, "retry clears nudge state")
+	verify(game.camera.first_person, "retry returns to first-person launch")
 	await click("select")
 	await click("world_next")
 	verify(game.selected_world == 1, "carousel changes world")

@@ -1,0 +1,9 @@
+{
+	"device": "Apple M4 Pro (Apple9)",
+	"frames": 642,
+	"max_draw_calls": 36,
+	"max_primitives": 58432,
+	"p95_cpu_ms": 17.178,
+	"p95_physics_ms": 2.191,
+	"p95_wall_ms": 13.419
+}

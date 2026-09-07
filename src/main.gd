@@ -120,18 +120,20 @@ func _setup_light() -> void:
 func _resize() -> void:
 	screen_size = get_viewport().get_visible_rect().size
 	var portrait: bool = screen_size.x / screen_size.y < 1
-	var side: float = 0 if portrait else screen_size.x * 0.29
+	var gameplay: bool = state in [State.AIM, State.ROLL]
+	var side: float = 0 if portrait or gameplay else screen_size.x * 0.29
 	var top: float = 0.0
 	var bottom: float = 1.0
 	if portrait:
 		match state:
-			State.AIM: top = 0.155; bottom = 0.76
+			State.AIM: top = 0.0; bottom = 1.0
 			State.TITLE: top = 0.28; bottom = 0.78
 			State.COURSE_SELECT: top = 0.34; bottom = 0.77
 			State.RESULT: top = 0.34; bottom = 0.77
 	viewport_container.position = Vector2(side, screen_size.y * top)
 	viewport_container.size = Vector2(screen_size.x - side, screen_size.y * (bottom - top))
 	camera.portrait = portrait
+	camera.gameplay_frame = gameplay
 	ui.rebuild()
 
 func load_course(data: CourseData) -> void:
@@ -216,6 +218,7 @@ func _enter_state(next: State) -> void:
 			tire.linear_damp = 0.05
 			tire.angular_damp = 0.03
 			tire.reset_to_aim()
+			camera.first_person = true
 			camera.blend_to("aim")
 			guide_dirty = true
 			Sound.tier = 0
@@ -257,18 +260,19 @@ func _action(name: String, value: Variant = null) -> void:
 		"course":
 			selected_number = int(value)
 			_preview_selected()
+		"view":
+			if state in [State.AIM, State.ROLL]:
+				camera.toggle_view()
+				ui.rebuild()
 		"roll":
 			if state == State.AIM:
 				change_state(State.ROLL)
-		"aim", "lean":
-			if name == "aim":
-				aim_value = float(value)
-			else:
-				lean_value = float(value)
-			tire.aim = aim_value
-			tire.lean = lean_value
+		"aim":
 			if state == State.AIM:
+				aim_value = clampf(float(value), -1, 1)
+				tire.aim = aim_value
 				tire.position = RollingTire.launch_position(course.data, aim_value)
+				tire.rotation = Vector3(0, aim_value * deg_to_rad(25), 0)
 				guide_dirty = true
 		"nudge":
 			if tire.nudge(float(value)):
@@ -301,6 +305,7 @@ func _action(name: String, value: Variant = null) -> void:
 			state = previous_state
 			get_tree().paused = false
 			ui.page = "roll" if state == State.ROLL else "aim"
+			_resize()
 			ui.rebuild()
 		"settings":
 			settings_return = state
@@ -378,13 +383,13 @@ func _update_guide() -> void:
 	var points: PackedVector3Array = RollPredictor.trace(tire, RollingTire.FEEL.guide_seconds)
 	for i: int in range(points.size()):
 		var mesh: SphereMesh = SphereMesh.new()
-		mesh.radius = 0.11 - i * 0.003
-		mesh.height = mesh.radius * 2
+		mesh.radius = 0.09 - i * 0.002
+		mesh.height = 0.025
 		mesh.radial_segments = 6
 		mesh.rings = 3
 		var dot: MeshInstance3D = MeshInstance3D.new()
 		dot.mesh = mesh
-		dot.position = points[i] + Vector3.UP * 0.05
+		dot.position = Vector3(points[i].x, course.data.height_at(points[i].x, points[i].z) + 0.045, points[i].z)
 		var mat: StandardMaterial3D = StandardMaterial3D.new()
 		mat.albedo_color = Color("fff5d5")
 		mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
@@ -461,34 +466,46 @@ func _tick_particles(dt: float) -> void:
 		p.node.position += p.v * dt
 		p.node.rotation += Vector3(2, 3, 1) * dt
 
+func _input(event: InputEvent) -> void:
+	# Gameplay shortcuts take precedence over a focused view/launch button.
+	# Pointer events still go through GUI handling before reaching the hill.
+	if not event is InputEventKey or not event.pressed or state not in [State.AIM, State.ROLL, State.RESULT, State.PAUSE]:
+		return
+	if event.echo and event.keycode not in [KEY_LEFT, KEY_RIGHT, KEY_A, KEY_D]:
+		return
+	match event.keycode:
+		KEY_V:
+			if state not in [State.AIM, State.ROLL]: return
+			_action("view")
+		KEY_SPACE, KEY_ENTER:
+			if state == State.AIM: _action("roll")
+			elif state == State.RESULT: _action("retry")
+			else: return
+		KEY_LEFT, KEY_A, KEY_RIGHT, KEY_D:
+			var side: int = -1 if event.keycode in [KEY_LEFT, KEY_A] else 1
+			if state == State.AIM:
+				_action("aim", aim_value + side * 0.05)
+				if is_instance_valid(ui.aim_slider): ui.aim_slider.set_value_no_signal(aim_value)
+			elif state == State.ROLL:
+				if not event.echo: _action("nudge", side)
+			else: return
+		KEY_R:
+			if state == State.PAUSE: return
+			_action("retry")
+		KEY_ESCAPE:
+			if state == State.PAUSE: _action("resume")
+			elif state in [State.AIM, State.ROLL]: _action("pause")
+			else: return
+		_:
+			return
+	get_viewport().set_input_as_handled()
+
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
-		match event.keycode:
-			KEY_ESCAPE:
-				if state == State.PAUSE:
-					_action("resume")
-				elif state in [State.AIM, State.ROLL]:
-					_action("pause")
-				else:
-					_action("select")
-			KEY_SPACE, KEY_ENTER:
-				if state == State.AIM: _action("roll")
-				elif state == State.RESULT: _action("retry")
-				elif state == State.TITLE: _action("play")
-			KEY_R:
-				if state in [State.RESULT, State.AIM, State.ROLL]: _action("retry")
-			KEY_LEFT, KEY_A:
-				if state == State.AIM: _action("aim", clampf(aim_value - 0.05, -1, 1))
-				elif state == State.ROLL: _action("nudge", -1)
-			KEY_RIGHT, KEY_D:
-				if state == State.AIM: _action("aim", clampf(aim_value + 0.05, -1, 1))
-				elif state == State.ROLL: _action("nudge", 1)
-			KEY_UP, KEY_W:
-				if state == State.AIM: _action("lean", clampf(lean_value + 0.5, -15, 15))
-			KEY_DOWN, KEY_S:
-				if state == State.AIM: _action("lean", clampf(lean_value - 0.5, -15, 15))
-		if is_instance_valid(ui.aim_slider): ui.aim_slider.set_value_no_signal(aim_value)
-		if is_instance_valid(ui.lean_slider): ui.lean_slider.set_value_no_signal(lean_value)
+		if event.keycode == KEY_ESCAPE:
+			_action("select")
+		elif event.keycode in [KEY_SPACE, KEY_ENTER] and state == State.TITLE:
+			_action("play")
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		_pointer(event.position, event.pressed)
 	elif event is InputEventScreenTouch:
@@ -504,17 +521,13 @@ func _pointer(pos: Vector2, pressed: bool) -> void:
 		drag_start = pos
 	elif dragging:
 		dragging = false
-		if state == State.AIM and pos.distance_to(drag_start) > 8:
-			_action("roll")
-		elif state == State.ROLL and absf(pos.x - drag_start.x) > 30:
+		if state == State.ROLL and absf(pos.x - drag_start.x) > 30:
 			_action("nudge", signf(pos.x - drag_start.x))
 
 func _drag(relative: Vector2) -> void:
 	if state == State.AIM:
 		_action("aim", clampf(aim_value + relative.x / screen_size.x * 2.5, -1, 1))
-		_action("lean", clampf(lean_value - relative.y / screen_size.y * 30, -15, 15))
 		if is_instance_valid(ui.aim_slider): ui.aim_slider.set_value_no_signal(aim_value)
-		if is_instance_valid(ui.lean_slider): ui.lean_slider.set_value_no_signal(lean_value)
 
 func _toast(text: String) -> void:
 	ui.toast = text
@@ -552,6 +565,9 @@ func _command_line() -> void:
 	if opts.has("--state"):
 		var states: Dictionary = {"title": State.TITLE, "select": State.COURSE_SELECT, "aim": State.AIM, "roll": State.ROLL, "settings": State.SETTINGS, "credits": State.CREDITS, "garage": State.GARAGE}
 		change_state(states.get(opts["--state"], State.TITLE))
+	if opts.get("--view", "") == "overview":
+		camera.first_person = false
+		ui.rebuild()
 	if opts.has("--capture"):
 		capture_path = opts["--capture"]
 		capture_at = int(opts.get("--capture-at", "90"))
@@ -560,8 +576,8 @@ func _command_line() -> void:
 		Engine.max_fps = 0
 		Save.data.settings.reduce_motion = true
 		load_course(courses.back())
-		aim_value = -0.9
-		lean_value = -5
+		aim_value = -0.72
+		lean_value = 0
 		change_state(State.AIM)
 		change_state.call_deferred(State.ROLL)
 	if opts.has("--playtest"):
@@ -587,6 +603,14 @@ func _automate(dt: float) -> void:
 		2:
 			if frames > 140:
 				_capture(automation_output + "/aim.png")
+				assert(camera.first_person)
+				_action("view")
+				automating_step = 8
+		8:
+			if frames > 185:
+				assert(not camera.first_person)
+				_capture(automation_output + "/overview.png")
+				_action("view")
 				_action("roll")
 				automating_step = 3
 		3:

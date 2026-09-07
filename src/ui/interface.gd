@@ -19,7 +19,6 @@ var ticker: float = 0.0
 var toast: String = ""
 var toast_time: float = 0.0
 var safe_origin: Vector2 = Vector2.ZERO
-var lean_slider: HSlider
 var aim_slider: HSlider
 
 func _ready() -> void:
@@ -48,7 +47,6 @@ func rebuild() -> void:
 	for child: Node in buttons.get_children():
 		buttons.remove_child(child)
 		child.queue_free()
-	lean_slider = null
 	aim_slider = null
 	var x: float = 40 if portrait else 56
 	var w: float = 640 if portrait else 332
@@ -70,24 +68,19 @@ func rebuild() -> void:
 			button("start", "ROLL THIS HILL  →" if unlocked else "EARN 4 STARS TO OPEN", Rect2(x, 1080 if portrait else 520, w, 64), YELLOW if unlocked else Color("e0e2d6"), 19, null, not unlocked)
 			button("tutorial", "↗  Warm up on the tutorial hill", Rect2(x, 1170 if portrait else 613, w, 44), Color.TRANSPARENT, 18)
 			button("garage", "THE TIRE SHOP   →", Rect2(x, 720 if not portrait else 995, w, 52), Color("e7ecdc"), 17)
-		"aim":
-			button("select", "←  HILLS", Rect2(x, 29, 145, 46), PAPER, 17)
-			button("pause", "Ⅱ", Rect2(base.x - 88, 29, 48, 46), PAPER, 22)
-			var yy: float = 1030 if portrait else 441
-			aim_slider = slider("aim", Rect2(x, yy, w, 36), -1, 1, game.aim_value, 0.01)
-			lean_slider = slider("lean", Rect2(x, yy + 95, w, 36), -15, 15, game.lean_value, 0.5)
-			button("roll", "LET IT ROLL  ↓", Rect2(x, yy + 146, w, 66), YELLOW, 23)
-			if portrait:
-				button("purist", "PURIST ✓" if game.purist else "PURIST ○", Rect2(420, 29, 185, 46), PAPER, 18)
-			if not portrait:
-				button("purist", "●  PURIST" if game.purist else "○  PURIST", Rect2(x, 703, w, 45), Color("e7ecdc"), 17)
-		"roll":
-			button("pause", "Ⅱ", Rect2(base.x - 88, 29, 48, 46), PAPER, 22)
-			var yy: float = base.y - 130
-			var left: bool = Save.data.settings.left_handed
-			var nx: float = 40 if portrait or left else base.x - 250
-			button("nudge", "←", Rect2(nx, yy, 90, 70), PAPER, 32, -1)
-			button("nudge", "→", Rect2(nx + 108, yy, 90, 70), PAPER, 32, 1)
+		"aim", "roll":
+			button("select", "←", Rect2(24, 24, 52, 52), PAPER, 25)
+			button("view", "COURSE VIEW" if game.camera.first_person else "TIRE VIEW", Rect2(base.x - 278, 24, 178, 52), PAPER, 16)
+			button("pause", "Ⅱ", Rect2(base.x - 80, 24, 52, 52), PAPER, 23)
+			if page == "aim":
+				var dock: Rect2 = control_dock()
+				aim_slider = slider("aim", Rect2(dock.position + Vector2(28, 52), Vector2(380 if portrait else 490, 48)), -1, 1, game.aim_value, 0.01)
+				style_angle_slider(aim_slider)
+				button("roll", "ROLL  →", Rect2(dock.position + Vector2(450 if portrait else 550, 34), Vector2(202 if portrait else 222, 70)), YELLOW, 27)
+			else:
+				var nx: float = base.x / 2 - 112
+				button("nudge", "←", Rect2(nx, base.y - 112, 96, 70), PAPER, 32, -1, game.purist or game.tire.tilted)
+				button("nudge", "→", Rect2(nx + 128, base.y - 112, 96, 70), PAPER, 32, 1, game.purist or game.tire.tilted)
 		"result":
 			var yy: float = 1000 if portrait else 519
 			button("retry", "ONE MORE  ↻", Rect2(x, yy, w, 64), YELLOW, 23)
@@ -98,6 +91,7 @@ func rebuild() -> void:
 		"pause":
 			button("resume", "BACK TO THE HILL  →", Rect2(x, 390, w, 64), YELLOW, 21)
 			button("settings", "Settings", Rect2(x, 477, w, 54), Color("e7ecdc"))
+			button("purist", "PURIST  " + ("ON" if game.purist else "OFF"), Rect2(x, 635, w, 48), Color("e7ecdc"), 17, null, game.previous_state == game.State.ROLL)
 			button("select", "Choose another hill", Rect2(x, 551, w, 54), Color("e7ecdc"))
 		"settings":
 			button("settings_back", "←  BACK", Rect2(x, 30, 145, 44), Color.TRANSPARENT, 17)
@@ -180,20 +174,16 @@ func _draw() -> void:
 	var x: float = 40 if portrait else 56
 	var w: float = 640 if portrait else 332
 	var hud: bool = page in ["aim", "roll"]
-	if not portrait:
+	if not portrait and not hud:
 		panel(Rect2(24, 24, 396, base.y - 48), PAPER, 25)
 	else:
 		if page == "title":
 			panel(Rect2(20, 25, 680, 353), PAPER, 25)
 			panel(Rect2(20, 979, 680, 275), PAPER, 25)
-		elif page in ["aim", "roll"]:
-			panel(Rect2(20, 20, 680, 175), PAPER, 22)
-			if page == "aim":
-				panel(Rect2(20, 958, 680, 300), PAPER, 22)
 		elif page in ["select", "result"]:
 			panel(Rect2(20, 20, 680, 435 if page == "select" else 440), PAPER, 25)
 			panel(Rect2(20, 976, 680, 278), PAPER, 25)
-		else:
+		elif not hud:
 			panel(Rect2(20, 20, 680, 1235), PAPER, 25)
 	match page:
 		"title":
@@ -220,35 +210,7 @@ func _draw() -> void:
 				if stars > 0:
 					label("★".repeat(stars), Vector2(x + (i % 4) * (154 if portrait else 84) + 12, (225 if portrait else 247) + (i / 4) * 88 + 71), 12)
 		"aim", "roll":
-			label("%s  /  %02d" % [CourseData.WORLDS[game.course.data.world].to_upper(), game.course.data.number], Vector2(x, 116 if portrait else 146), 14, MUTED)
-			label(game.course.data.title.to_upper(), Vector2(x, 159 if portrait else 188), 27, INK, true)
-			if page == "aim":
-				if not portrait:
-					label("PICK YOUR LINE.", Vector2(x, 285), 24, INK, true)
-					label("DODGE. BANK. COMMIT.", Vector2(x, 318), 20, INK, true)
-					label("Drag to aim. Lift to roll.", Vector2(x, 365), 22, MUTED)
-				var yy: float = 1020 if portrait else 426
-				label("LAUNCH ANGLE", Vector2(x, yy), 15, MUTED)
-				label("%+.0f°" % (game.aim_value * 25), Vector2(x + w - 57, yy), 17)
-				label("BANK / DRIFT", Vector2(x, yy + 95), 15, MUTED)
-				label("%+.1f°" % game.lean_value, Vector2(x + w - 64, yy + 95), 17)
-				if not portrait:
-					label("← → AIM    ↑ ↓ LEAN    SPACE ROLL", Vector2(x, 793), 12, MUTED)
-					label("Short guide. Two nudges. No autopilot.", Vector2(x, 824), 17, MUTED)
-			else:
-				if not portrait:
-					label("LET THE", Vector2(x, 282), 36, INK, true)
-					label("GOOD TIMES", Vector2(x, 324), 32, INK, true)
-					label("ROLL.", Vector2(x, 380), 55, INK, true)
-					label("%03d" % game.tire.style.score, Vector2(x, 509), 68, INK, true)
-					label("STYLE POINTS", Vector2(x, 539), 15, MUTED)
-					panel(Rect2(x, 573, w, 10), Color("e2e6d7"), 5)
-					panel(Rect2(x, 573, maxf(12, w * minf(1, game.tire.style.score / 300.0)), 10), YELLOW, 5)
-					label("×%d  COMBO" % game.tire.style.combo, Vector2(x, 626), 25, INK, true)
-					label("%.1f m/s" % game.tire.linear_velocity.length(), Vector2(x, 740), 28)
-					label("%s" % ("PURIST" if game.purist else ("TILT — LOCKED" if game.tire.tilted else "%d NUDGES LEFT" % (2 - game.tire.nudges))), Vector2(x, 797), 18, MUTED)
-				else:
-					label("%d STYLE    ×%d" % [game.tire.style.score, game.tire.style.combo], Vector2(365, 63), 18)
+			_draw_game_hud()
 		"result":
 			var good: bool = game.result.get("outcome", "") == "GOAL"
 			label("SIGNED, SEALED," if good else "READ THE HILL.", Vector2(x, 148), 23, MUTED, true)
@@ -263,7 +225,7 @@ func _draw() -> void:
 			if not portrait:
 				var feedback: String = "CENTER %d%%" % roundi(float(game.result.get("accuracy", 0)) * 100)
 				if not good:
-					feedback = "Aim around it. Bank back toward goal." if game.result.get("outcome") == "BLOCKED" else ("Try less bank to stay on the hill." if game.tire.position.z < game.course.data.length - 2 else "%.1f tire widths from the center" % (float(game.result.get("offset", 0)) / 1.3))
+					feedback = "Choose an angle around the barrier." if game.result.get("outcome") == "BLOCKED" else ("Try a shallower launch angle." if game.tire.position.z < game.course.data.length - 2 else "%.1f tire widths from the center" % (float(game.result.get("offset", 0)) / 1.3))
 				label(feedback, Vector2(x, 450), 16, MUTED)
 				label("SEED  %d" % game.roll_seed, Vector2(x, 785), 14, MUTED)
 				label("Same hill. A whole new possibility.", Vector2(x, 818), 17, MUTED)
@@ -285,10 +247,10 @@ func _draw() -> void:
 		"credits":
 			label("MADE FOR", Vector2(x, 144), 33, INK, true)
 			label("ONE MORE.", Vector2(x, 190), 35, INK, true)
-			var lines: Array[String] = ["TREADFALL / 0.2", "Sweet Papa Technologies", "Forrester ‘FoFo’ Terry", "", "BUILT WITH GODOT 4.7.2 · MIT", "Nature & impact sounds: Kenney · CC0", "Bungee: David Jonathan Ross · OFL", "Nunito: Vernon Adams et al. · OFL", "Original procedural hills & synth music", "", "No ads. No accounts. Just good hills.", "Asset licenses included with the game."]
+			var lines: Array[String] = ["TREADFALL / 0.3", "Sweet Papa Technologies", "Forrester ‘FoFo’ Terry", "", "BUILT WITH GODOT 4.7.2 · MIT", "Nature & impact sounds: Kenney · CC0", "Bungee: David Jonathan Ross · OFL", "Nunito: Vernon Adams et al. · OFL", "Original procedural hills & synth music", "", "No ads. No accounts. Just good hills.", "Asset licenses included with the game."]
 			for i: int in range(lines.size()):
 				label(lines[i], Vector2(x, 276 + i * 36), 16 if i > 3 else 21, MUTED if i > 3 else INK)
-	if not portrait:
+	if not portrait and not hud:
 		panel(Rect2(460, 32, 278, 42), Color(PAPER, 0.85), 21)
 		label("●  " + CourseData.WORLDS[game.course.data.world].to_upper(), Vector2(480, 59), 15)
 		label("THE DOWNHILL SOCIAL CLUB", Vector2(base.x - 310, base.y - 40), 13, Color(INK, 0.7))
@@ -300,8 +262,59 @@ func _draw() -> void:
 		label(toast, Vector2(base.x / 2 - 240, 123), 18, PAPER)
 	if hud and not Save.data.settings.reduce_motion and page == "roll" and game.tire.linear_velocity.length() > game.course.data.max_speed * 0.8:
 		for i: int in range(12):
-			var center: Vector2 = Vector2(base.x * (0.5 if portrait else 0.7), base.y * 0.5)
+			var center: Vector2 = Vector2(base.x * 0.5, base.y * 0.5)
 			var angle: float = i * TAU / 12 + 0.1
 			var dir: Vector2 = Vector2(cos(angle), sin(angle))
 			draw_line(center + dir * base.y * 0.44, center + dir * base.y * 0.65, Color(1, 1, 0.92, 0.16), 2)
 	draw_set_transform(Vector2.ZERO)
+
+func control_dock() -> Rect2:
+	return Rect2(20, base.y - 202, 680, 174) if portrait else Rect2(base.x / 2 - 400, base.y - 158, 800, 130)
+
+func style_angle_slider(s: HSlider) -> void:
+	var track: StyleBoxFlat = StyleBoxFlat.new()
+	track.bg_color = Color("58736c")
+	track.content_margin_top = 4
+	track.content_margin_bottom = 4
+	track.set_corner_radius_all(4)
+	s.add_theme_stylebox_override("slider", track)
+	var fill: StyleBoxFlat = track.duplicate()
+	fill.bg_color = YELLOW
+	s.add_theme_stylebox_override("grabber_area", fill)
+	s.add_theme_stylebox_override("grabber_area_highlight", fill)
+	var img: Image = Image.new()
+	img.load_svg_from_string('<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><circle cx="16" cy="16" r="14" fill="#fcf8e9"/><circle cx="16" cy="16" r="9" fill="#f5ce78"/></svg>')
+	var knob: ImageTexture = ImageTexture.create_from_image(img)
+	s.add_theme_icon_override("grabber", knob)
+	s.add_theme_icon_override("grabber_highlight", knob)
+
+func _draw_game_hud() -> void:
+	# Gameplay owns the whole screen. Navigation floats above it; the launch
+	# instrument has one purpose and one adjustable value.
+	var title_pos: Vector2 = Vector2(96, 51)
+	if portrait:
+		panel(Rect2(24, 96, 672, 62), Color(PAPER, 0.94), 19)
+		title_pos = Vector2(42, 135)
+	else:
+		panel(Rect2(88, 24, 380, 58), Color(PAPER, 0.94), 18)
+	label("%02d  /  %s" % [game.course.data.number, game.course.data.title.to_upper()], title_pos, 20, INK, true)
+	if page == "aim":
+		var dock: Rect2 = control_dock()
+		panel(dock, Color("244841"), 26)
+		label("LAUNCH ANGLE", dock.position + Vector2(28, 33), 16, Color("b8cdc1"))
+		label("%+.1f°" % (game.aim_value * 25), dock.position + Vector2(305 if portrait else 398, 33), 23, PAPER, true)
+		var sw: float = 380 if portrait else 490
+		for i: int in range(11):
+			var xx: float = dock.position.x + 44 + (sw - 32) * i / 10.0
+			draw_line(Vector2(xx, dock.position.y + 98), Vector2(xx, dock.position.y + 104 + (4 if i % 5 == 0 else 0)), Color("91aea0"), 1.5)
+		if portrait:
+			label("DRAG LEFT / RIGHT · TAP ROLL", dock.position + Vector2(28, 150), 15, Color("b8cdc1"))
+		else:
+			label("SPACE · ROLL      V · VIEW", dock.position + Vector2(554, 121), 12, Color("b8cdc1"))
+	else:
+		panel(Rect2(base.x / 2 - 175, base.y - 173, 350, 145), Color("244841"), 25)
+		var remaining: String = "PURIST" if game.purist else ("TILT" if game.tire.tilted else "%d NUDGES LEFT" % (2 - game.tire.nudges))
+		label(remaining, Vector2(base.x / 2 - 78, base.y - 137), 17, PAPER)
+		panel(Rect2(24, 180 if portrait else 102, 200, 80), Color(PAPER, 0.93), 18)
+		label("%03d  STYLE" % game.tire.style.score, Vector2(42, 211 if portrait else 133), 23, INK, true)
+		label("×%d  ·  %.1f m/s" % [game.tire.style.combo, game.tire.linear_velocity.length()], Vector2(42, 240 if portrait else 162), 17, MUTED)
