@@ -11,7 +11,7 @@ Version **0.4.0 playable alpha** adds rolling terrain, true side gaps, banked sh
 - Android arm64 export, local-test signing, package-byte/signature/16 KB alignment checks and Pixel API 36 emulator gameplay passed. Android uses OpenGL after the emulator's Vulkan presentation failed. iOS compiled and completed the same gameplay flow on iPhone 16 Pro / iOS 18.6 simulator, using the official x86 template's software-rendering fallback. These establish functional mobile execution, not physical-phone haptics/performance or store readiness.
 - The asset ledger now covers **30 source files**. New glass sounds came from the already downloaded Kenney CC0 impact archive; terrain, glass and shards are original procedural source geometry/materials.
 
-Final package identifiers/checksums and mobile reports are recorded in `docs/verification/release-04.json` and `mobile-04.json` after packaging. Previous sections below are historical.
+Final package identifiers/checksums and mobile reports are recorded in `docs/verification/release-04.json` and `mobile-04.json`. Mac app/ZIP and local DMG are ready with an ad hoc local-testing signature; automatic approval review blocked Developer ID signing/notarization pending explicit authorization. Android normal/automation APKs are signed with the local test key. Final iOS simulator gameplay passed. A separate physical-iPhone build failed because the official engine archive was built with SDK 26.1 and this host has SDK 18.5; `docs/verification/ios-device-04.txt` records the linker failure and the new build script reports the requirement early. Android lighting was reduced after touch/visual inspection found washed-out terrain under GLES. Previous sections below are historical.
 
 ---
 

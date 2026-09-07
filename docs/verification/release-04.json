@@ -1,0 +1,56 @@
+{
+  "version": "0.4.0",
+  "macos": {
+    "preset": "macOS",
+    "version": "0.4.0",
+    "build": 11,
+    "engine": "4.7.2.stable.official.ed1daf0bf",
+    "commit": "8e287c5a6322abe1295d5d76694fee4bb52dc58f",
+    "signed": true,
+    "dirty": false,
+    "sha256": "89a75a5b2091c8791eb15e9be9dd633da4b6eb5dc6a80f50bb278d1e01979eee",
+    "signing": "Ad hoc local testing signature",
+    "notarized": false
+  },
+  "android": {
+    "preset": "Android",
+    "version": "0.4.0",
+    "build": 12,
+    "engine": "4.7.2.stable.official.ed1daf0bf",
+    "commit": "a83ac374c50c51bbd59c89eb69139b6ce5bab966",
+    "signed": true,
+    "dirty": true,
+    "sha256": "83911579462f84b2cd70b1bcd1d4326c68c42058657c58ec89cb2c1315d631c5",
+    "signing": "Local test key; not a Play Store release key"
+  },
+  "ios": {
+    "preset": "iOS",
+    "version": "0.4.0",
+    "build": 11,
+    "engine": "4.7.2.stable.official.ed1daf0bf",
+    "commit": "8e287c5a6322abe1295d5d76694fee4bb52dc58f",
+    "signed": false,
+    "dirty": false
+  },
+  "artifacts": {
+    "build/macos/TREADFALL.zip": {
+      "bytes": 60889600,
+      "sha256": "89a75a5b2091c8791eb15e9be9dd633da4b6eb5dc6a80f50bb278d1e01979eee"
+    },
+    "build/macos/TREADFALL-0.4.0-local.dmg": {
+      "bytes": 68776320,
+      "sha256": "66b4dd2cd9570b5e75563d000de63ae467acaa9d8a346ef9dddd5f5e7e041312"
+    },
+    "build/android/TREADFALL.apk": {
+      "bytes": 27774241,
+      "sha256": "83911579462f84b2cd70b1bcd1d4326c68c42058657c58ec89cb2c1315d631c5"
+    },
+    "build/android/TREADFALL-playtest.apk": {
+      "bytes": 27774241,
+      "sha256": "024a77744b5e37065363a4e03472e3928a4d0d6f61711cff7de5ae3b69776efc"
+    }
+  },
+  "macos_notarization": "Blocked by automatic approval review; explicit Developer ID signing / Apple submission authorization requested. Local ad hoc signature verified and packaged app playtested.",
+  "ios_device_build": "Blocked: official arm64 template SDK 26.1; installed Xcode 16.4 / SDK 18.5. Simulator build/playtest passed.",
+  "android_lighting_revision": "a83ac37; other game behavior matches packaged Mac/iOS revision 8e287c5. Android dirty flag is from verification-document updates during packaging."
+}

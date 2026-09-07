@@ -1,0 +1,118 @@
+{
+  "source_commit": "8e287c5",
+  "android": {
+    "device": "Pixel 9 Pro XL API 36 emulator, arm64",
+    "renderer": "OpenGL ES 3.0 compatibility, host Apple M4 Pro",
+    "apk": "build/android/TREADFALL.apk",
+    "signing": "Local test key",
+    "playtest": {
+      "daily": "pass",
+      "frames": 837,
+      "p95_frame_ms": 18.306,
+      "pause_resume": "pass",
+      "result": {
+        "accuracy": 0.868121758017033,
+        "events": [
+          "AIR",
+          "NICE",
+          "AIR",
+          "AIR",
+          "NICE",
+          "AIR"
+        ],
+        "offset": 0.266064353200637,
+        "outcome": "GOAL",
+        "position": "(0.265831, 0.582127, 58.03305)",
+        "score": 120,
+        "seed": 42,
+        "stars": 3,
+        "time": 14.1533333333331
+      },
+      "retry": "pass"
+    },
+    "source_commit": "a83ac37",
+    "visual_inspection": "Ambient/sunlight adjusted for GLES; normal APK touch input and portrait first-person/overview inspected",
+    "touch_test": {
+      "normal_apk": true,
+      "actions": [
+        "title to course select",
+        "course to first-person aim",
+        "horizontal angle drag (-16.2 degrees)",
+        "course view and tire view toggle",
+        "Roll",
+        "Pause",
+        "Resume",
+        "left nudge: one remaining"
+      ],
+      "captures": [
+        "build/android-touch-overview-final-04.png",
+        "build/android-touch-pause-final-04.png",
+        "build/android-touch-roll-final-04.png"
+      ],
+      "result": "PASS; screenshots inspected"
+    }
+  },
+  "ios": {
+    "device": "iPhone 16 Pro simulator, iOS 18.6",
+    "architecture": "x86_64 official engine template under Rosetta",
+    "renderer": "Software GLES; simulator-only reduced canvas and 3D resolution",
+    "playtest": {
+      "daily": "pass",
+      "frames": 215,
+      "p95_frame_ms": 71.7306666666667,
+      "pause_resume": "pass",
+      "result": {
+        "accuracy": 0.864650756170701,
+        "events": [
+          "AIR",
+          "NICE",
+          "AIR",
+          "AIR",
+          "NICE",
+          "AIR"
+        ],
+        "offset": 0.273067099425611,
+        "outcome": "GOAL",
+        "position": "(0.273079, 0.585179, 58.02402)",
+        "score": 120,
+        "seed": 42,
+        "stars": 3,
+        "time": 14.1516666666665
+      },
+      "retry": "pass"
+    },
+    "physical_device_build": "FAILED: Xcode 16.4 / iOS 18.5 SDK lacks CADynamicRange and MTLTensorDomain symbols referenced by official arm64 template",
+    "physical_device_test": "Not performed",
+    "source_commit": "8e287c5",
+    "required_device_sdk": "26.1, read directly from official arm64 object LC_BUILD_VERSION"
+  },
+  "macos": {
+    "signing": "Ad hoc local testing; Developer ID/notarization requires explicit approval",
+    "playtest": {
+      "daily": "pass",
+      "frames": 537,
+      "p95_frame_ms": 27.674,
+      "pause_resume": "pass",
+      "result": {
+        "accuracy": 0.868595309354253,
+        "events": [
+          "AIR",
+          "NICE",
+          "AIR",
+          "AIR",
+          "NICE",
+          "AIR"
+        ],
+        "offset": 0.265108963377795,
+        "outcome": "GOAL",
+        "position": "(0.264817, 0.583675, 58.028)",
+        "score": 120,
+        "seed": 42,
+        "stars": 3,
+        "time": 14.1524999999998
+      },
+      "retry": "pass"
+    }
+  },
+  "physical_phone_performance_verified": false
+}

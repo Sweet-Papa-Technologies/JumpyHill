@@ -1,0 +1,21 @@
+Official arm64 template LC_BUILD_VERSION: platform IOS, minos 14.0, sdk 26.1.
+Installed Xcode 16.4, iOS SDK 18.5.
+
+ld: warning: Could not find or use auto-linked library 'swift_DarwinFoundation1': library 'swift_DarwinFoundation1' not found
+ld: warning: Could not find or use auto-linked library 'swift_DarwinFoundation2': library 'swift_DarwinFoundation2' not found
+ld: warning: Could not find or use auto-linked library 'swift_DarwinFoundation3': library 'swift_DarwinFoundation3' not found
+ld: warning: Could not find or use auto-linked framework 'AudioUnit': framework 'AudioUnit' not found
+ld: warning: Could not find or use auto-linked framework 'CoreAudioTypes': framework 'CoreAudioTypes' not found
+ld: warning: Could not find or use auto-linked framework 'UIUtilities': framework 'UIUtilities' not found
+ld: warning: Could not find or use auto-linked framework '_LocationEssentials': framework '_LocationEssentials' not found
+ld: warning: Could not parse or use implicit file '/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/SwiftUICore.framework/SwiftUICore.tbd': cannot link directly with 'SwiftUICore' because product being built is not an allowed client of it
+Undefined symbols for architecture arm64:
+  "_CADynamicRangeAutomatic", referenced from:
+  "_CADynamicRangeConstrainedHigh", referenced from:
+  "_CADynamicRangeHigh", referenced from:
+  "_CADynamicRangeStandard", referenced from:
+  "_MTLTensorDomain", referenced from:
+ld: symbol(s) not found for architecture arm64
+clang++: error: linker command failed with exit code 1 (use -v to see invocation)
+
+The pinned Godot arm64 template was built with iOS SDK 26.1. Select Xcode 26.1+ before building for physical iPhones. Simulator builds can still use tools/ios-simulator.sh.
