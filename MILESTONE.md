@@ -8,6 +8,8 @@
 - The angle-only ceiling is 50% on regular hills, 80% on the tutorial. The full report is `docs/verification/angle-only-03.json`.
 - Existing result-freeze, off-edge presentation and 20-retry determinism checks remain passing. Native first-person benchmark: **13.42 ms p95 wall**, **2.19 ms p95 physics**, **36 visible draw calls**, **58,432 primitives**, Apple M4 Pro. The process monitor reports 17.18 ms; the automated GUI walk reports 27.58 ms p95 frame delta. These are development-machine measurements, not physical-phone guarantees.
 
+Final release: **0.3.0 / build 9**, source `d978c91`. The Mac app and DMG are signed, notarized and stapled; the signed app passed the packaged first-person/overview playtest. `tools/test.sh --full` completed successfully, including all 16,665 angle-only trials. Windows was re-exported and PE-validated (unsigned); the refreshed iOS simulator target compiled successfully. Manifest: `docs/verification/release-03.json`.
+
 Earlier release notes below are historical.
 
 ---

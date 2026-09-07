@@ -1,0 +1,12 @@
+{
+  "preset": "macOS",
+  "version": "0.3.0",
+  "build": 9,
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "commit": "d978c913f91ecbd0af87e80169d5592b101092b1",
+  "signed": true,
+  "dirty": false,
+  "sha256": "6cb9cb519d61177a3c7a25e57d3a71a6cd339c7a6e24c986290b0f86dc2bfeca",
+  "notarized": true,
+  "dmg_sha256": "84da47c7050d338713acba154adbd7d6141f053d515d783f0fcec22e7f73c913"
+}
