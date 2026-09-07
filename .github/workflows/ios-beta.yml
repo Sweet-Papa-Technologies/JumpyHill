@@ -40,7 +40,7 @@ jobs:
         run: |
           xcodebuild -project build/ios/TREADFALL.xcodeproj -scheme TREADFALL \
             -configuration Release -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' \
-            -derivedDataPath build/ios-ci-simulator CODE_SIGNING_ALLOWED=NO build
+            -derivedDataPath build/ios-ci-simulator CODE_SIGNING_ALLOWED=NO ARCHS=x86_64 ONLY_ACTIVE_ARCH=YES build
           python3 tools/store/ios-playtest.py build/ios-ci-simulator/Build/Products/Release-iphonesimulator/TREADFALL.app
       - uses: actions/upload-artifact@v4
         if: always()
