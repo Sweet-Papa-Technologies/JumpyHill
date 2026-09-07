@@ -6,9 +6,8 @@ September 7, 2026. Both platforms use `com.sweetpapa.treadfall`.
 
 **iOS:** Apple accepted the signed IPA with zero warnings, then processed build
 `974bf6f1-8ba0-44b5-b2f1-4e3142ad1a36` as `VALID`. It is assigned to the internal
-**TreadFall Playtest** group. The group currently has **zero testers**; build state
-is `READY_FOR_BETA_TESTING`. An authorized tester email is still needed before
-inviting anyone. External beta review and production release have not been submitted.
+**TreadFall Playtest** group. The authorized tester has been invited and membership verified; build state
+is **`IN_BETA_TESTING`**. Accept the email invitation to install with TestFlight. External beta review and production release have not been submitted.
 The build expires December 6, 2026.
 
 [Open TreadFall TestFlight](https://appstoreconnect.apple.com/apps/6809527457/testflight/ios).

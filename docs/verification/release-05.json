@@ -6,7 +6,7 @@
   "appleBuildId": "974bf6f1-8ba0-44b5-b2f1-4e3142ad1a36",
   "appleProcessing": "VALID",
   "testflightGroup": "e8241fd0-f1fe-47c9-8cf7-466251ac99d8",
-  "testerCount": 0,
+  "testerCount": 1,
   "androidTrack": "alpha",
   "androidStatus": "draft",
   "iOSArchiveRun": "https://github.com/Sweet-Papa-Technologies/JumpyHill/actions/runs/34144678606",
@@ -27,12 +27,13 @@
     "runtime": "iOS 26.2",
     "result": "PASS"
   },
-  "appleTestingState": "READY_FOR_BETA_TESTING",
+  "appleTestingState": "IN_BETA_TESTING",
   "screenshots": {
     "apple": 6,
     "appleDeliveryState": "COMPLETE",
     "googlePhoneScreenshots": 3,
     "googleIcon": 1,
     "googleFeatureGraphic": 1
-  }
+  },
+  "testerState": "INVITED"
 }
