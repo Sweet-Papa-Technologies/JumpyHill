@@ -1,5 +1,12 @@
 # Terrain and mobile gameplay update — 2026-09-07
 
+## 0.5 beta — patient rolls and mobile submissions
+
+Simplified title/menu labels and removed both hidden roll deadlines. A 12 cm / three-second progress check detects a stuck wheel while slow rolls can continue. The real level 3 regression reaches GOAL at 41 seconds; stationary spinning and 0.1 m/s slow-roll cases pass. Full validation passes: 16,665 angle-only trials, all course/seed combinations solvable, zero unfinished trials at the test-only 120-second horizon. One of 160 default course/seed rolls succeeds; default launching remains unreliable.
+
+SPT-signed Android AAB/APK passed exported-game automation and native touch play. Google saved build 15 in closed alpha as a draft, plus listing artwork. The iOS 26 device archive passed Apple signing/validation/upload; TestFlight build 15 is processed and assigned to TreadFall Playtest. Cloud iOS simulator playtest passed. See [STORE_RELEASE.md](docs/STORE_RELEASE.md) for exact status and remaining user setup.
+
+
 Version **0.4.0 playable alpha** adds rolling terrain, true side gaps, banked shoulders, terrain-conforming boost/mud/ice/spring pads, glass boundaries with openings, physical banks and impact shattering, transient shards and Kenney glass sounds. The control stays launch-angle-only with first-person/course-view switching.
 
 - Fixed uninterrupted course/world preview music and preserved musical phase when entering a different world. Native audio regression passed.

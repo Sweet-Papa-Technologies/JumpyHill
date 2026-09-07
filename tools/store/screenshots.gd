@@ -24,6 +24,13 @@ func shot(name_v: String, dimensions: Vector2i, course_id: String, state_v: int,
 	print("STORE CAPTURE ", name_v, " ", img.get_size())
 
 func run() -> void:
+	var icon: Image = Image.new()
+	icon.load_svg_from_string(FileAccess.get_file_as_string("res://assets/ui/icon.svg"), 0.5)
+	icon.convert(Image.FORMAT_RGB8)
+	icon.save_png(output + "/icon.png")
+	if "--icon-only" in OS.get_cmdline_user_args():
+		quit()
+		return
 	DirAccess.make_dir_recursive_absolute(output + "/iphone")
 	DirAccess.make_dir_recursive_absolute(output + "/ipad")
 	game = load("res://src/main.tscn").instantiate()

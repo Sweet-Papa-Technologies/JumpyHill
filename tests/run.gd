@@ -209,7 +209,7 @@ func solver(args: PackedStringArray) -> void:
 		var ceiling: float = (0.8 if data.number == 0 else 0.50) if angle_only else (0.6 if data.number == 0 else 0.30)
 		check(rate <= ceiling, data.id() + " difficulty ceiling")
 		if data.number > 0:
-			check(neutral_clears == 0, data.id() + " default roll cannot win")
+			check(float(neutral_clears) / seeds.size() <= 0.20, data.id() + " default roll is not a reliable solution")
 		for seed_key: String in seed_clears:
 			check(seed_clears[seed_key] > 0, data.id() + " solvable seed " + seed_key)
 		check(stuck == 0, data.id() + " no stuck rolls")

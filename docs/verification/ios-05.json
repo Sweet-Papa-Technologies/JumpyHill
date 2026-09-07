@@ -1,0 +1,25 @@
+{
+	"daily": "pass",
+	"frames": 214,
+	"p95_frame_ms": 71.82,
+	"pause_resume": "pass",
+	"result": {
+		"accuracy": 0.864650756170701,
+		"events": [
+			"AIR",
+			"NICE",
+			"AIR",
+			"AIR",
+			"NICE",
+			"AIR"
+		],
+		"offset": 0.273067099425611,
+		"outcome": "GOAL",
+		"position": "(0.273079, 0.585179, 58.02402)",
+		"score": 120,
+		"seed": 42,
+		"stars": 3,
+		"time": 14.1516666666665
+	},
+	"retry": "pass"
+}

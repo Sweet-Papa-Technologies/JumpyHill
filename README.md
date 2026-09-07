@@ -2,13 +2,13 @@
 
 A native pastel downhill tire game. Read the hill, pick a launch angle, and let it roll.
 
-**Version 0.4 playable alpha, built with Godot 4.7.2 + Jolt at 120 Hz, Mobile renderer.** Includes the complete title → course select → aim → roll → result → retry loop, 32 courses plus a tutorial, four worlds, four unlockable tires, daily rolls, local progress, settings, adaptive music and sound, and portrait/landscape layouts.
+**Version 0.5 playable beta, built with Godot 4.7.2 + Jolt at 120 Hz, Mobile renderer.** Includes the complete title → course select → aim → roll → result → retry loop, 32 courses plus a tutorial, four worlds, four unlockable tires, daily rolls, local progress, settings, adaptive music and sound, and portrait/landscape layouts.
 
 This is not a spec-complete store release. See [FEATURE_STATUS.md](FEATURE_STATUS.md) for the remaining implementation and release gates, and [MILESTONE.md](MILESTONE.md) for measured results.
 
 ## Play
 
-On this machine, open `build/macos/TREADFALL.app`, or use the local `build/macos/TREADFALL-0.4.0-local.dmg`. The 0.4 app has an ad hoc local-testing signature; Developer ID signing/notarization awaits explicit permission. The previous notarized installer is retained as `build/macos/TREADFALL-0.3.0-notarized.dmg`. The source project also runs directly:
+On this machine, open `build/macos/TREADFALL.app` for version 0.5. It has an ad hoc local-testing signature. The `TREADFALL-0.4.0-local.dmg` installer is an older build. The previous notarized installer is retained as `build/macos/TREADFALL-0.3.0-notarized.dmg`. The source project also runs directly:
 
 ```sh
 ./tools/bootstrap.sh          # macOS: pinned editor + official export templates
@@ -40,7 +40,7 @@ On other systems, install the pinned Godot version and set `GODOT_BIN` to its ex
 ./tools/godot --headless --script tools/bake_course.gd -- meadow/01
 ```
 
-`--test` keeps the real save untouched. Reports and screenshots go in `build/`; this folder is excluded from git and exports. The solver fails on impossible hills, >50% angle-only clear rate on regular hills (>80% in the tutorial), any winning default launch, any seed without a solution, or a roll reaching 20 s. Rolls still moving at 16 s end as misses; two seconds stalled against an obstacle ends as BLOCKED. Both wins and misses freeze the tire and hold the camera. The solver uses the actual `RollingTire` scene behavior, not the reduced aim preview model.
+`--test` keeps the real save untouched. Reports and screenshots go in `build/`; this folder is excluded from git and exports. The solver fails on impossible hills, >50% angle-only clear rate on regular hills (>80% in the tutorial), a default launch winning on more than 20% of sampled seeds, any seed without a solution, or an unfinished simulation at the test-only 120-second observation limit. Gameplay has no roll timer. A tire that stays within a 12 cm radius for three seconds is BLOCKED; slow rolls that keep advancing continue. The dedicated level-3 regression reaches GOAL after 41 seconds. Both wins and misses freeze the tire and hold the camera. The solver uses the actual `RollingTire` scene behavior, not the reduced aim preview model.
 
 Testing entry points:
 
@@ -55,12 +55,12 @@ The optional baker writes an editable grayscale PNG and a terrain mesh/collider 
 ## Build and sign
 
 ```sh
-./tools/export.sh macOS 0.4.0
+./tools/export.sh macOS 0.5.0
 ./tools/sign-macos.sh build/macos/TREADFALL.app --dry-run
 ./tools/sign-macos.sh build/macos/TREADFALL.app --dmg
-./tools/export.sh iOS 0.4.0
+./tools/export.sh iOS 0.5.0
 ./tools/ios-simulator.sh
-./tools/export.sh Windows 0.4.0
+./tools/export.sh Windows 0.5.0
 ./tools/android.sh 0.4.0
 ```
 
@@ -68,9 +68,9 @@ Godot and templates must both be **4.7.2**. `tools/export.sh` records the git co
 
 The signing scripts were reused from `~/code/FloppyJam/scripts`, as required. `FoFoPedal` and `FoFoSoundBooster` were absent; the available `FoFoPedalVST` setup was inspected. Credentials stay in the existing keychain/environment. `--dry-run` signs and verifies locally; it does **not** notarize. The second macOS command submits to Apple's notarization service and produces a stapled DMG. Windows Trusted Signing requires a Windows host, as in FloppyJam.
 
-The iOS export is an Xcode project for `com.sweetpapa.treadfall`, team `6Y5SZ2K5XY`. On this machine (Xcode 16.4), the supplied simulator library is x86_64 despite its dual-architecture manifest; the simulator script detects and builds that architecture. The app was installed and launched under the iPhone 16 Pro simulator. This does not establish performance, haptics, signing, or installation on a physical iPhone. A physical-device compile was also attempted: the engine arm64 object metadata identifies iOS SDK **26.1**, and the installed Xcode 16.4/iOS 18.5 SDK cannot link its CADynamicRange/MTLTensorDomain references. `tools/ios-device.sh` checks for SDK 26.1+ and builds an unsigned arm64 release on a compatible host. [Apple lists the required Xcode/macOS combinations](https://developer.apple.com/xcode/system-requirements).
+The iOS export is an Xcode project for `com.sweetpapa.treadfall`, team `6Y5SZ2K5XY`. On this machine (Xcode 16.4), the supplied simulator library is x86_64 despite its dual-architecture manifest; the simulator script detects and builds that architecture. The app was installed and launched under the iPhone 16 Pro simulator. This does not establish performance, haptics, or installation on a physical iPhone. The iOS beta workflow now builds with Xcode 26.3/iOS 26.2, signs locally using the existing distribution identity, and uploads to TestFlight. A physical-device compile was also attempted: the engine arm64 object metadata identifies iOS SDK **26.1**, and the installed Xcode 16.4/iOS 18.5 SDK cannot link its CADynamicRange/MTLTensorDomain references. `tools/ios-device.sh` checks for SDK 26.1+ and builds an unsigned arm64 release on a compatible host. [Apple lists the required Xcode/macOS combinations](https://developer.apple.com/xcode/system-requirements).
 
-Android builds require SDK platform 36, build tools and JDK 17 configured in Godot Editor Settings. `tools/android.sh` exports arm64 APKs, checks package contents, signs with a local test key stored in ignored `.tools/`, and verifies signatures and 16 KB library alignment. `TREADFALL.apk` is normal play; `TREADFALL-playtest.apk` has identical game bytes with automated launch arguments. Install through `adb install -r` and launch `com.sweetpapa.treadfall/com.godot.game.GodotAppLauncher`. Android uses the OpenGL compatibility renderer; the emulator's Vulkan presentation path failed during testing. The local signing key is **not a Play Store release key**. Gradle/AAB distribution, physical-phone feel and store release testing remain. No store listings or submissions are created by these commands.
+Android builds require SDK platform 36, build tools and JDK 17 configured in Godot Editor Settings. `tools/android.sh` exports arm64 APKs, checks package contents, signs with a local test key stored in ignored `.tools/`, and verifies signatures and 16 KB library alignment. `TREADFALL.apk` is normal play; `TREADFALL-playtest.apk` has identical game bytes with automated launch arguments. Install through `adb install -r` and launch `com.sweetpapa.treadfall/com.godot.game.GodotAppLauncher`. Android uses the OpenGL compatibility renderer; the emulator's Vulkan presentation path failed during testing. The local signing key is **not a Play Store release key**. For store distribution, `python3 tools/store/build-android.py` creates an AAB and matching APK using the existing SPT upload key. Version 0.5.0 (15) passed exported-game and touch playtests and is saved on the closed alpha track as a draft. Google requires the remaining Play Console app setup before activation. See [mobile release status](docs/STORE_RELEASE.md).
 
 For iOS simulator automation, launch with `SIMCTL_CHILD_TREADFALL_PLAYTEST=1 xcrun simctl launch <device-id> com.sweetpapa.treadfall`. This isolates save data and runs the game through both views, a complete roll, pause/resume, results, retry, settings and daily mode. Captures/report are in the app container's `Documents/playtest/`. The official x86 simulator template uses software OpenGL under Rosetta, so that environment uses a 480×1040 canvas and lighter 3D rendering. Physical iOS builds retain the normal renderer and native UI; simulator results do not establish phone performance.
 
@@ -81,6 +81,10 @@ Typed GDScript; no gameplay addons. `src/core` holds save/state support, `src/co
 Kenney CC0 nature props and impact sounds, Google Fonts OFL Bungee/Nunito, and original procedural meshes, vector art, and synthesized music. All assets are shipped locally. [ASSETS.md](ASSETS.md) records each file's provenance and license; [CREDITS.md](CREDITS.md) includes the shipped notices.
 
 Dependencies: Godot 4.7.2 provides rendering, Jolt physics, audio and exports; Python 3 and shell scripts provide local asset/build verification only. No third-party game plugins or analytics SDKs are included.
+
+## Store beta
+
+[Release status and remaining Console steps](docs/STORE_RELEASE.md). iPhone/iPad and native Android listing screenshots are in `build/store/screenshots/` and uploaded to the existing store listings. No production release has been submitted.
 
 ## Screenshots
 

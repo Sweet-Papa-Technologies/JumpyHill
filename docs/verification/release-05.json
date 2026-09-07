@@ -1,0 +1,38 @@
+{
+  "version": "0.5.0",
+  "build": 15,
+  "bundle": "com.sweetpapa.treadfall",
+  "appleAppId": "6809527457",
+  "appleBuildId": "974bf6f1-8ba0-44b5-b2f1-4e3142ad1a36",
+  "appleProcessing": "VALID",
+  "testflightGroup": "e8241fd0-f1fe-47c9-8cf7-466251ac99d8",
+  "testerCount": 0,
+  "androidTrack": "alpha",
+  "androidStatus": "draft",
+  "iOSArchiveRun": "https://github.com/Sweet-Papa-Technologies/JumpyHill/actions/runs/34144678606",
+  "iOSVerifiedRun": "https://github.com/Sweet-Papa-Technologies/JumpyHill/actions/runs/34145028547",
+  "artifacts": {
+    "build/android/TREADFALL-store.aab": {
+      "sha256": "6c4a84178ab4c5058a087e11c32f3f92b0b5451ae45c2e0b4aa68e5bd86a858a"
+    },
+    "build/android/TREADFALL-store.apk": {
+      "sha256": "0f5e7098102589f8da0d3b4fe0b4c88a8bdd974a7c4af3166782fa6cc4b61960"
+    },
+    "build/ios-store/TREADFALL.ipa": {
+      "sha256": "3a3f4bbd84196bf58473d75f59c25f0b777265832925663727fbe13fe9b53275"
+    }
+  },
+  "iosTestDevice": {
+    "name": "iPhone 17 Pro Max",
+    "runtime": "iOS 26.2",
+    "result": "PASS"
+  },
+  "appleTestingState": "READY_FOR_BETA_TESTING",
+  "screenshots": {
+    "apple": 6,
+    "appleDeliveryState": "COMPLETE",
+    "googlePhoneScreenshots": 3,
+    "googleIcon": 1,
+    "googleFeatureGraphic": 1
+  }
+}

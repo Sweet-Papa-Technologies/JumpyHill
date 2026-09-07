@@ -1,0 +1,28 @@
+{
+  "package": "com.sweetpapa.treadfall",
+  "alpha": {
+    "track": "alpha",
+    "releases": [
+      {
+        "name": "0.5.0 — Let it roll",
+        "versionCodes": [
+          "15"
+        ],
+        "releaseNotes": [
+          {
+            "language": "en-US",
+            "text": "Simpler menus and no roll time limit. Slow rolls can finish; a tire only becomes stuck after it stops making progress. Please test level 3, moving obstacles, glass banks and camera switching."
+          }
+        ],
+        "status": "draft"
+      }
+    ]
+  },
+  "assets": {
+    "icon": 1,
+    "featureGraphic": 1,
+    "phoneScreenshots": 3
+  },
+  "title": "TreadFall",
+  "descriptionSaved": true
+}
