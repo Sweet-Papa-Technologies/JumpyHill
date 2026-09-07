@@ -39,10 +39,13 @@ func apply_settings() -> void:
 func set_world(value: int) -> void:
 	if not enabled or world == value:
 		return
+	# All stems share a loop length. Change the arrangement at the existing
+	# musical position rather than replaying the intro on each world change.
+	var position: float = music_players[0].get_playback_position() if music_players[0].playing else 0.0
 	world = value
 	for i: int in range(3):
 		music_players[i].stream = load("res://assets/audio/world_%d_stem_%d.wav" % [world, i]) as AudioStream
-		music_players[i].play()
+		music_players[i].play(fmod(position, music_players[i].stream.get_length()))
 
 func _process(dt: float) -> void:
 	duck = maxf(0, duck - dt)
@@ -57,11 +60,13 @@ func play(event: String) -> void:
 	var path: String = "res://assets/audio/click.wav"
 	match event:
 		"BOING", "TOCK": path = "res://assets/audio/impactWood_medium_000.ogg"
-		"POST", "WIDE", "BLOCKED": path = "res://assets/audio/impactMetal_light_000.ogg"
+		"POST", "WIDE", "BLOCKED", "GAP": path = "res://assets/audio/impactMetal_light_000.ogg"
+		"SMASH": path = "res://assets/audio/impactGlass_heavy_000.ogg"
+		"BANK": path = "res://assets/audio/impactGlass_light_000.ogg"
 		"GOAL":
 			path = "res://assets/audio/goal.wav"
 			duck = 1.4
-		"WHOOSH", "BOOST", "AIR": path = "res://assets/audio/whoosh.wav"
+		"WHOOSH", "BOOST", "AIR", "SPRING", "GAP JUMP": path = "res://assets/audio/whoosh.wav"
 	if not streams.has(path):
 		streams[path] = load(path)
 	for player: AudioStreamPlayer in players:

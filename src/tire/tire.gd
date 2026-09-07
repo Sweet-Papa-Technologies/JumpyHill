@@ -29,6 +29,11 @@ var gust_start: float = 3.0
 var gust_force: float = 0.0
 var last_result: Dictionary = {}
 var stalled_time: float = 0.0
+var incoming_velocity: Vector3 = Vector3.ZERO
+var crossed_gap: bool = false
+var surface_kind: String = "ground"
+var glass_contacts: Dictionary = {}
+const GLASS_BREAK_SPEED: float = 4.8
 
 func _ready() -> void:
 	mass = variant.mass
@@ -41,7 +46,8 @@ func _ready() -> void:
 	linear_damp = 0.05
 	angular_damp = 0.03
 	contact_monitor = true
-	max_contacts_reported = 6
+	max_contacts_reported = 8
+	body_entered.connect(_on_body_entered)
 	var pm: PhysicsMaterial = PhysicsMaterial.new()
 	pm.friction = variant.grip
 	pm.bounce = variant.bounce
@@ -115,6 +121,12 @@ func reset_to_aim() -> void:
 	last_nudge = -10.0
 	style = StyleTracker.new()
 	touched.clear()
+	for body: PhysicsBody3D in get_collision_exceptions():
+		remove_collision_exception_with(body)
+	glass_contacts.clear()
+	crossed_gap = false
+	surface_kind = "ground"
+	physics_material_override.friction = variant.grip
 	post_hit = false
 	stalled_time = 0.0
 	last_result = {}
@@ -148,6 +160,7 @@ func launch() -> void:
 	active = true
 	linear_velocity = launch_velocity(course, aim, variant)
 	angular_velocity = transform.basis.x * linear_velocity.length() / FEEL.tire_radius
+	incoming_velocity = linear_velocity
 
 func nudge(side: float) -> bool:
 	if not active or purist or tilted:
@@ -172,7 +185,14 @@ func _physics_process(dt: float) -> void:
 		return
 	elapsed += dt
 	# Lean supplies continuous force and rolling torque, never teleports the tire.
-	var on_ground: bool = position.y - course.height_at(position.x, position.z) < FEEL.tire_radius + 0.18
+	var height: float = position.y - course.height_at(position.x, position.z) - FEEL.tire_radius
+	var ground_exists: bool = course.has_ground(position.x, position.z)
+	var on_ground: bool = ground_exists and height > -0.4 and height < 0.18
+	if not ground_exists and absf(position.x) < course.width * 0.5 and position.z > 3:
+		crossed_gap = true
+	if height < -1.6 and position.z > 3:
+		_finish("GAP" if crossed_gap else "WIDE", 0.0, absf(position.x - course.goal_x))
+		return
 	if on_ground:
 		apply_central_force(Vector3(lean * FEEL.lean_force, 0, 0))
 	var axle: Vector3 = transform.basis.x.normalized()
@@ -193,8 +213,7 @@ func _physics_process(dt: float) -> void:
 		return
 	if speed > cap:
 		apply_central_force(-linear_velocity.normalized() * (speed - cap) * mass * 30.0)
-	var height: float = position.y - course.height_at(position.x, position.z) - FEEL.tire_radius
-	var grounded: bool = height < 0.15
+	var grounded: bool = on_ground
 	if not grounded and position.z > 3:
 		air_time += dt
 		air_awarded += dt
@@ -202,6 +221,9 @@ func _physics_process(dt: float) -> void:
 			air_awarded -= 0.25
 			add_style("AIR")
 	elif not grounded_before:
+		if crossed_gap:
+			add_style("GAP JUMP")
+			crossed_gap = false
 		if air_time >= 0.35:
 			add_style("NICE")
 		air_time = 0.0
@@ -211,16 +233,18 @@ func _physics_process(dt: float) -> void:
 		if speed_time >= 1.0:
 			speed_time = 0.0
 			add_style("FULL SEND")
+	surface_kind = "ground"
+	physics_material_override.friction = variant.grip
 	for i: int in range(features.size()):
 		var f: Dictionary = features[i]
 		var dx: float = position.x - float(f.x)
 		var dz: float = position.z - float(f.z)
 		var distance: float = Vector2(dx, dz).length()
-		if touched.has(i):
+		if touched.has(i) and f.kind not in ["ice", "mud"]:
 			continue
 		match f.kind:
 			"bumper", "peg":
-				if distance < (1.25 if f.kind == "bumper" else 0.9) and height < 1.1:
+				if distance < (1.25 if f.kind == "bumper" else 0.9) and height > -0.4 and height < 1.1:
 					touched[i] = true
 					if f.kind == "bumper":
 						var normal: Vector3 = Vector3(dx, 0.12, maxf(0.3, absf(dz))).normalized()
@@ -232,31 +256,44 @@ func _physics_process(dt: float) -> void:
 					touched[i] = true
 					add_style("SO CLOSE")
 			"ramp":
-				if absf(dx) < 1.3 and absf(dz) < 0.7 and height < 1.3:
+				if absf(dx) < 1.3 and absf(dz) < 0.7 and height > -0.4 and height < 1.3:
 					touched[i] = true
 					apply_central_impulse(Vector3(0, 34, 8))
 					styled.emit("WHOOSH")
 			"boost":
 				if absf(dx) < 1.2 and absf(dz) < 1.5 and grounded:
 					touched[i] = true
-					apply_central_impulse(Vector3(0, 0, 22))
+					apply_central_impulse(Vector3(0, 0, 32))
 					styled.emit("BOOST")
 			"mud":
 				if absf(dx) < 1.2 and absf(dz) < 1.5 and grounded:
 					apply_central_force(-linear_velocity * mass * 0.8)
+			"ice":
+				if absf(dx) < 1.2 and absf(dz) < 1.5 and grounded:
+					surface_kind = "ice"
+					physics_material_override.friction = 0.035
+					if not touched.has(i):
+						touched[i] = true
+						styled.emit("SLIDE")
+			"spring":
+				if absf(dx) < 1.2 and absf(dz) < 1.5 and grounded:
+					touched[i] = true
+					apply_central_impulse(Vector3(0, 46, 5))
+					add_style("SPRING")
 			"rail":
 				if absf(dx) < 0.55 and absf(dz) < 3.5 and height > 0.25:
 					touched[i] = true
 					add_style("GRIND")
 	var goal_delta: float = absf(position.x - course.goal_x)
-	if absf(position.z - course.length) < 0.55 and absf(goal_delta - course.goal_width / 2) < FEEL.tire_radius + 0.16 and height < 3.3:
-		post_hit = true
 	if previous.z < course.length and position.z >= course.length:
 		var t: float = (course.length - previous.z) / (position.z - previous.z)
 		var crossing_x: float = lerpf(previous.x, position.x, t)
 		var offset: float = absf(crossing_x - course.goal_x)
-		var clear: bool = offset < course.goal_width / 2 - FEEL.tire_radius
-		var accuracy: float = clampf(1.0 - offset / (course.goal_width / 2 - FEEL.tire_radius), 0, 1)
+		# The physical posts already test the full oriented wheel shape. Score
+		# its swept center through their inner faces; radius is NOT axle width.
+		var crossing_y: float = lerpf(previous.y, position.y, t)
+		var clear: bool = goal_passes(course, crossing_x, crossing_y)
+		var accuracy: float = clampf(1.0 - offset / (course.goal_width / 2 - 0.16), 0, 1)
 		if clear and offset < FEEL.tire_radius * 0.25:
 			add_style("BULLSEYE")
 		if clear and post_hit:
@@ -264,9 +301,8 @@ func _physics_process(dt: float) -> void:
 		_finish("GOAL" if clear else ("POST" if post_hit else "WIDE"), accuracy, offset)
 	elif absf(position.x) > course.width / 2 + 2 or position.y < -8 or elapsed >= FEEL.roll_timeout:
 		_finish("POST" if post_hit else "WIDE", 0.0, goal_delta)
-	elif post_hit and linear_velocity.z < 0:
-		_finish("POST", 0.0, goal_delta)
 	previous = position
+	incoming_velocity = linear_velocity
 
 func _finish(outcome: String, accuracy: float, offset: float) -> void:
 	active = false
@@ -284,3 +320,30 @@ func _finish(outcome: String, accuracy: float, offset: float) -> void:
 		rotation = Vector3(0, rotation.y, 0)
 		reset_physics_interpolation()
 	finished.emit(last_result)
+
+static func goal_passes(data: CourseData, x: float, y: float) -> bool:
+	return absf(x - data.goal_x) < data.goal_width * 0.5 - 0.16 and y >= data.height_at(x, data.length) - 0.1
+
+func _on_body_entered(body: Node) -> void:
+	if not active:
+		return
+	if body.has_meta("goal_post"):
+		post_hit = true
+	if not body.has_meta("glass_index"):
+		return
+	var index: int = body.get_meta("glass_index")
+	if glass_contacts.get(index, false):
+		return
+	var hill: HillCourse = body.get_meta("glass_course")
+	# Only the speed INTO the wall counts, not the downhill component. A fast,
+	# shallow approach can bank safely; a hard sideways hit punches through.
+	var normal_speed: float = absf(incoming_velocity.x)
+	if normal_speed >= GLASS_BREAK_SPEED:
+		glass_contacts[index] = true
+		add_collision_exception_with(body as PhysicsBody3D)
+		linear_velocity = Vector3(incoming_velocity.x * 0.72, incoming_velocity.y, incoming_velocity.z * 0.92)
+		hill.shatter(index, incoming_velocity)
+		add_style("SMASH")
+	elif not glass_contacts.has(index):
+		glass_contacts[index] = false
+		add_style("BANK")

@@ -1,3 +1,20 @@
+# Terrain and mobile gameplay update — 2026-09-07
+
+Version **0.4.0 playable alpha** adds rolling terrain, true side gaps, banked shoulders, terrain-conforming boost/mud/ice/spring pads, glass boundaries with openings, physical banks and impact shattering, transient shards and Kenney glass sounds. The control stays launch-angle-only with first-person/course-view switching.
+
+- Fixed uninterrupted course/world preview music and preserved musical phase when entering a different world. Native audio regression passed.
+- Fixed near-post passes: swept center scoring uses physical post inner faces; contact status comes from actual collisions. Both sides passed with three wheel widths; an outside pass still fails.
+- New physics integration checks passed: no hidden gap floor, prompt frozen gap miss, successful gap landing, soft/hard glass impacts, independent wall state for parallel solver tires, retry restoration, ice friction/reset and spring impulse. Native rendered shatter/reset check passed, including pane removal and cleanup of all 16 shards.
+- Final **16,665 rolls** (33 courses × 101 launch angles × 5 seeds) passed. Every course has a solution for each seed; regular-course mean clear rate **18.29%**, range **3.96–45.74%**, and **0/160** default launches clear. Ember 03's finish approach was widened after the initial sweep found one inaccessible seed. See `docs/verification/angle-only-04.json`.
+- Native scripted gameplay completed a three-star GOAL with airtime/landings; pause, retry, both camera views, settings and daily mode passed. UI event tests, 20 complete runtime retries, ten-second result holds and three processes × 20 deterministic physics trials passed.
+- Final heaviest-course native Metal benchmark on M4 Pro: **13.404 ms p95 wall frame time**, 41 maximum 3D draw calls, 71,272 visible primitives, 2.452 ms p95 physics monitor. Godot's CPU/process monitor reported 32.587 ms and is retained in the report. This is not a phone or M1 performance certification.
+- Android arm64 export, local-test signing, package-byte/signature/16 KB alignment checks and Pixel API 36 emulator gameplay passed. Android uses OpenGL after the emulator's Vulkan presentation failed. iOS compiled and completed the same gameplay flow on iPhone 16 Pro / iOS 18.6 simulator, using the official x86 template's software-rendering fallback. These establish functional mobile execution, not physical-phone haptics/performance or store readiness.
+- The asset ledger now covers **30 source files**. New glass sounds came from the already downloaded Kenney CC0 impact archive; terrain, glass and shards are original procedural source geometry/materials.
+
+Final package identifiers/checksums and mobile reports are recorded in `docs/verification/release-04.json` and `mobile-04.json` after packaging. Previous sections below are historical.
+
+---
+
 # Version 0.3 — single-control HUD and first-person play
 
 - Gameplay occupies the full window. A dedicated bottom panel contains one launch-angle slider and Roll; bank input and drag-to-release launching are removed. Purist is available before a roll in the pause menu.

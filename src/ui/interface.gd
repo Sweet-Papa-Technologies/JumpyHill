@@ -225,7 +225,7 @@ func _draw() -> void:
 			if not portrait:
 				var feedback: String = "CENTER %d%%" % roundi(float(game.result.get("accuracy", 0)) * 100)
 				if not good:
-					feedback = "Choose an angle around the barrier." if game.result.get("outcome") == "BLOCKED" else ("Try a shallower launch angle." if game.tire.position.z < game.course.data.length - 2 else "%.1f tire widths from the center" % (float(game.result.get("offset", 0)) / 1.3))
+					feedback = "Carry speed over the gap, or use the center lane." if game.result.get("outcome") == "GAP" else "Choose an angle around the barrier." if game.result.get("outcome") == "BLOCKED" else ("Try a shallower launch angle." if game.tire.position.z < game.course.data.length - 2 else "%.1f tire widths from the center" % (float(game.result.get("offset", 0)) / 1.3))
 				label(feedback, Vector2(x, 450), 16, MUTED)
 				label("SEED  %d" % game.roll_seed, Vector2(x, 785), 14, MUTED)
 				label("Same hill. A whole new possibility.", Vector2(x, 818), 17, MUTED)
@@ -300,6 +300,8 @@ func _draw_game_hud() -> void:
 	label("%02d  /  %s" % [game.course.data.number, game.course.data.title.to_upper()], title_pos, 20, INK, true)
 	if page == "aim":
 		var dock: Rect2 = control_dock()
+		panel(Rect2(base.x / 2 - (330 if portrait else 355), dock.position.y - 47, 660 if portrait else 710, 34), Color(INK, 0.82), 12)
+		label(game.course.data.terrain_hint(), Vector2(base.x / 2 - (311 if portrait else 328), dock.position.y - 24), 17 if portrait else 18, PAPER)
 		panel(dock, Color("244841"), 26)
 		label("LAUNCH ANGLE", dock.position + Vector2(28, 33), 16, Color("b8cdc1"))
 		label("%+.1f°" % (game.aim_value * 25), dock.position + Vector2(305 if portrait else 398, 33), 23, PAPER, true)

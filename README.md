@@ -2,7 +2,7 @@
 
 A native pastel downhill tire game. Read the hill, pick a launch angle, and let it roll.
 
-**Version 0.3 playable alpha, built with Godot 4.7.2 + Jolt at 120 Hz, Mobile renderer.** Includes the complete title → course select → aim → roll → result → retry loop, 32 courses plus a tutorial, four worlds, four unlockable tires, daily rolls, local progress, settings, adaptive music and sound, and portrait/landscape layouts.
+**Version 0.4 playable alpha, built with Godot 4.7.2 + Jolt at 120 Hz, Mobile renderer.** Includes the complete title → course select → aim → roll → result → retry loop, 32 courses plus a tutorial, four worlds, four unlockable tires, daily rolls, local progress, settings, adaptive music and sound, and portrait/landscape layouts.
 
 This is not a spec-complete store release. See [FEATURE_STATUS.md](FEATURE_STATUS.md) for the remaining implementation and release gates, and [MILESTONE.md](MILESTONE.md) for measured results.
 
@@ -20,6 +20,8 @@ On other systems, install the pinned Godot version and set `GODOT_BIN` to its ex
 
 - Adjust **Launch angle** in the dedicated bottom control panel, or drag left/right on the hill. Releasing a drag keeps you in aim mode; tap **Roll** when ready. There is no bank control.
 - Each hill starts in a stabilized **first-person tire view**. Tap **Course view** (or **V**) for a closer overview that fits the full course above the controls; tap **Tire view** to return. Switching also works during a roll.
+- Courses now include rolling crests, troughs, banked shoulders and a side-lane gap with a takeoff and a continuous center bypass. Boost pads carry speed; mud slows you; blue ice reduces grip; golden springs in Ember launch the wheel.
+- Glass guards have marked openings. Shallow impacts rebound; sideways impacts at 4.8 m/s or more shatter the pane, cost some momentum and leave the edge exposed. Retry restores the walls. Land a gap jump or bank off glass for style.
 - The short dotted launch guide stays on the ground. Gameplay fills the window, with no left control sidebar.
 - During the roll, swipe left/right or use the nudge buttons. Two nudges, 0.5 s cooldown; a third attempt triggers TILT.
 - Keyboard: **←/→** or **A/D** aim/nudge; **Space/Enter** roll/retry; **R** retry; **V** switch view; **Esc** pause.
@@ -31,6 +33,8 @@ On other systems, install the pinned Godot version and set `GODOT_BIN` to its ex
 ./tools/test.sh               # asset ledger, units, real UI events, 20 runtime retries,
                              # win/miss hold and hazard lifecycle checks, plus 20 physics repeats in each of 3 fresh processes
 ./tools/test.sh --full        # also 33 × 101 angles × 5 seeds, neutral bank + PNG heatmaps
+./tools/godot --script tests/audio.gd -- --test # native music continuity
+./tools/godot --script tests/glass_visual.gd -- --test # visible shatter/reset
 ./tools/godot -- --test --playtest
 ./tools/godot -- --test --perf # uncapped heaviest-course benchmark; exit fails above 16.6 ms p95
 ./tools/godot --headless --script tools/bake_course.gd -- meadow/01
@@ -51,12 +55,13 @@ The optional baker writes an editable grayscale PNG and a terrain mesh/collider 
 ## Build and sign
 
 ```sh
-./tools/export.sh macOS 0.3.0
+./tools/export.sh macOS 0.4.0
 ./tools/sign-macos.sh build/macos/TREADFALL.app --dry-run
 ./tools/sign-macos.sh build/macos/TREADFALL.app --dmg
-./tools/export.sh iOS 0.3.0
+./tools/export.sh iOS 0.4.0
 ./tools/ios-simulator.sh
-./tools/export.sh Windows 0.3.0
+./tools/export.sh Windows 0.4.0
+./tools/android.sh 0.4.0
 ```
 
 Godot and templates must both be **4.7.2**. `tools/export.sh` records the git commit, build count, version and SHA-256. It verifies packaged bytes, including an observed Godot export issue that produced a zero-byte macOS executable: the verifier restores the byte-identical official universal release binary and fails if that binary is invalid. A successful engine exit alone is not treated as a working app.
@@ -65,7 +70,9 @@ The signing scripts were reused from `~/code/FloppyJam/scripts`, as required. `F
 
 The iOS export is an Xcode project for `com.sweetpapa.treadfall`, team `6Y5SZ2K5XY`. On this machine (Xcode 16.4), the supplied simulator library is x86_64 despite its dual-architecture manifest; the simulator script detects and builds that architecture. The app was installed and launched under the iPhone 16 Pro simulator. This does not establish performance, haptics, signing, or installation on a physical iPhone.
 
-Android has a starter APK export preset. A release keystore, Gradle/AAB setup, target API verification, and device testing remain. No store listings or submissions are created by these commands.
+Android builds require SDK platform 36, build tools and JDK 17 configured in Godot Editor Settings. `tools/android.sh` exports arm64 APKs, checks package contents, signs with a local test key stored in ignored `.tools/`, and verifies signatures and 16 KB library alignment. `TREADFALL.apk` is normal play; `TREADFALL-playtest.apk` has identical game bytes with automated launch arguments. Install through `adb install -r` and launch `com.sweetpapa.treadfall/com.godot.game.GodotAppLauncher`. Android uses the OpenGL compatibility renderer; the emulator's Vulkan presentation path failed during testing. The local signing key is **not a Play Store release key**. Gradle/AAB distribution, physical-phone feel and store release testing remain. No store listings or submissions are created by these commands.
+
+For iOS simulator automation, launch with `SIMCTL_CHILD_TREADFALL_PLAYTEST=1 xcrun simctl launch <device-id> com.sweetpapa.treadfall`. This isolates save data and runs the game through both views, a complete roll, pause/resume, results, retry, settings and daily mode. Captures/report are in the app container's `Documents/playtest/`. The official x86 simulator template uses software OpenGL under Rosetta, so that environment uses a 480×1040 canvas and lighter 3D rendering. Physical iOS builds retain the normal renderer and native UI; simulator results do not establish phone performance.
 
 ## Structure and assets
 

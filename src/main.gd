@@ -35,6 +35,7 @@ var frames: int = 0
 var particles: Array[Dictionary] = []
 var screen_size: Vector2
 var automation: bool = false
+var automation_failed: bool = false
 var automation_output: String = "res://build/playtest"
 var quitting: bool = false
 var automating_step: int = 0
@@ -49,24 +50,34 @@ var perf_cpu: Array[float] = []
 var perf_physics: Array[float] = []
 var perf_draws: int = 0
 var perf_primitives: int = 0
+# Official x86 iOS simulator template uses software OpenGL under Rosetta.
+# Keep the full-resolution UI and real physics, but use a lighter 3D view there.
+var software_simulator: bool = OS.get_name() == "iOS" and OS.has_environment("SIMULATOR_UDID")
 var speed_fx: ShaderMaterial
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	Engine.max_fps = 60
+	if software_simulator:
+		# The Rosetta GLES simulator rasterizes even UI shaders on the CPU.
+		# Bound its offscreen canvas; device builds keep native-resolution UI.
+		get_window().content_scale_mode = Window.CONTENT_SCALE_MODE_VIEWPORT
+		get_window().content_scale_size = Vector2i(480, 1040)
 	courses = CourseData.all_courses()
 	viewport_container = SubViewportContainer.new()
 	viewport_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	viewport_container.stretch = true
 	speed_fx = ShaderMaterial.new()
 	speed_fx.shader = preload("res://src/feel/shaders/speed.gdshader")
-	viewport_container.material = speed_fx
+	viewport_container.material = null if software_simulator else speed_fx
 	add_child(viewport_container)
 	viewport = SubViewport.new()
 	viewport.world_3d = World3D.new()
 	viewport.handle_input_locally = false
 	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
-	viewport.msaa_3d = Viewport.MSAA_4X
+	viewport.msaa_3d = Viewport.MSAA_DISABLED if software_simulator else Viewport.MSAA_4X
+	if software_simulator:
+		viewport_container.stretch_shrink = 2
 	viewport_container.add_child(viewport)
 	world_root = Node3D.new()
 	world_root.process_mode = Node.PROCESS_MODE_PAUSABLE
@@ -92,7 +103,8 @@ func _setup_light() -> void:
 	environment = WorldEnvironment.new()
 	world_root.add_child(environment)
 	var env: Environment = Environment.new()
-	env.background_mode = Environment.BG_SKY
+	env.background_mode = Environment.BG_COLOR if software_simulator else Environment.BG_SKY
+	env.background_color = Color("cde6e5")
 	var sky: Sky = Sky.new()
 	var sky_mat: ProceduralSkyMaterial = ProceduralSkyMaterial.new()
 	sky_mat.sky_top_color = Color("abcdd5")
@@ -112,7 +124,7 @@ func _setup_light() -> void:
 	sun.rotation_degrees = Vector3(-52, -35, 0)
 	sun.light_color = Color("fff0d5")
 	sun.light_energy = 0.85
-	sun.shadow_enabled = true
+	sun.shadow_enabled = not software_simulator
 	sun.directional_shadow_mode = DirectionalLight3D.SHADOW_ORTHOGONAL
 	sun.directional_shadow_max_distance = 110
 	world_root.add_child(sun)
@@ -161,12 +173,14 @@ func load_course(data: CourseData) -> void:
 	camera.course = data
 	camera.target = tire
 	camera.blend_to("aim")
+	environment.environment.background_color = CourseData.PALETTES[data.world][4]
 	var sky_mat: ProceduralSkyMaterial = environment.environment.sky.sky_material as ProceduralSkyMaterial
 	sky_mat.sky_top_color = CourseData.PALETTES[data.world][4]
 	sky_mat.sky_horizon_color = CourseData.PALETTES[data.world][4].lerp(CourseData.PALETTES[data.world][1], 0.4)
 	sky_mat.ground_horizon_color = sky_mat.sky_horizon_color
 	sky_mat.ground_bottom_color = sky_mat.sky_top_color
-	Sound.set_world(data.world)
+	if Sound.world < 0:
+		Sound.set_world(data.world)
 	_apply_post_markers()
 
 func _create_tire() -> void:
@@ -203,6 +217,8 @@ func _enter_state(next: State) -> void:
 			tire.reset_to_aim()
 			camera.blend_to("aim")
 		State.AIM:
+			Sound.set_world(course.data.world)
+			course.reset_glass()
 			# A frozen finished rigid body can retain pending forces. Recreate the
 			# small tire body while retaining the expensive course geometry.
 			tire.free()
@@ -429,7 +445,7 @@ func _style(event: String) -> void:
 	pop_text = event
 	pop_time = 0.8
 	Sound.play(event)
-	if event in ["BOING", "NICE", "GRIND"]:
+	if event in ["BOING", "NICE", "GRIND", "SMASH", "GAP JUMP", "SPRING"]:
 		if not Save.data.settings.reduce_motion:
 			hit_until = Time.get_ticks_msec() + 45
 			viewport.render_target_update_mode = SubViewport.UPDATE_DISABLED
@@ -551,6 +567,8 @@ func _capture(path: String) -> void:
 
 func _command_line() -> void:
 	var args: PackedStringArray = OS.get_cmdline_user_args()
+	if OS.get_environment("TREADFALL_PLAYTEST") == "1":
+		args.append_array(["--test", "--playtest", "--aim", "-0.6", "--test-output", "user://playtest"])
 	var opts: Dictionary = {}
 	for i: int in range(args.size()):
 		if args[i].begins_with("--"):
@@ -587,6 +605,8 @@ func _command_line() -> void:
 		DirAccess.make_dir_recursive_absolute(automation_output)
 
 func _automate(dt: float) -> void:
+	if automation_failed:
+		return
 	if state == State.ROLL:
 		frame_times.append(dt * 1000)
 	match automating_step:
@@ -603,12 +623,12 @@ func _automate(dt: float) -> void:
 		2:
 			if frames > 140:
 				_capture(automation_output + "/aim.png")
-				assert(camera.first_person)
+				_automation_check(camera.first_person, "First-person default")
 				_action("view")
 				automating_step = 8
 		8:
 			if frames > 185:
-				assert(not camera.first_person)
+				_automation_check(not camera.first_person, "Course view toggle")
 				_capture(automation_output + "/overview.png")
 				_action("view")
 				_action("roll")
@@ -620,18 +640,19 @@ func _automate(dt: float) -> void:
 				automating_step = 4
 		4:
 			if frames % 30 == 0:
-				assert(get_tree().paused)
+				_automation_check(get_tree().paused, "Pause freezes the tree")
 				var old_time: float = tire.elapsed
 				_action("resume")
-				assert(tire.elapsed == old_time)
+				_automation_check(tire.elapsed == old_time, "Resume preserves roll time")
 				automating_step = 5
 		5:
 			if state == State.RESULT:
+				_automation_check(tire.freeze and not tire.active and not result.is_empty(), "Result freezes finished wheel")
 				_capture(automation_output + "/result.png")
 				var started: int = Time.get_ticks_usec()
 				_action("retry")
 				var retry_ms: float = (Time.get_ticks_usec() - started) / 1000.0
-				assert(state == State.AIM and retry_ms < 300)
+				_automation_check(state == State.AIM and retry_ms < 300, "Retry returns promptly to aim")
 				print("PLAYTEST retry_ms=", retry_ms, " result=", result)
 				_action("settings")
 				automating_step = 6
@@ -642,7 +663,9 @@ func _automate(dt: float) -> void:
 				_action("setting_toggle", "reduce_motion")
 				_action("settings_back")
 				_action("daily")
-				assert(state == State.AIM and roll_seed == int(daily.seed))
+				_automation_check(state == State.AIM and roll_seed == int(daily.seed), "Daily starts the date-derived seed")
+				if automation_failed:
+					return
 				frame_times.sort()
 				var report: Dictionary = {"retry": "pass", "pause_resume": "pass", "daily": "pass", "frames": frame_times.size(), "p95_frame_ms": frame_times[int(frame_times.size() * 0.95)] if not frame_times.is_empty() else 0, "result": result}
 				var file: FileAccess = FileAccess.open(automation_output + "/report.json", FileAccess.WRITE)
@@ -686,3 +709,15 @@ func _quit(code: int = 0) -> void:
 	Sound.stop_all()
 	await get_tree().create_timer(0.15, true, false, true).timeout
 	get_tree().quit(code)
+
+func _automation_check(condition: bool, message: String) -> void:
+	# GDScript assert() is removed in release exports. Mobile/package playtests
+	# need explicit checks that remain active in the exact release runtime.
+	if condition:
+		return
+	automation_failed = true
+	push_error("PLAYTEST FAIL: " + message)
+	var file: FileAccess = FileAccess.open(automation_output + "/failure.json", FileAccess.WRITE)
+	if file != null:
+		file.store_string(JSON.stringify({"failure": message}))
+	_quit.call_deferred(1)

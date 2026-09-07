@@ -34,7 +34,45 @@ func height_at(x: float, z: float) -> float:
 	var bend: float = sin(z / length * TAU) * lane_curve
 	var gutters: float = -0.09 * cos((x - bend) * PI / 3.6) * sin(clampf(z / 9.0, 0.0, 1.0) * PI / 2.0)
 	var edges: float = maxf(0.0, absf(x) - width * 0.40) * 0.20
-	return base + gutters + edges
+	# Compact, smooth earthworks. The first obstacle stays on a predictable slope;
+	# later crests launch fast wheels and compress slow wheels into the troughs.
+	var relief: float = 0.0
+	if number > 0:
+		var side: float = -1.0 if layout % 2 == 0 else 1.0
+		relief += (0.8 + world * 0.12) * mound(z, length * 0.34 + x * side * 0.12, 3.3)
+		relief -= 0.55 * mound(z, length * 0.43, 3.4)
+		relief += (0.65 + (number % 3) * 0.15) * mound(z, length * 0.78 - x * side * 0.16, 3.2)
+		# Raised side-lane takeoff before the missing slab; the center is a bypass.
+		relief += 1.05 * mound(x, side * 4.8, 3.0) * mound(z, gap_start() - 1.8, 2.8)
+		# Outer bank is useful for wall rebounds without funneling the center lane.
+		relief += 0.5 * mound(z, length * 0.54, 7.0) * pow(maxf(0, absf(x) - 4.0) / 4.0, 2)
+	return base + gutters + edges + relief
+
+static func mound(value: float, center: float, radius: float) -> float:
+	var t: float = absf(value - center) / radius
+	return 0.5 + 0.5 * cos(t * PI) if t < 1.0 else 0.0
+
+func gap_start() -> float:
+	return length * 0.60
+
+func gap_rect() -> Rect2:
+	var side: float = -1.0 if layout % 2 == 0 else 1.0
+	return Rect2(2.7 if side > 0 else -6.7, gap_start(), 4.0, 2.2 + world * 0.25)
+
+func has_ground(x: float, z: float) -> bool:
+	if absf(x) > width * 0.5 or z < -2 or z > length + 3:
+		return false
+	if number == 0:
+		return true
+	# Match the mesh's omitted cells, including the exact boundary coordinates.
+	var cell_x: float = width / 48.0
+	var cell_z: float = (length + 5.0) / int(length * 2)
+	var center: Vector2 = Vector2((floor((x + width * 0.5) / cell_x) + 0.5) * cell_x - width * 0.5, (floor((z + 2) / cell_z) + 0.5) * cell_z - 2)
+	return not gap_rect().has_point(center)
+
+func terrain_hint() -> String:
+	return "Find your line. Two nudges if you need them." if number == 0 else "Roll the crests · jump the side gap · bank gently off glass"
+
 
 func features(roll_seed: int) -> Array[Dictionary]:
 	var rng: RandomNumberGenerator = RandomNumberGenerator.new()
@@ -62,8 +100,13 @@ func features(roll_seed: int) -> Array[Dictionary]:
 	out.append({"kind": "ramp", "x": mirror * 4.7, "z": length * 0.44, "strength": 1.0})
 	out.append({"kind": "boost", "x": -mirror * 4.2, "z": length * 0.35, "strength": 1.0})
 	out.append({"kind": "mud", "x": mirror * 2.0, "z": length * 0.73, "strength": 1.0})
+	out.append({"kind": "spring" if world == 2 else "ice", "x": -mirror * 3.7, "z": length * 0.86, "strength": 1.0})
 	if number >= 3:
 		out.append({"kind": "rail", "x": -mirror * 5.8, "z": length * 0.56, "strength": 1.0})
+	# Never leave an old obstacle floating in a newly excavated jump lane.
+	for feature: Dictionary in out:
+		if not has_ground(feature.x, feature.z):
+			feature.z = gap_rect().end.y + 2.0
 	return out
 
 static func all_courses() -> Array[CourseData]:

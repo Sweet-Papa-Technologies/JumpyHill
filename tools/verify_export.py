@@ -36,3 +36,13 @@ elif sys.argv[2] == 'Windows':
         assert f.read(4) == b'PE\0\0', 'Invalid PE header'
     assert path.stat().st_size > 1_000_000
     print('Windows package byte verification PASS (execution/signing needs Windows)')
+
+
+elif sys.argv[2] == 'Android':
+    with zipfile.ZipFile(path) as z:
+        names = z.namelist()
+        assert 'AndroidManifest.xml' in names and 'classes.dex' in names
+        assert any(n.startswith('lib/arm64-v8a/') and n.endswith('.so') for n in names)
+        assert any(n.startswith('assets/') for n in names)
+    assert path.stat().st_size > 1_000_000
+    print('Android arm64 package byte verification PASS (signing and execution are separate checks)')

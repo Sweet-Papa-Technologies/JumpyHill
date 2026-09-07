@@ -4,7 +4,7 @@ var score: int = 0
 var combo: int = 0
 var events: Array[String] = []
 var last_event: String = "FIND YOUR FLOW"
-const POINTS: Dictionary = {"AIR": 10, "BOING": 25, "GRIND": 15, "SO CLOSE": 30, "NICE": 40, "FULL SEND": 20, "SAVED": 50, "BULLSEYE": 100, "GRAZE": -50, "TILT": -100}
+const POINTS: Dictionary = {"BANK": 25, "SMASH": 40, "GAP JUMP": 75, "SPRING": 20, "AIR": 10, "BOING": 25, "GRIND": 15, "SO CLOSE": 30, "NICE": 40, "FULL SEND": 20, "SAVED": 50, "BULLSEYE": 100, "GRAZE": -50, "TILT": -100}
 
 func add(event: String) -> int:
 	var points: int = int(POINTS.get(event, 0))

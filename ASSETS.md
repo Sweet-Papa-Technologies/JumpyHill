@@ -8,6 +8,8 @@ CC0 terms: https://creativecommons.org/publicdomain/zero/1.0/ . Font license tex
 |---|---|---|---|---|---|
 | `assets/audio/click.wav` | Original work in this repository | Sweet Papa Technologies | Apache-2.0 | 2026-09-06 | Procedural composition / original vector; no external samples. |
 | `assets/audio/goal.wav` | Original work in this repository | Sweet Papa Technologies | Apache-2.0 | 2026-09-06 | Procedural composition / original vector; no external samples. |
+| `assets/audio/impactGlass_heavy_000.ogg` | https://kenney.nl/assets/impact-sounds | Kenney | CC0 | 2026-09-07 | Unmodified audio, from the previously downloaded source archive. |
+| `assets/audio/impactGlass_light_000.ogg` | https://kenney.nl/assets/impact-sounds | Kenney | CC0 | 2026-09-07 | Unmodified audio, from the previously downloaded source archive. |
 | `assets/audio/impactMetal_light_000.ogg` | https://kenney.nl/assets/impact-sounds | Kenney | CC0 | 2026-09-06 | Unmodified audio. |
 | `assets/audio/impactWood_medium_000.ogg` | https://kenney.nl/assets/impact-sounds | Kenney | CC0 | 2026-09-06 | Unmodified audio. |
 | `assets/audio/whoosh.wav` | Original work in this repository | Sweet Papa Technologies | Apache-2.0 | 2026-09-06 | Procedural composition / original vector; no external samples. |

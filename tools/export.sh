@@ -29,6 +29,8 @@ from pathlib import Path
 p=Path('export_presets.cfg');s=p.read_text()
 s=re.sub(r'application/short_version="[^"]*"',f'application/short_version="{os.environ["TREADFALL_VERSION"]}"',s)
 s=re.sub(r'application/version="[^"]*"',f'application/version="{os.environ["TREADFALL_BUILD_NUMBER"]}"',s)
+s=re.sub(r'version/name="[^"]*"',f'version/name="{os.environ["TREADFALL_VERSION"]}"',s)
+s=re.sub(r'version/code=\d+',f'version/code={os.environ["TREADFALL_BUILD_NUMBER"]}',s)
 p.write_text(s)
 PY
 tools/godot --headless --editor --import --quit

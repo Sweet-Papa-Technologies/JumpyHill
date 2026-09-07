@@ -15,7 +15,7 @@ func capture(name: String) -> void:
 	if native:
 		root.get_texture().get_image().save_png("res://build/experience/" + name + ".png")
 
-func attempt(aim: float, lean: float) -> Dictionary:
+func attempt(aim: float, lean: float, force_edge: bool = false) -> Dictionary:
 	game.aim_value = aim
 	game.lean_value = lean
 	game.change_state(game.State.AIM)
@@ -29,6 +29,11 @@ func attempt(aim: float, lean: float) -> Dictionary:
 		if tick == 240:
 			moved = not game.course.movers[0].body.transform.is_equal_approx(initial)
 			capture("roll")
+			if force_edge:
+				# Explicitly cross an open boundary. Gentle extreme launches can now
+				# rebound from glass, so they are no longer an off-edge fixture.
+				game.tire.position.x = game.course.data.width * 0.5 + 2.1
+				game.tire.previous = game.tire.position
 		if game.state == game.State.RESULT: break
 	check(game.state == game.State.RESULT, "Roll terminates")
 	check(moved, "Hazard physically moves during roll")
@@ -61,8 +66,8 @@ func run() -> void:
 	check(miss.outcome != "GOAL", "Default launch is not a free win")
 	var win: Dictionary = await attempt(-0.6, 0)
 	check(win.outcome == "GOAL", "A deliberate bank route clears the first hill")
-	var edge: Dictionary = await attempt(1, 15)
-	check(edge.outcome != "GOAL" and absf(edge.position.x) > game.course.data.width / 2, "Extreme bank produces an off-edge miss")
+	var edge: Dictionary = await attempt(0, 0, true)
+	check(edge.outcome != "GOAL" and absf(edge.position.x) > game.course.data.width / 2, "Crossing an open boundary produces an off-edge miss")
 	check(absf(game.tire.position.x) < game.course.data.width * 0.4, "Off-edge result is staged clear of decorative cliffs")
 	check(game.tire.position.y > game.course.data.height_at(game.tire.position.x, game.tire.position.z) + 0.6, "Recovered result tire is visible above the ground")
 	game.change_state(game.State.AIM)

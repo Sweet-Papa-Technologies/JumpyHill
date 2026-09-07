@@ -5,7 +5,7 @@ var last_error: String = ""
 var test_mode: bool = false
 
 func _ready() -> void:
-	test_mode = "--test" in OS.get_cmdline_user_args()
+	test_mode = "--test" in OS.get_cmdline_user_args() or OS.get_environment("TREADFALL_PLAYTEST") == "1"
 	if test_mode:
 		return
 	if FileAccess.file_exists(PATH):

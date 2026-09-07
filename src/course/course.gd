@@ -11,6 +11,11 @@ var movers: Array[Dictionary] = []
 var visual: bool = true
 var mats: Dictionary = {}
 var terrain_mesh: ArrayMesh
+var glass: MultiMesh
+var glass_transforms: Array[Transform3D] = []
+var glass_bodies: Array[StaticBody3D] = []
+var broken_glass: Dictionary = {}
+var shards: Array[Dictionary] = []
 
 func _ready() -> void:
 	if data != null:
@@ -107,19 +112,16 @@ func build() -> void:
 				if visual:
 					for i: int in range(3):
 						box(Vector3(1.8, 0.035, 0.15), Vector3(0, 0.16, -1.0 + i * 0.8), Color("fff0d2"), false, ramp)
-			"boost", "mud":
+			"boost", "mud", "ice", "spring":
 				if visual:
-					var pad: Node3D = box(Vector3(2.2, 0.07, 3), pos + Vector3.UP * 0.06, palette[2] if f.kind == "boost" else palette[5])
-					pad.rotation.x = atan(data.slope)
-					if f.kind == "boost":
-						for i: int in range(3):
-							box(Vector3(1.5, 0.025, 0.15), Vector3(0, 0.05, -0.8 + i * 0.7), Color("e9f1b7"), false, pad)
+					_build_surface_patch(f)
 			"rail":
 				box(Vector3(0.24, 0.25, 7.0), pos + Vector3.UP * 0.8, palette[3], true).rotation.x = atan(data.slope)
 			"log":
 				var log_node: Node3D = cylinder(0.35, 2.7, pos + Vector3.UP * 0.45, palette[5], true)
 				log_node.rotation.z = PI / 2.0
 				log_node.rotation.y = f.strength
+	_build_glass()
 	_build_goal()
 	if visual:
 		_build_decor()
@@ -129,10 +131,14 @@ func build() -> void:
 func _build_terrain() -> void:
 	var st: SurfaceTool = SurfaceTool.new()
 	st.begin(Mesh.PRIMITIVE_TRIANGLES)
-	var nx: int = 24
-	var nz: int = int(data.length)
+	var nx: int = 48
+	var nz: int = int(data.length * 2)
 	for z: int in range(nz):
 		for x: int in range(nx):
+			var cx: float = -data.width / 2 + (x + 0.5) / nx * data.width
+			var cz: float = (z + 0.5) / nz * (data.length + 5) - 2
+			if not data.has_ground(cx, cz):
+				continue
 			var color: Color = palette[0].lerp(palette[1], 0.1 + 0.07 * float((x * 7 + z * 3) % 4))
 			for c: Vector2i in [Vector2i(0, 0), Vector2i(1, 0), Vector2i(0, 1), Vector2i(1, 0), Vector2i(1, 1), Vector2i(0, 1)]:
 				var px: float = -data.width / 2 + float(x + c.x) / nx * data.width
@@ -162,6 +168,7 @@ func _build_terrain() -> void:
 	phys.bounce = 0.05
 	body.physics_material_override = phys
 	if visual:
+		_build_earthwork_details()
 		# Layered cliff sides make the playable terrain a floating postcard diorama.
 		for side: int in [-1, 1]:
 			for z: int in range(0, int(data.length) + 3, 3):
@@ -177,6 +184,7 @@ func _build_goal() -> void:
 		var x: float = data.goal_x + side * data.goal_width / 2.0
 		var y: float = data.height_at(x, data.length)
 		var post: Node3D = cylinder(0.16, 3.3, Vector3(x, y + 1.65, data.length), Color("fff3d7"), true)
+		post.get_child(0).set_meta("goal_post", true)
 		posts.append(post)
 		if visual:
 			var flag: Node3D = box(Vector3(0.8, 0.5, 0.06), Vector3(x + side * 0.35, y + 2.9, data.length), palette[3])
@@ -313,3 +321,138 @@ func _is_moving(node: Node) -> bool:
 			return true
 		node = node.get_parent()
 	return false
+
+func _build_earthwork_details() -> void:
+	if data.number == 0:
+		return
+	# Painted contour dashes follow the actual crests, making the relief legible.
+	for fraction: float in [0.34, 0.78]:
+		for i: int in range(23):
+			var x: float = -7.3 + i * 0.65
+			var side: float = -1.0 if data.layout % 2 == 0 else 1.0
+			var z: float = data.length * fraction + x * side * (0.12 if fraction < 0.5 else -0.16)
+			box(Vector3(0.32, 0.04, 0.12), Vector3(x, data.height_at(x, z) + 0.04, z), Color("fff0c9"))
+	var gap: Rect2 = data.gap_rect()
+	for edge: float in [gap.position.y, gap.end.y]:
+		for i: int in range(12):
+			var x: float = gap.position.x + (i + 0.5) * gap.size.x / 12
+			# Vertical exposed cut; no invisible floor under the jump.
+			box(Vector3(gap.size.x / 12 + 0.02, 2.7, 0.12), Vector3(x, data.height_at(x, edge) - 1.45, edge), palette[5])
+			box(Vector3(gap.size.x / 12 * 0.8, 0.07, 0.26), Vector3(x, data.height_at(x, edge) + 0.04, edge + (-0.3 if edge == gap.position.y else 0.3)), Color("ffe2a0") if i % 2 == 0 else palette[5])
+	for x: float in [gap.position.x, gap.end.x]:
+		box(Vector3(0.10, 2.7, gap.size.y), Vector3(x, data.height_at(x, gap.get_center().y) - 1.5, gap.get_center().y), palette[5])
+	var sign: Label3D = Label3D.new()
+	sign.text = "JUMP  »"
+	sign.font = preload("res://assets/fonts/Bungee-Regular.ttf")
+	sign.font_size = 48
+	sign.pixel_size = 0.012
+	sign.modulate = Color("fff0c9")
+	sign.outline_modulate = palette[5]
+	sign.position = Vector3(gap.get_center().x, data.height_at(gap.get_center().x, gap.position.y - 4.5) + 0.12, gap.position.y - 4.5)
+	sign.rotation_degrees = Vector3(-90, 180, 0)
+	add_child(sign)
+
+func _build_glass() -> void:
+	var pane: BoxMesh = BoxMesh.new()
+	pane.size = Vector3(0.12, 1.65, 3.85)
+	if visual:
+		glass = MultiMesh.new()
+		glass.transform_format = MultiMesh.TRANSFORM_3D
+		glass.mesh = pane
+		var instances: MultiMeshInstance3D = MultiMeshInstance3D.new()
+		instances.multimesh = glass
+		var mat: ShaderMaterial = ShaderMaterial.new()
+		mat.shader = preload("res://src/feel/shaders/glass.gdshader")
+		instances.material_override = mat
+		add_child(instances)
+	for side: int in [-1, 1]:
+		for index: int in range(int((data.length - 10) / 4)):
+			var z: float = 7.0 + index * 4.0
+			var x: float = side * (data.width * 0.5 - 0.28)
+			# Deliberate unguarded sections on alternate sides are route hazards.
+			if data.number > 0 and index % 8 == (4 if side < 0 else 6):
+				if visual:
+					for end: int in [-1, 1]:
+						box(Vector3(0.3, 0.18, 0.3), Vector3(x, data.height_at(x, z + end * 2) + 0.14, z + end * 2), Color("ffbb7b"))
+				continue
+			var tilt: float = atan((data.height_at(x, z - 1.9) - data.height_at(x, z + 1.9)) / 3.8)
+			var pose: Transform3D = Transform3D(Basis(Vector3.RIGHT, tilt), Vector3(x, data.height_at(x, z) + 0.85, z))
+			var body: StaticBody3D = StaticBody3D.new()
+			body.collision_layer = 1
+			body.collision_mask = 2
+			body.set_meta("glass_course", self)
+			body.set_meta("glass_index", glass_transforms.size())
+			var pm: PhysicsMaterial = PhysicsMaterial.new()
+			pm.bounce = 0.55
+			pm.friction = 0.05
+			body.physics_material_override = pm
+			add_child(body)
+			body.transform = pose
+			var col: CollisionShape3D = CollisionShape3D.new()
+			var shape: BoxShape3D = BoxShape3D.new()
+			shape.size = pane.size
+			col.shape = shape
+			body.add_child(col)
+			glass_bodies.append(body)
+			glass_transforms.append(pose)
+	if visual:
+		glass.instance_count = glass_transforms.size()
+		reset_glass()
+
+func reset_glass() -> void:
+	broken_glass.clear()
+	if glass != null:
+		for i: int in range(glass_transforms.size()):
+			glass.set_instance_transform(i, glass_transforms[i])
+	for shard: Dictionary in shards:
+		shard.node.queue_free()
+	shards.clear()
+
+func shatter(index: int, velocity: Vector3) -> void:
+	# Collision exceptions belong to the striking wheel. Keeping the shared
+	# static body means parallel solver trials cannot break each other's walls.
+	if not visual or broken_glass.has(index):
+		return
+	broken_glass[index] = true
+	glass.set_instance_transform(index, Transform3D(Basis.IDENTITY.scaled(Vector3.ZERO), glass_transforms[index].origin))
+	var rng: RandomNumberGenerator = RandomNumberGenerator.new()
+	rng.seed = roll_seed + index * 917
+	for i: int in range(16):
+		var chip: PrismMesh = PrismMesh.new()
+		chip.size = Vector3(rng.randf_range(0.1, 0.3), rng.randf_range(0.15, 0.4), 0.035)
+		var node: MeshInstance3D = mesh_node(chip, glass_transforms[index] * Vector3(0, rng.randf_range(-0.6, 0.6), rng.randf_range(-1.7, 1.7)), Color("b6eff3"))
+		node.rotation = Vector3(rng.randf() * TAU, rng.randf() * TAU, rng.randf() * TAU)
+		shards.append({"node": node, "velocity": velocity * 0.28 + Vector3(rng.randf_range(-2, 2), rng.randf_range(1, 4), rng.randf_range(-2, 2)), "life": 1.1})
+
+func _process(dt: float) -> void:
+	for i: int in range(shards.size() - 1, -1, -1):
+		var shard: Dictionary = shards[i]
+		shard.life -= dt
+		shard.velocity.y -= 9.8 * dt
+		shard.node.position += shard.velocity * dt
+		shard.node.rotate_x(dt * 3)
+		shard.node.scale = Vector3.ONE * minf(1.0, shard.life * 3)
+		if shard.life <= 0:
+			shard.node.queue_free()
+			shards.remove_at(i)
+
+func _build_surface_patch(f: Dictionary) -> void:
+	var color: Color = Color("a6eafa") if f.kind == "ice" else (Color("ffca75") if f.kind == "spring" else (palette[2] if f.kind == "boost" else palette[5]))
+	var st: SurfaceTool = SurfaceTool.new()
+	st.begin(Mesh.PRIMITIVE_TRIANGLES)
+	for row: int in range(8):
+		for c: Vector2i in [Vector2i(0, 0), Vector2i(1, 0), Vector2i(0, 1), Vector2i(1, 0), Vector2i(1, 1), Vector2i(0, 1)]:
+			var x: float = f.x + (c.x - 0.5) * 2.2
+			var z: float = f.z - 1.5 + (row + c.y) * 3.0 / 8.0
+			st.add_vertex(Vector3(x, data.height_at(x, z) + 0.045, z))
+	st.generate_normals()
+	mesh_node(st.commit(), Vector3.ZERO, color)
+	if f.kind == "mud":
+		return
+	for i: int in range(3):
+		for side: int in [-1, 1]:
+			var x: float = f.x + side * 0.33
+			var z: float = f.z - 0.8 + i * 0.7
+			var mark: Node3D = box(Vector3(0.8, 0.03, 0.12), Vector3(x, data.height_at(x, z) + 0.08, z), Color("f1ffff") if f.kind == "ice" else Color("fff0c9"))
+			mark.rotation.x = atan((data.height_at(x, z - 0.1) - data.height_at(x, z + 0.1)) / 0.2)
+			mark.rotate_y(side * 0.4)

@@ -18,3 +18,14 @@ This repository is a playable alpha. The original requirements remain unchanged.
 | Android/Windows | Export presets and reused Windows signing script | Android AAB/keystore/SDK validation; signed Windows build on Windows; actual devices and store distribution |
 
 The spec's M1 gate explicitly requires FoFo to play ten rolls on a phone and want an eleventh. No automated test or simulator screenshot substitutes for that. Content here is a tested draft available for that evaluation; M1–M5 are not marked complete.
+
+
+## 0.4 terrain, boundaries and mobile verification
+
+Course previews retain the current music stream. Entering a different world changes its three stems at the existing playback phase. Near-post goal scoring uses the swept center between physical post inner faces: actual Jolt post collisions handle the oriented wheel shape, avoiding the previous incorrect subtraction of the wheel radius from lateral clearance. Post-graze status now requires real contact, and a rebound is allowed to recover before the attempt ends.
+
+Smooth, compact earthworks add two diagonal crests, a trough, an outer bank and a side takeoff. The side gap omits mesh/collider cells; the ground query uses the same cell centers. Existing obstacles are moved out of the excavation. Low drops terminate as GAP and freeze the result. Modifier graphics conform to the terrain; ice changes the actual friction material and restores grip on exit. Boost/spring impulses and gap-landing style remain deterministic physics events.
+
+Glass panels use static colliders and one transparent MultiMesh. Normal impact speed (4.8 m/s) separates banks from shattering. Breaking adds a collision exception only between that wheel and the panel, preserving independence among the simultaneous solver tires. Rendering hides the pane and emits 16 short-lived decorative shards. New tires and restored instance transforms reset both collision and appearance on retry. The full solver required a wider finish approach on Ember 03 for all five seeds.
+
+Android's Vulkan path failed to present on the available emulator; the Android export now selects OpenGL compatibility, which completed the actual game loop. APKs are signed with an explicitly local testing key and alignment/signatures verified. iOS's official template contains only x86_64 simulator code, invoking software GLES through Rosetta. Its simulator-only canvas/3D budget is reduced to make functional playtesting practical; the device path retains normal rendering. iOS playtest launch uses an environment flag because the supplied template does not reliably forward user arguments. Both mobile harnesses avoid writing player progress.
