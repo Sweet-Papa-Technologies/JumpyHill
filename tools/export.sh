@@ -7,7 +7,8 @@ VERSION="${2:-0.1.0}"
 EXPECTED="$(cat .godot-version)"
 ACTUAL="$(tools/godot --version)"
 [[ "$ACTUAL" == "$EXPECTED.stable."* ]] || { echo "Editor mismatch: $ACTUAL, need $EXPECTED" >&2; exit 1; }
-BUILD_NUMBER="$(git rev-list --count HEAD)"
+BUILD_NUMBER="${TREADFALL_BUILD_NUMBER:-$(git rev-list --count HEAD)}"
+[[ "$BUILD_NUMBER" =~ ^[1-9][0-9]*$ ]] || { echo "Build number must be positive" >&2; exit 1; }
 export TREADFALL_SOURCE_DIRTY="$(git status --porcelain)"
 export TREADFALL_BUILD_NUMBER="$BUILD_NUMBER" TREADFALL_VERSION="$VERSION"
 python3 tools/asset_ledger.py

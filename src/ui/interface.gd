@@ -52,8 +52,8 @@ func rebuild() -> void:
 	var w: float = 640 if portrait else 332
 	match page:
 		"title":
-			button("play", "LET'S ROLL  →", Rect2(x, 1010 if portrait else 542, w, 66), YELLOW)
-			button("daily", "DAILY ROLL    ↗", Rect2(x, 1090 if portrait else 624, w, 58), Color("e8eddb"))
+			button("play", "PLAY  →", Rect2(x, 1010 if portrait else 542, w, 66), YELLOW)
+			button("daily", "DAILY  ↗", Rect2(x, 1090 if portrait else 624, w, 58), Color("e8eddb"))
 			button("settings", "Settings", Rect2(x, 1180 if portrait else 795, 145, 44), Color.TRANSPARENT, 18)
 			button("credits", "Credits", Rect2(x + 175, 1180 if portrait else 795, 140, 44), Color.TRANSPARENT, 18)
 		"select":
@@ -65,9 +65,9 @@ func rebuild() -> void:
 			button("world_prev", "←", Rect2(x, 163 if portrait else 177, 44, 44), Color("e7ecdc"), 22)
 			button("world_next", "→", Rect2(x + w - 44, 163 if portrait else 177, 44, 44), Color("e7ecdc"), 22)
 			var unlocked: bool = Save.world_unlocked(game.selected_world)
-			button("start", "ROLL THIS HILL  →" if unlocked else "EARN 4 STARS TO OPEN", Rect2(x, 1080 if portrait else 520, w, 64), YELLOW if unlocked else Color("e0e2d6"), 19, null, not unlocked)
-			button("tutorial", "↗  Warm up on the tutorial hill", Rect2(x, 1170 if portrait else 613, w, 44), Color.TRANSPARENT, 18)
-			button("garage", "THE TIRE SHOP   →", Rect2(x, 720 if not portrait else 995, w, 52), Color("e7ecdc"), 17)
+			button("start", "PLAY  →" if unlocked else "4 STARS TO UNLOCK", Rect2(x, 1080 if portrait else 520, w, 64), YELLOW if unlocked else Color("e0e2d6"), 19, null, not unlocked)
+			button("tutorial", "Practice", Rect2(x, 1170 if portrait else 613, w, 44), Color.TRANSPARENT, 18)
+			button("garage", "TIRES  →", Rect2(x, 720 if not portrait else 995, w, 52), Color("e7ecdc"), 17)
 		"aim", "roll":
 			button("select", "←", Rect2(24, 24, 52, 52), PAPER, 25)
 			button("view", "COURSE VIEW" if game.camera.first_person else "TIRE VIEW", Rect2(base.x - 278, 24, 178, 52), PAPER, 16)
@@ -83,16 +83,16 @@ func rebuild() -> void:
 				button("nudge", "→", Rect2(nx + 128, base.y - 112, 96, 70), PAPER, 32, 1, game.purist or game.tire.tilted)
 		"result":
 			var yy: float = 1000 if portrait else 519
-			button("retry", "ONE MORE  ↻", Rect2(x, yy, w, 64), YELLOW, 23)
-			button("new_seed", "NEW ROLL", Rect2(x, yy + 80, w * 0.48, 50), Color("e7ecdc"), 17)
-			button("next", "NEXT HILL  →", Rect2(x + w * 0.52, yy + 80, w * 0.48, 50), Color("e7ecdc"), 17)
-			button("share", "SAVE A POSTCARD  ↗", Rect2(x, yy + 146, w, 44), Color.TRANSPARENT, 17)
-			button("select", "←  ALL HILLS", Rect2(x, 32, 170, 44), Color.TRANSPARENT, 17)
+			button("retry", "RETRY  ↻", Rect2(x, yy, w, 64), YELLOW, 23)
+			button("new_seed", "SHUFFLE", Rect2(x, yy + 80, w * 0.48, 50), Color("e7ecdc"), 17)
+			button("next", "NEXT  →", Rect2(x + w * 0.52, yy + 80, w * 0.48, 50), Color("e7ecdc"), 17)
+			button("share", "SAVE PHOTO  ↗", Rect2(x, yy + 146, w, 44), Color.TRANSPARENT, 17)
+			button("select", "←  LEVELS", Rect2(x, 32, 170, 44), Color.TRANSPARENT, 17)
 		"pause":
-			button("resume", "BACK TO THE HILL  →", Rect2(x, 390, w, 64), YELLOW, 21)
+			button("resume", "RESUME  →", Rect2(x, 390, w, 64), YELLOW, 21)
 			button("settings", "Settings", Rect2(x, 477, w, 54), Color("e7ecdc"))
 			button("purist", "PURIST  " + ("ON" if game.purist else "OFF"), Rect2(x, 635, w, 48), Color("e7ecdc"), 17, null, game.previous_state == game.State.ROLL)
-			button("select", "Choose another hill", Rect2(x, 551, w, 54), Color("e7ecdc"))
+			button("select", "Levels", Rect2(x, 551, w, 54), Color("e7ecdc"))
 		"settings":
 			button("settings_back", "←  BACK", Rect2(x, 30, 145, 44), Color.TRANSPARENT, 17)
 			for i: int in range(3):
@@ -105,7 +105,7 @@ func rebuild() -> void:
 		"credits":
 			button("title", "←  BACK", Rect2(x, 30, 145, 44), Color.TRANSPARENT, 17)
 		"garage":
-			button("select", "←  HILLS", Rect2(x, 30, 145, 44), Color.TRANSPARENT, 17)
+			button("select", "←  LEVELS", Rect2(x, 30, 145, 44), Color.TRANSPARENT, 17)
 			for i: int in range(4):
 				var td: TireData = load("res://src/tire/%d.tres" % i) as TireData
 				var unlocked: bool = Save.stars_total() >= td.unlock_stars
@@ -178,7 +178,7 @@ func _draw() -> void:
 		panel(Rect2(24, 24, 396, base.y - 48), PAPER, 25)
 	else:
 		if page == "title":
-			panel(Rect2(20, 25, 680, 353), PAPER, 25)
+			panel(Rect2(20, 25, 680, 280), PAPER, 25)
 			panel(Rect2(20, 979, 680, 275), PAPER, 25)
 		elif page in ["select", "result"]:
 			panel(Rect2(20, 20, 680, 435 if page == "select" else 440), PAPER, 25)
@@ -187,23 +187,14 @@ func _draw() -> void:
 			panel(Rect2(20, 20, 680, 1235), PAPER, 25)
 	match page:
 		"title":
-			label("SWEET PAPA PRESENTS", Vector2(x, 98 if not portrait else 80), 15, MUTED)
-			label("TREAD", Vector2(x - 3, 221 if not portrait else 178), 69, INK, true)
-			label("FALL", Vector2(x - 3, 298 if not portrait else 258), 86, INK, true)
-			label("GOOD HILLS. GREAT ROLLS.", Vector2(x, 349 if not portrait else 313), 16, MUTED)
-			if not portrait:
-				draw_line(Vector2(x, 385), Vector2(x + w, 385), Color("d8dfce"), 1)
-				label("Read the hill.", Vector2(x, 435), 29)
-				label("Find your line. Let it roll.", Vector2(x, 475), 25)
-				label("33 HILLS  /  4 WORLDS  /  ONE TIRE", Vector2(x, 746), 13, MUTED)
+			label("TREAD", Vector2(x - 3, 221 if not portrait else 145), 69, INK, true)
+			label("FALL", Vector2(x - 3, 298 if not portrait else 225), 86, INK, true)
 		"select":
-			label("PICK YOUR", Vector2(x, 115), 34, INK, true)
-			label("HAPPY PLACE.", Vector2(x, 155), 31, INK, true)
+			label("LEVELS", Vector2(x, 135), 38, INK, true)
 			label(CourseData.WORLDS[game.selected_world], Vector2(x + 58, 194 if portrait else 208), 22)
 			if not portrait:
 				label(game.course.data.title.to_upper(), Vector2(x, 466), 21, INK, true)
-				label("%d m  /  %s  /  %d STYLE PAR" % [game.course.data.length, "MOVING GATE" if game.course.data.moving_gate else "OPEN GATE", game.course.data.par_style], Vector2(x, 493), 12, MUTED)
-			label("%d ★ COLLECTED" % Save.stars_total(), Vector2(x, 840 if not portrait else 955), 16, MUTED)
+			label("%d ★" % Save.stars_total(), Vector2(x, 840 if not portrait else 955), 16, MUTED)
 			for i: int in range(8):
 				var id_v: String = "%s/%02d" % [CourseData.SLUGS[game.selected_world], i + 1]
 				var stars: int = int(Save.data.courses.get(id_v, {}).get("stars", 0))
@@ -213,47 +204,32 @@ func _draw() -> void:
 			_draw_game_hud()
 		"result":
 			var good: bool = game.result.get("outcome", "") == "GOAL"
-			label("SIGNED, SEALED," if good else "READ THE HILL.", Vector2(x, 148), 23, MUTED, true)
-			label("DELIVERED." if good else ("ROADBLOCK." if game.result.get("outcome") == "BLOCKED" else "ANOTHER LINE."), Vector2(x, 206), 35, INK, true)
+			label("CLEARED!" if good else ("STUCK" if game.result.get("outcome") == "BLOCKED" else "MISSED"), Vector2(x, 206), 35, INK, true)
 			label("★".repeat(int(game.result.get("stars", 0))) + "☆".repeat(3 - int(game.result.get("stars", 0))), Vector2(x, 280), 52, Color("c1943f"))
 			label("%03d" % game.result.get("score", 0), Vector2(x, 365), 62, INK, true)
-			label("STYLE POINTS", Vector2(x + 180, 350), 14, MUTED)
+			label("STYLE", Vector2(x + 180, 350), 14, MUTED)
 			if portrait:
 				panel(Rect2(20, 928, 680, 48), PAPER, 16)
-				label("%s  ·  SEED %d" % [game.course.data.title, game.roll_seed], Vector2(x, 960), 18, MUTED)
-			label("%s  /  %.1f SECONDS" % [game.result.get("outcome", "WIDE"), game.result.get("time", 0)], Vector2(x, 408), 16)
-			if not portrait:
-				var feedback: String = "CENTER %d%%" % roundi(float(game.result.get("accuracy", 0)) * 100)
-				if not good:
-					feedback = "Carry speed over the gap, or use the center lane." if game.result.get("outcome") == "GAP" else "Choose an angle around the barrier." if game.result.get("outcome") == "BLOCKED" else ("Try a shallower launch angle." if game.tire.position.z < game.course.data.length - 2 else "%.1f tire widths from the center" % (float(game.result.get("offset", 0)) / 1.3))
-				label(feedback, Vector2(x, 450), 16, MUTED)
-				label("SEED  %d" % game.roll_seed, Vector2(x, 785), 14, MUTED)
-				label("Same hill. A whole new possibility.", Vector2(x, 818), 17, MUTED)
+				label(game.course.data.title, Vector2(x, 960), 18, MUTED)
+			label("%s  ·  %.1f s" % [game.result.get("outcome", "WIDE"), game.result.get("time", 0)], Vector2(x, 408), 16)
+
 		"pause":
-			label("TAKE A", Vector2(x, 213), 44, INK, true)
-			label("BREATHER.", Vector2(x, 268), 39, INK, true)
-			label("Your hill will be right here.", Vector2(x, 330), 22, MUTED)
+			label("PAUSED", Vector2(x, 268), 44, INK, true)
 		"settings":
-			label("YOUR KIND", Vector2(x, 123), 31, INK, true)
-			label("OF ROLL.", Vector2(x, 163), 35, INK, true)
+			label("SETTINGS", Vector2(x, 143), 34, INK, true)
 			for i: int in range(3):
 				label(["MASTER", "MUSIC", "SOUND EFFECTS"][i], Vector2(x, 204 + i * 90), 15, MUTED)
-			label("LANGUAGE   ENGLISH", Vector2(x, 796), 15, MUTED)
 		"garage":
-			label("PICK YOUR", Vector2(x, 141), 34, INK, true)
-			label("PERSONALITY.", Vector2(x, 186), 31, INK, true)
-			label("Earn stars. Find a new favorite.", Vector2(x, 699), 21, MUTED)
-			label("%d ★ COLLECTED" % Save.stars_total(), Vector2(x, 748), 19)
+			label("TIRES", Vector2(x, 163), 40, INK, true)
+			label("%d ★" % Save.stars_total(), Vector2(x, 748), 19)
 		"credits":
-			label("MADE FOR", Vector2(x, 144), 33, INK, true)
-			label("ONE MORE.", Vector2(x, 190), 35, INK, true)
-			var lines: Array[String] = ["TREADFALL / 0.3", "Sweet Papa Technologies", "Forrester ‘FoFo’ Terry", "", "BUILT WITH GODOT 4.7.2 · MIT", "Nature & impact sounds: Kenney · CC0", "Bungee: David Jonathan Ross · OFL", "Nunito: Vernon Adams et al. · OFL", "Original procedural hills & synth music", "", "No ads. No accounts. Just good hills.", "Asset licenses included with the game."]
+			label("CREDITS", Vector2(x, 163), 36, INK, true)
+			var lines: Array[String] = ["TREADFALL / 0.5", "Sweet Papa Technologies", "Forrester ‘FoFo’ Terry", "", "BUILT WITH GODOT 4.7.2 · MIT", "Nature & impact sounds: Kenney · CC0", "Bungee: David Jonathan Ross · OFL", "Nunito: Vernon Adams et al. · OFL", "Original procedural hills & synth music", "", "Licenses: ASSETS.md"]
 			for i: int in range(lines.size()):
 				label(lines[i], Vector2(x, 276 + i * 36), 16 if i > 3 else 21, MUTED if i > 3 else INK)
 	if not portrait and not hud:
 		panel(Rect2(460, 32, 278, 42), Color(PAPER, 0.85), 21)
 		label("●  " + CourseData.WORLDS[game.course.data.world].to_upper(), Vector2(480, 59), 15)
-		label("THE DOWNHILL SOCIAL CLUB", Vector2(base.x - 310, base.y - 40), 13, Color(INK, 0.7))
 	if page == "roll" and game.pop_time > 0:
 		var px: float = 170 if portrait else 760
 		label(game.pop_text, Vector2(px, base.y * 0.33), 48, Color("fff3cf"), true)

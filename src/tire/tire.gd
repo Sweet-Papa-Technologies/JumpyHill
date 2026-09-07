@@ -29,6 +29,9 @@ var gust_start: float = 3.0
 var gust_force: float = 0.0
 var last_result: Dictionary = {}
 var stalled_time: float = 0.0
+var motion_anchor: Vector3
+const STUCK_RADIUS: float = 0.12
+const STUCK_SECONDS: float = 3.0
 var incoming_velocity: Vector3 = Vector3.ZERO
 var crossed_gap: bool = false
 var surface_kind: String = "ground"
@@ -143,6 +146,7 @@ func reset_to_aim() -> void:
 	angular_velocity = Vector3.ZERO
 	position = launch_position(course, aim)
 	previous = position
+	motion_anchor = position
 	reset_physics_interpolation()
 
 static func launch_position(data: CourseData, direction: float) -> Vector3:
@@ -204,12 +208,15 @@ func _physics_process(dt: float) -> void:
 		apply_central_force(Vector3(gust_force, 0, 0))
 	var speed: float = linear_velocity.length()
 	var cap: float = course.max_speed * variant.speed_scale
-	stalled_time = stalled_time + dt if elapsed > 2.0 and speed < 0.7 else 0.0
-	if stalled_time > 2.0:
+	# A spinning axle or contact jitter is not forward progress. Let slow rolls
+	# continue indefinitely while they move beyond this small physical radius.
+	if position.distance_to(motion_anchor) >= STUCK_RADIUS:
+		motion_anchor = position
+		stalled_time = 0.0
+	else:
+		stalled_time += dt
+	if stalled_time >= STUCK_SECONDS:
 		_finish("BLOCKED", 0.0, absf(position.x - course.goal_x))
-		return
-	if elapsed > 16.0:
-		_finish("POST" if post_hit else "WIDE", 0.0, absf(position.x - course.goal_x))
 		return
 	if speed > cap:
 		apply_central_force(-linear_velocity.normalized() * (speed - cap) * mass * 30.0)
@@ -299,7 +306,7 @@ func _physics_process(dt: float) -> void:
 		if clear and post_hit:
 			add_style("GRAZE")
 		_finish("GOAL" if clear else ("POST" if post_hit else "WIDE"), accuracy, offset)
-	elif absf(position.x) > course.width / 2 + 2 or position.y < -8 or elapsed >= FEEL.roll_timeout:
+	elif absf(position.x) > course.width / 2 + 2 or position.y < -8:
 		_finish("POST" if post_hit else "WIDE", 0.0, goal_delta)
 	previous = position
 	incoming_velocity = linear_velocity

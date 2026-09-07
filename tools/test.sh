@@ -12,6 +12,9 @@ run_checked() {
   if rg -q 'SCRIPT ERROR|ERROR:|TESTS .* FAIL' "$log"; then exit 1; fi
 }
 run_checked build/unit.log
+tools/godot --headless --fixed-fps 120 --script tests/rolling.gd -- --test > build/rolling-tests.log 2>&1
+cat build/rolling-tests.log
+if rg -q 'SCRIPT ERROR|ERROR:|ROLLING FAIL' build/rolling-tests.log; then exit 1; fi
 tools/godot --headless --fixed-fps 120 --script tests/terrain.gd -- --test > build/terrain-tests-04.log 2>&1
 cat build/terrain-tests-04.log
 if rg -q 'SCRIPT ERROR|ERROR:|TERRAIN FAIL' build/terrain-tests-04.log; then exit 1; fi

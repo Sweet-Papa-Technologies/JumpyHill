@@ -110,7 +110,7 @@ func trial(data: CourseData, seed_v: int, aim_v: float, lean_v: float) -> Dictio
 	await physics_frame
 	await physics_frame
 	tire.launch()
-	for tick: int in range(2410):
+	for tick: int in range(14400):
 		await physics_frame
 		hill.tick_gate(tire.elapsed)
 		if not tire.active:
@@ -174,7 +174,7 @@ func solver(args: PackedStringArray) -> void:
 			for tire: RollingTire in tires:
 				tire.launch()
 			var elapsed: float = 0
-			for tick: int in range(2410):
+			for tick: int in range(14400):
 				await physics_frame
 				elapsed += 1.0 / 120
 				hill.tick_gate(elapsed)
@@ -188,14 +188,14 @@ func solver(args: PackedStringArray) -> void:
 			for i: int in range(tires.size()):
 				var tire: RollingTire = tires[i]
 				count += 1
-				if tire.last_result.is_empty() or tire.elapsed >= 20.0:
+				if tire.last_result.is_empty():
 					stuck += 1
 				if tire.last_result.get("outcome", "") == "GOAL":
 					clear_count += 1
 					seed_clears[str(seed_v)] += 1
 					if is_zero_approx(tire.aim) and is_zero_approx(tire.lean): neutral_clears += 1
 					if seed_v == 42:
-						solutions.append({"aim": tire.aim, "lean": tire.lean, "score": tire.last_result.score})
+						solutions.append({"aim": tire.aim, "lean": tire.lean, "score": tire.last_result.score, "time": tire.elapsed})
 					var key: String = str(i)
 					rates[key] = int(rates.get(key, 0)) + 1
 					heat.set_pixel(i / lean_steps, i % lean_steps, Color("b7d8ac"))

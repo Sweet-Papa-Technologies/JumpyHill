@@ -5,3 +5,5 @@ build/
 *.tmp
 export/*.zip
 export/*.app/
+
+__pycache__/

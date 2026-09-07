@@ -11,4 +11,3 @@ extends Resource
 @export var camera_lag: float = 5.0
 @export var transition_time: float = 0.20
 @export var tire_radius: float = 0.65
-@export var roll_timeout: float = 20.0
